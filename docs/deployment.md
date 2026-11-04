@@ -1,12 +1,33 @@
 # Публикация: Vercel или самостоятельный сервер
 
-Приложение проверено локально. Исходники: [AyanamiFRei/mgimo-vibecode-orbita](https://github.com/AyanamiFRei/mgimo-vibecode-orbita). Подключённых аккаунтов хостинга нет; публичный адрес самого приложения пока не создан.
+Приложение опубликовано 4 ноября 2026 года: **[mgimo-vibecode-orbita.vercel.app](https://mgimo-vibecode-orbita.vercel.app)**. Исходники: [AyanamiFRei/mgimo-vibecode-orbita](https://github.com/AyanamiFRei/mgimo-vibecode-orbita).
+
+## Текущая публикация
+
+- Vercel: проект `mgimo-vibecode-orbita`, scope `sahar8s-projects`, тариф Hobby. Native Next.js, Node.js 24.x, `npm ci`, `npm run build`; output directory определяется адаптером автоматически.
+- Функции: `arn1` (Стокгольм), рядом с постоянной Turso в `aws-eu-north-1`. Регион сборочной машины может быть `iad1`: он не задаёт регион выполнения функций.
+- БД: Turso Free, отдельная от локальной SQLite. Созданы схема и вымышленные начальные данные. После проверки оставлены демонстрационные заявка, переписка и отдельный вымышленный аккаунт регистрации.
+- Серверные переменные production: `DATABASE_URL`, `DATABASE_AUTH_TOKEN`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `TRUST_PROXY=true`. Токен БД и секрет NextAuth сохранены в Vercel как Secret. Значения не публикуются в исходниках.
+- Канонический origin: `https://mgimo-vibecode-orbita.vercel.app`. Preview-адреса и дополнительные aliases не предназначены для отправки форм с этим production `NEXTAUTH_URL`.
+- Публикация выполнена Vercel CLI 65.11.0 из коммита приложения `f18953d`. Автодеплой GitHub не подключён: `vercel git connect` отклонён сервисом. Исходники доступны в GitHub, повторную публикацию выполняйте CLI либо подключите этот репозиторий через Settings → Git в Vercel.
+
+Повторная публикация из этого checkout после изменения и проверки исходников:
+
+```powershell
+npx --yes vercel@65.11.0 deploy --prod --scope sahar8s-projects
+```
+
+В новом checkout сначала выполните `npx --yes vercel@65.11.0 login`, затем `npx --yes vercel@65.11.0 link --project mgimo-vibecode-orbita --scope sahar8s-projects --yes`. Оплаченные возможности и trial Pro не включались. Бесплатные тарифы действуют в пределах квот поставщиков: [Vercel Hobby](https://vercel.com/docs/plans/hobby), [Turso Free](https://turso.tech/pricing).
+
+Production-проверка прошла: вход `student1`, `student2`, `dean`; страницы кабинета; оба семестра и отсутствие занятий 4 ноября; создание заявки, статусы `processing` → `ready`, документ; 404 для чужой заявки/чата, 403 для staff API студенту и чужого Origin; создание чата, ответ сотрудника и регистрация отдельного вымышленного студента. Неавторизованный `/api/workspace` возвращает 401. Рабочая запись и чтение идут через Vercel в Turso.
+
+Проверка HTTPS `/login` 4 ноября 2026 года с `ru1` и `ru2` Check-Host (Москва, две разные сети) дала HTTP 200 с обоих узлов: [отчёт](https://check-host.net/check-report/55935049k9fd). Это проверка серверных сетей, а не всех домашних/мобильных операторов; доступ на всех провайдерах и будущую непрерывную доступность она не гарантирует. Приёмочную проверку нужно дополнить открытием с телефона через российский мобильный интернет без VPN.
 
 ## Vercel + удалённый libSQL
 
 1. Импортируйте [репозиторий проекта](https://github.com/AyanamiFRei/mgimo-vibecode-orbita). В нём есть package-lock.json; `.env.local`, `data`, node_modules и .next исключены.
 2. Создайте удалённую libSQL-совместимую БД, например через Turso. Скопируйте URL и токен в безопасное место. Файловый `file:` URL для Vercel не подходит и блокируется приложением.
-3. В локальном `.env.local` временно укажите удалённые `DATABASE_URL=libsql://…` и `DATABASE_AUTH_TOKEN=…`, затем выполните `npm run db:setup`. Это создаст вымышленные аккаунты и начальные данные в удалённой БД. Не публикуйте этот файл.
+3. В локальном `.env.turso.local` укажите удалённые `DATABASE_URL=libsql://…` и `DATABASE_AUTH_TOKEN=…`, затем выполните `node --env-file=.env.turso.local --import tsx scripts/setup-db.ts`. Это создаст вымышленные аккаунты и начальные данные в удалённой БД, сохранив локальную SQLite-настройку. Файл исключён из Git и Vercel upload; не публикуйте его. Перед повторным seed убедитесь, что выбрана нужная БД.
 4. Импортируйте репозиторий в Vercel. Framework: Next.js, Node.js 22+, install `npm ci`, build `npm run build`. Убедитесь, что Vercel применяет native Next.js адаптер, а не пытается раздавать статический HTML.
 5. Задайте серверные переменные: DATABASE_URL, DATABASE_AUTH_TOKEN, NEXTAUTH_SECRET (новая случайная строка), NEXTAUTH_URL (точный production HTTPS origin). Не добавляйте NEXT_PUBLIC. Не указывайте localhost на production.
 6. Выполните Deploy. Если адрес впервые станет известен после deploy, исправьте NEXTAUTH_URL и повторите deployment. После смены адреса старые preview-origin мутации намеренно отклоняются; тестируйте на каноническом домене.
