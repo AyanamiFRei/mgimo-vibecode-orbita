@@ -57,7 +57,7 @@ export function Schedule() {
   return (
     <>
       <PageTitle
-        eyebrow="ПЛАНИРУЙ СВОЙ РИТМ"
+        eyebrow="УЧЕБНЫЙ КАЛЕНДАРЬ"
         title="Расписание"
         description={`${data.user.group} · Учебный год 2026/27`}
       />

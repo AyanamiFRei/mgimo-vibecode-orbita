@@ -1,0 +1,718 @@
+:root {
+  color-scheme: light;
+  --surface-base: #ffffff;
+  --surface-sidebar: #fcfdf9;
+  --surface-header: #fafbf7;
+  --surface-subtle: #eff2e8;
+  --surface-hover: #eaf0e4;
+  --surface-selected: #eaf0df;
+  --surface-input: #ffffff;
+  --text-secondary: #66735f;
+  --text-accent: #496b3c;
+  --text-placeholder: #737f6b;
+  --brand-mark: #29503e;
+  --brand-orbit-normal: #d9edbb;
+  --hero-bg: #e9eedc;
+  --hero-text: #263b33;
+  --hero-muted: #566547;
+  --orbit-stroke: #d0dabd;
+  --orbit-fill: #9caf7f;
+  --ticket-bg: #fffef4ed;
+  --ticket-border: #ffffff;
+  --ticket-icon-bg: #edf1e2;
+  --status-ready-bg: #eaf3e5;
+  --status-ready-ink: #4e7444;
+  --status-processing-bg: #fff2d8;
+  --status-processing-ink: #876822;
+  --status-submitted-bg: #eef0ed;
+  --status-submitted-ink: #69746a;
+  --status-rejected-bg: #fbeaea;
+  --status-rejected-ink: #a34d4d;
+  --warm-bg: #f2eee1;
+  --warm-ink: #746133;
+  --cool-bg: #edf0f0;
+  --cool-ink: #557064;
+  --notice-bg: #edf2e7;
+  --notice-ink: #5b7353;
+  --danger-bg: #fff2f0;
+  --danger-ink: #a94343;
+  --danger-border: #f2d8d3;
+  --message-incoming: #f1f4ed;
+  --message-outgoing: #eaf1e2;
+  --avatar-bg: #e9dfcd;
+  --avatar-ink: #8d7655;
+  --purple-bg: #e8e4f1;
+  --purple-ink: #756485;
+  --blue-bg: #e0eaf1;
+  --blue-ink: #5b7a8e;
+  --progress-track: #edf0e8;
+  --progress-fill: #6c9774;
+  --focus-ring: #6b9772;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #171b19;
+  --paper: #202722;
+  --ink: #e4ece0;
+  --muted: #afbea7;
+  --green: #416c4d;
+  --lime: #536c43;
+  --border: #3b493c;
+  --surface-base: #202722;
+  --surface-sidebar: #1b211d;
+  --surface-header: #1c231e;
+  --surface-subtle: #2a342b;
+  --surface-hover: #354430;
+  --surface-selected: #35482e;
+  --surface-input: #1b231d;
+  --text-secondary: #afbea7;
+  --text-accent: #c0dba9;
+  --text-placeholder: #99ac92;
+  --brand-mark: #dae9cd;
+  --brand-orbit-normal: #28422d;
+  --hero-bg: #2a3b2a;
+  --hero-text: #e4ece0;
+  --hero-muted: #bdcdae;
+  --orbit-stroke: #516748;
+  --orbit-fill: #8ca577;
+  --ticket-bg: #253428ed;
+  --ticket-border: #506344;
+  --ticket-icon-bg: #35482f;
+  --status-ready-bg: #31472e;
+  --status-ready-ink: #c6e2af;
+  --status-processing-bg: #473e28;
+  --status-processing-ink: #efdaa5;
+  --status-submitted-bg: #343e35;
+  --status-submitted-ink: #c4d0bf;
+  --status-rejected-bg: #482e2d;
+  --status-rejected-ink: #f2b9b1;
+  --warm-bg: #413c2a;
+  --warm-ink: #e1ce9a;
+  --cool-bg: #2c3e38;
+  --cool-ink: #bdd8cb;
+  --notice-bg: #2b3b2a;
+  --notice-ink: #c4dbb1;
+  --danger-bg: #432e29;
+  --danger-ink: #f2bdb2;
+  --danger-border: #775449;
+  --message-incoming: #29342b;
+  --message-outgoing: #30452d;
+  --avatar-bg: #49412f;
+  --avatar-ink: #e7d4a9;
+  --purple-bg: #3c3549;
+  --purple-ink: #dac9ee;
+  --blue-bg: #2d404b;
+  --blue-ink: #b5d4e7;
+  --progress-track: #3a4838;
+  --progress-fill: #a8c68a;
+  --focus-ring: #bad49d;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="system"] {
+    color-scheme: dark;
+    --bg: #171b19;
+    --paper: #202722;
+    --ink: #e4ece0;
+    --muted: #afbea7;
+    --green: #416c4d;
+    --lime: #536c43;
+    --border: #3b493c;
+    --surface-base: #202722;
+    --surface-sidebar: #1b211d;
+    --surface-header: #1c231e;
+    --surface-subtle: #2a342b;
+    --surface-hover: #354430;
+    --surface-selected: #35482e;
+    --surface-input: #1b231d;
+    --text-secondary: #afbea7;
+    --text-accent: #c0dba9;
+    --text-placeholder: #99ac92;
+    --brand-mark: #dae9cd;
+    --brand-orbit-normal: #28422d;
+    --hero-bg: #2a3b2a;
+    --hero-text: #e4ece0;
+    --hero-muted: #bdcdae;
+    --orbit-stroke: #516748;
+    --orbit-fill: #8ca577;
+    --ticket-bg: #253428ed;
+    --ticket-border: #506344;
+    --ticket-icon-bg: #35482f;
+    --status-ready-bg: #31472e;
+    --status-ready-ink: #c6e2af;
+    --status-processing-bg: #473e28;
+    --status-processing-ink: #efdaa5;
+    --status-submitted-bg: #343e35;
+    --status-submitted-ink: #c4d0bf;
+    --status-rejected-bg: #482e2d;
+    --status-rejected-ink: #f2b9b1;
+    --warm-bg: #413c2a;
+    --warm-ink: #e1ce9a;
+    --cool-bg: #2c3e38;
+    --cool-ink: #bdd8cb;
+    --notice-bg: #2b3b2a;
+    --notice-ink: #c4dbb1;
+    --danger-bg: #432e29;
+    --danger-ink: #f2bdb2;
+    --danger-border: #775449;
+    --message-incoming: #29342b;
+    --message-outgoing: #30452d;
+    --avatar-bg: #49412f;
+    --avatar-ink: #e7d4a9;
+    --purple-bg: #3c3549;
+    --purple-ink: #dac9ee;
+    --blue-bg: #2d404b;
+    --blue-ink: #b5d4e7;
+    --progress-track: #3a4838;
+    --progress-fill: #a8c68a;
+    --focus-ring: #bad49d;
+  }
+}
+
+/* Shared surfaces use the same semantic tokens in both themes. */
+input,
+select,
+textarea {
+  background-color: var(--surface-input);
+  color: var(--ink);
+  border-color: var(--border);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+a:hover {
+  color: var(--text-accent);
+}
+.count-bubble {
+  background: var(--surface-selected);
+  color: var(--text-accent);
+}
+.segmented a,
+.segmented button {
+  color: var(--text-secondary);
+}
+.empty-icon {
+  background: var(--surface-subtle);
+  color: var(--text-accent);
+}
+:focus-visible {
+  outline-color: var(--focus-ring);
+}
+.brand:not(.brand-light) {
+  color: var(--brand-mark);
+  --brand-orbit: var(--brand-orbit-normal);
+}
+.sidebar {
+  background: var(--surface-sidebar);
+}
+.topbar {
+  background: var(--surface-header);
+}
+.stat-card,
+.document-type-card,
+.day-tab,
+.semester-controls,
+.secondary,
+.segmented .selected,
+.demo-logins button {
+  background-color: var(--surface-base);
+  border-color: var(--border);
+}
+.help-card,
+.segmented,
+.demo-accounts,
+.document-icon,
+.teacher-subjects > span,
+.ticket-icon,
+.message-system {
+  background-color: var(--surface-subtle);
+}
+.nav-item:hover,
+.icon-button:hover,
+.signout:hover,
+.secondary:hover,
+.document-type-card:hover,
+.segmented a:hover,
+.segmented button:hover,
+.new-request-link:hover,
+.search-result:hover,
+.demo-logins button:hover {
+  background: var(--surface-hover);
+}
+.nav-item.active,
+.nav-count {
+  background: var(--surface-selected);
+  color: var(--text-accent);
+}
+.brand-caption,
+.university-name,
+.nav-caption,
+.concept-tag,
+.concept-tag small,
+.signout,
+.breadcrumb,
+.breadcrumb strong,
+.user-short small,
+.site-footer,
+.stat-label,
+.stat-number > span,
+.stat-foot,
+.schedule-subhead,
+.lesson-time span,
+.lesson-meta,
+.request-summary-text small,
+.panel-description,
+.deadline-item > span:last-child > small,
+.deadline-item em,
+.news-item p,
+.news-item > small,
+.wellbeing-note p,
+.wellbeing-note strong,
+.eyebrow,
+.day-tab > span,
+.filter-row > .muted,
+.grade-stat > span,
+.grade-stat > p,
+.grade-stat > strong small,
+.grade-subject p,
+.grade-subject small,
+.grade-progress,
+.document-type-card > span,
+.request-list-copy small,
+.detail-list dt,
+.timeline small,
+.notification-top small,
+.notification-copy > p,
+.notification-links .text-button,
+.search-result small,
+.help-card p,
+.nav-item,
+.field-hint,
+.login-description,
+.demo-accounts p,
+.demo-logins span,
+.demo-logins strong,
+.demo-password code,
+.login-disclaimer p,
+.login-panel > footer,
+.calendar-details,
+.semester-caption small,
+.teacher-title,
+.teacher-bio,
+.teacher-detail,
+.teacher-thread-copy > span,
+.teacher-thread-copy small,
+.teacher-thread-meta,
+.message-sender > span,
+.message-bubble > small,
+.chat-card-footer,
+.chat-card p,
+.chat-card-person small,
+.chat-teacher-option small {
+  color: var(--text-secondary);
+}
+.text-link,
+.text-button,
+.help-card a,
+.nav-item:hover,
+.lesson-meta a,
+.new-request-link,
+.segmented .selected,
+.segmented a:hover,
+.segmented button:hover,
+.semester-caption,
+.lesson-info h3,
+.request-summary-text strong,
+.deadline-item > span:last-child > strong,
+.news-item h3,
+.teacher-subjects > span,
+.conversation-heading,
+.auth-switch a,
+.registered-state,
+.chat-card-footer > span,
+.chat-card:hover h3 {
+  color: var(--text-accent);
+}
+.positive {
+  color: var(--text-accent) !important;
+}
+.hero-banner {
+  background: var(--hero-bg);
+  border-color: var(--border);
+}
+.hero-copy h2 {
+  color: var(--hero-text);
+}
+.hero-label,
+.hero-copy p {
+  color: var(--hero-muted);
+}
+.orbit {
+  border-color: var(--orbit-stroke);
+}
+.orbit-star {
+  color: var(--orbit-fill);
+}
+.floating-ticket {
+  background: var(--ticket-bg);
+  border-color: var(--ticket-border);
+}
+.floating-ticket strong,
+.floating-ticket small,
+.ticket-icon {
+  color: var(--text-accent);
+}
+.ticket-icon,
+.ticket-icon.light {
+  background: var(--ticket-icon-bg);
+}
+.lesson,
+.request-summary,
+.deadline-item,
+.news-item {
+  border-color: var(--border);
+}
+.new-request-link,
+.demo-accounts,
+.demo-logins button {
+  border-color: var(--border);
+}
+.request-dialog {
+  background: var(--surface-base);
+  color: var(--ink);
+  border-color: var(--border);
+}
+.status-ready,
+.type-lecture,
+.day-kind-study,
+.day-kind-vacation,
+.notice-news,
+.document-ready,
+.news-label,
+.success-message {
+  background: var(--status-ready-bg);
+  color: var(--status-ready-ink);
+}
+.status-processing,
+.type-seminar,
+.change-note,
+.label-amber,
+.deadline-date,
+.notice-schedule,
+.calendar-day-note {
+  background: var(--warm-bg);
+  color: var(--warm-ink);
+}
+.status-submitted {
+  background: var(--status-submitted-bg);
+  color: var(--status-submitted-ink);
+}
+.status-rejected {
+  background: var(--status-rejected-bg);
+  color: var(--status-rejected-ink);
+}
+.type-practice,
+.type-exam,
+.notice-request,
+.deadline-2,
+.day-kind-exam {
+  background: var(--cool-bg);
+  color: var(--cool-ink);
+}
+.deadline-1 {
+  background: var(--status-ready-bg);
+  color: var(--status-ready-ink);
+}
+.changed-label {
+  color: var(--warm-ink);
+}
+.form-notice,
+.info-strip,
+.staff-comment {
+  background: var(--notice-bg);
+  color: var(--notice-ink);
+  border-color: var(--border);
+}
+.form-error {
+  background: var(--danger-bg);
+  color: var(--danger-ink);
+  border-color: var(--danger-border);
+}
+.notice-deadline {
+  background: var(--warm-bg);
+  color: var(--warm-ink);
+}
+.avatar,
+.avatar-peach {
+  background: var(--avatar-bg);
+  color: var(--avatar-ink);
+}
+.avatar-lavender {
+  background: var(--purple-bg);
+  color: var(--purple-ink);
+}
+.avatar-mint {
+  background: var(--status-ready-bg);
+  color: var(--status-ready-ink);
+}
+.avatar-blue {
+  background: var(--blue-bg);
+  color: var(--blue-ink);
+}
+.day-tab.selected,
+.day-tab.selected > span {
+  background: var(--green);
+  color: #fff;
+}
+.day-tab.is-holiday:not(.selected) {
+  background: var(--warm-bg);
+  color: var(--warm-ink);
+}
+.conversation-panel,
+.teacher-card,
+.chat-card,
+.chat-teacher-option {
+  background: var(--surface-base);
+}
+.message-bubble {
+  background: var(--message-incoming);
+  border-color: var(--border);
+}
+.message-own {
+  background: var(--message-outgoing);
+}
+.message-system {
+  background: var(--surface-subtle);
+}
+.message-bubble p {
+  color: var(--ink);
+}
+.reply-form {
+  background: var(--surface-header);
+}
+.login-page,
+.login-panel {
+  background: var(--bg);
+}
+.login-disclaimer {
+  color: var(--text-secondary);
+}
+.progress,
+progress {
+  accent-color: var(--progress-fill);
+}
+progress::-webkit-progress-bar {
+  background: var(--progress-track);
+}
+progress::-webkit-progress-value {
+  background: var(--progress-fill);
+}
+progress::-moz-progress-bar {
+  background: var(--progress-fill);
+}
+/* Functional controls and responsive chat lists. */
+.theme-toggle {
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.theme-icon-dark {
+  display: none;
+}
+.theme-icon-light {
+  display: block;
+}
+html[data-theme="dark"] .theme-icon-dark {
+  display: block;
+}
+html[data-theme="dark"] .theme-icon-light {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="system"] .theme-icon-dark {
+    display: block;
+  }
+  html[data-theme="system"] .theme-icon-light {
+    display: none;
+  }
+}
+.auth-tools {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+}
+.login-panel {
+  position: relative;
+  padding-top: 75px;
+}
+.login-story-body {
+  padding-bottom: 60px;
+}
+.hero-copy h2 {
+  font-size: clamp(23px, 2.5vw, 32px);
+  max-width: 370px;
+}
+.help-card h3 {
+  font-size: 16px;
+}
+.help-card p {
+  font-size: 11px;
+}
+.auto-resize-textarea {
+  resize: none;
+  min-height: 72px;
+  overflow-y: hidden;
+  line-height: 1.6;
+}
+.new-chat-section {
+  margin-top: 30px;
+  scroll-margin-top: 20px;
+}
+.chat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.chat-card {
+  display: block;
+  min-width: 0;
+}
+.chat-card:hover {
+  border-color: var(--text-accent);
+}
+.chat-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+.chat-card-person {
+  min-width: 0;
+  flex: 1;
+}
+.chat-card-person strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.chat-card-person small {
+  display: block;
+  font-size: 10px;
+  margin-top: 4px;
+}
+.chat-card-heading .teacher-avatar {
+  width: 43px;
+  height: 43px;
+  font-size: 14px;
+  border-radius: 13px;
+}
+.chat-card h3 {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  margin-bottom: 9px;
+}
+.chat-card p {
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.chat-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 17px;
+}
+.chat-card-footer > span {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 11px;
+}
+.chat-teacher-picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+.chat-teacher-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 17px;
+}
+.chat-teacher-option > span:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+.chat-teacher-option strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.chat-teacher-option small {
+  display: block;
+  font-size: 10px;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+.chat-teacher-option .teacher-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 13px;
+}
+@media (max-width: 930px) {
+  .chat-cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .auth-tools {
+    top: 15px;
+    right: 18px;
+  }
+  .login-panel {
+    padding-top: 64px;
+  }
+  .login-story-body {
+    padding-bottom: 0;
+  }
+  .chat-teacher-picker {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .chat-card {
+    padding: 18px;
+  }
+  .chat-card-heading {
+    gap: 9px;
+  }
+  .chat-card-person strong {
+    font-size: 13px;
+  }
+  .chat-card-heading .badge {
+    font-size: 8px;
+  }
+  .chat-card-footer {
+    font-size: 9px;
+  }
+  .hero-copy h2 {
+    font-size: 22px;
+    max-width: 205px;
+  }
+  .auto-resize-textarea {
+    font-size: 16px;
+  }
+  .header-actions {
+    gap: 5px;
+  }
+}

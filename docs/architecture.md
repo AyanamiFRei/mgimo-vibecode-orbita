@@ -14,6 +14,8 @@
 
 - `app/dashboard/layout.tsx`: обязательный вход и первоначальная серверная загрузка данных.
 - `components`: интерфейс, формы, контекст текущего студента; не определяет полномочия.
+- `components/chats.tsx` и `teacher-conversation.tsx`: отдельная страница переписок и общий интерфейс диалога. Каталог преподавателей загружает только каталог. Старые `/dashboard/teachers?thread=…` перенаправляются на `/dashboard/chats?thread=…`, поэтому сохранённые уведомления не требуют миграции.
+- `components/theme-provider.tsx`, `theme-toggle.tsx`, `app/themes.css`: валидированная cookie `orbita-theme`, серверная тема первого кадра и семантические цвета. Корневой layout использует async cookies(), поэтому страницы динамические; стартовый скрипт и suppressHydrationWarning не нужны.
 - `lib/auth.ts`, `lib/credentials.ts`: NextAuth JWT в HttpOnly cookie, bcrypt, вход и активность аккаунта.
 - `lib/service.ts`: бизнес-правила, владение данными, заявки и уведомления.
 - `lib/registration.ts`, `lib/catalog.ts`: регистрация только из вымышленных persona/program; роль и идентификатор назначает сервер.

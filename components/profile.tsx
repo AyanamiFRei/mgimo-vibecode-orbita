@@ -9,9 +9,9 @@ export function Profile() {
   return (
     <>
       <PageTitle
-        eyebrow="ТВОЁ ПРОСТРАНСТВО"
+        eyebrow="УЧЕБНЫЕ СВЕДЕНИЯ"
         title="Профиль"
-        description="Всё, что университет знает о тебе — в одном месте."
+        description="Данные студента, факультет, направление, курс и группа."
       />
       <div className="profile-grid">
         <section className="panel profile-card">

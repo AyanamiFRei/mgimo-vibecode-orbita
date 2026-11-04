@@ -43,22 +43,19 @@ export function Dashboard() {
         eyebrow={
           <DateText value={today} options={{ weekday: "long", day: "numeric", month: "long" }} />
         }
-        title={`Привет, ${data.user.firstName} 👋`}
-        description="Всё важное уже здесь. Давай посмотрим, что на орбите."
+        title="Главная"
+        description={`${data.user.name} · ${data.user.group}`}
       />
       <section className="hero-banner">
         <div className="hero-copy">
           <span className="hero-label">
             <span />
-            ТВОЙ УНИВЕРСИТЕТ НА СВЯЗИ
+            УЧЕБНЫЙ КАБИНЕТ
           </span>
-          <h2>Учёба в твоём ритме.</h2>
-          <p>
-            Меньше забот о формальностях —<br className="desktop-only" /> больше времени на то, что
-            вдохновляет.
-          </p>
+          <h2>Расписание и учебные задачи</h2>
+          <p>Занятия, аудитории и дедлайны на текущую неделю.</p>
           <Link className="button hero-button" href="/dashboard/schedule">
-            План на неделю
+            Открыть расписание
             <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
         </div>
@@ -72,8 +69,8 @@ export function Dashboard() {
               <CalendarDays size={21} />
             </span>
             <span>
-              <strong>Всё по плану</strong>
-              <small>Твой следующий шаг — здесь</small>
+              <strong>Расписание</strong>
+              <small>Занятия и аудитории</small>
             </span>
             <Check size={16} />
           </div>
@@ -82,8 +79,8 @@ export function Dashboard() {
               <Sparkles size={21} />
             </span>
             <span>
-              <strong>Время для большего</strong>
-              <small>Деканат без очередей</small>
+              <strong>Документы</strong>
+              <small>Заявки и статусы</small>
             </span>
           </div>
           <span className="hero-dot dot-one" />
@@ -101,7 +98,7 @@ export function Dashboard() {
             <span>занятия</span>
           </div>
           <span className="stat-foot">
-            {lessons.length ? `Начало в ${lessons[0].startTime}` : "Можно выдохнуть"}
+            {lessons.length ? `Начало в ${lessons[0].startTime}` : "Занятий нет"}
             <ArrowUpRight size={14} aria-hidden="true" />
           </span>
         </Link>
@@ -131,7 +128,7 @@ export function Dashboard() {
             <span>в работе</span>
           </div>
           <span className="stat-foot">
-            {ready ? `${ready} готовы к получению` : "Всё под контролем"}
+            {ready ? `${ready} готовы к получению` : "Нет готовых документов"}
             <span className="small-dot" />
           </span>
         </Link>
@@ -175,7 +172,7 @@ export function Dashboard() {
             ) : (
               <EmptyState
                 title="Сегодня без пар"
-                text="Хороший день, чтобы заняться своим проектом или отдохнуть."
+                text="Занятий нет. Открой расписание, чтобы посмотреть другие дни."
               />
             )}
           </section>
@@ -188,7 +185,7 @@ export function Dashboard() {
             ) : (
               <EmptyState
                 title="Пока нет заявок"
-                text="Закажи первую справку — без похода в деканат."
+                text="Выбери документ и отправь заявку через кабинет."
               />
             )}
             <Link className="new-request-link" href="/dashboard/documents?new=1">
@@ -199,7 +196,7 @@ export function Dashboard() {
         </div>
         <div className="dashboard-aside">
           <section className="panel deadline-panel">
-            <SectionHead title="На горизонте" href="/dashboard/notifications" link="Все" />
+            <SectionHead title="Ближайшие дедлайны" href="/dashboard/notifications" link="Все" />
             <p className="panel-description">Важное, о чём стоит помнить</p>
             {upcoming.length ? (
               upcoming.slice(0, 3).map((d, i) => (
@@ -262,9 +259,12 @@ export function Dashboard() {
           <div className="wellbeing-note">
             <Sun size={23} aria-hidden="true" />
             <p>
-              Ты — больше, чем твои оценки.
+              Консультации преподавателей
               <br />
-              <strong>Не забывай оставлять время для себя.</strong>
+              <Link className="text-link" href="/dashboard/teachers">
+                Кафедры и часы приёма
+                <ArrowUpRight size={14} aria-hidden="true" />
+              </Link>
             </p>
           </div>
         </div>

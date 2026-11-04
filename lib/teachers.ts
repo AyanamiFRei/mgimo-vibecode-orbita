@@ -208,7 +208,7 @@ export class TeacherService {
             "Ответ в переписке с преподавателем",
             `${actor.name} · сотрудник: ${data.body.slice(0, 160)}`,
             timestamp,
-            `/dashboard/teachers?thread=${id}`,
+            `/dashboard/chats?thread=${id}`,
           ],
         });
       return {

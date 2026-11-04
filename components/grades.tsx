@@ -18,9 +18,9 @@ export function Grades() {
   return (
     <>
       <PageTitle
-        eyebrow="ТВОЙ ПРОГРЕСС"
+        eyebrow="ТЕКУЩИЙ УЧЕБНЫЙ ПЕРИОД"
         title="Успеваемость"
-        description="Понятная картина учёбы — без лишних переживаний."
+        description="Текущие баллы, итоговые оценки, зачёты и даты экзаменов."
       />
       <div className="grade-stats">
         <div className="panel grade-stat">
@@ -41,7 +41,7 @@ export function Grades() {
             {completed.length}
             <small> / {data.grades.length}</small>
           </strong>
-          <p>Каждый шаг приближает к цели</p>
+          <p>Дисциплины с итоговой аттестацией</p>
         </div>
         <div className="panel grade-stat">
           <GraduationCap size={22} aria-hidden="true" />

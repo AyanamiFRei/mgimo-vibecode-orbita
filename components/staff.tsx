@@ -60,7 +60,7 @@ export function Staff() {
       <PageTitle
         eyebrow="РАБОЧЕЕ МЕСТО СОТРУДНИКА"
         title="Очередь деканата"
-        description="Помоги студентам решить вопрос, а не найти нужный кабинет."
+        description="Обработка заявок студентов, статусы и ответы по документам."
       >
         <button
           className="button secondary"

@@ -36,9 +36,9 @@ export function Notifications() {
   return (
     <>
       <PageTitle
-        eyebrow="ВСЕГДА В КУРСЕ"
+        eyebrow="СООБЩЕНИЯ УНИВЕРСИТЕТА"
         title="Уведомления"
-        description="Изменения, новости и напоминания — ничего не потеряется."
+        description="Объявления, изменения расписания, ответы и напоминания."
       >
         <button
           className="button secondary"

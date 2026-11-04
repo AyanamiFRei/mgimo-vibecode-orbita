@@ -79,3 +79,15 @@
 > Check newsignupUI security/validation/accessibility … original screenshot bug … first regression recorded RED … Need finalsecurity+semestermigration+signupreview … sourceGitinitialized but notstageduntilchecks.
 
 В ответ выявлены и исправлены зависшая ошибка повтора пароля, несовпадение login pattern, устаревший список диалогов и скрытая подпись учебной субботы. Проверка WebKit и увеличенного шрифта добавлена к Chromium-сценариям.
+
+## 12. Третья итерация — интерфейс
+
+> Оставь в шапке только логотип с текстом орбиты и текст «Больше жизни. Меньше формальностей.»
+
+> Чат с преподом вынеси в отдельную вкладку … уже существующие чаты … в верхнюю часть страницы чатов. В самом чате убери ручное растяжение поля ввода, только автоматику.
+
+> Убери «рекламные» слоганы … декоративные элементы оставь … Добавь переключение на темную тему.
+
+> После этого будем грузить на vercel и на удаленную бд.
+
+Astra xhigh worker: «ThemeProvider … SSR validatedcookie … no startupscript/suppresshydration … cookie is public display preference». Основной агент: «Old teachers?thread links redirect to chats … existingthreads first … textarea reset RAF … no DB migration». Reviewer проверял наблюдаемые сценарии и контраст; инфраструктура не развёртывалась, поскольку пользователь отвёл её следующему этапу.

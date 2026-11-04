@@ -17,16 +17,19 @@ import {
   X,
   UsersRound,
   GraduationCap,
+  MessageSquare,
 } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Brand } from "./brand";
 import { useWorkspace } from "./workspace-provider";
+import { ThemeToggle } from "./theme-toggle";
 
 const navigation = [
   { href: "/dashboard", title: "Главная", icon: House },
   { href: "/dashboard/schedule", title: "Расписание", icon: CalendarDays },
   { href: "/dashboard/grades", title: "Успеваемость", icon: ChartNoAxesCombined },
   { href: "/dashboard/teachers", title: "Преподаватели", icon: GraduationCap },
+  { href: "/dashboard/chats", title: "Чаты", icon: MessageSquare },
   { href: "/dashboard/documents", title: "Документы", icon: Files },
   { href: "/dashboard/notifications", title: "Уведомления", icon: Bell },
 ];
@@ -122,7 +125,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             новых горизонтов
           </span>
         </div>
-        <div className="nav-caption">ТВОЁ ПРОСТРАНСТВО</div>
+        <div className="nav-caption">РАЗДЕЛЫ КАБИНЕТА</div>
         <nav className="main-nav" aria-label="Основная навигация">
           {navigation.map(({ href, title, icon: Icon }) => (
             <Link
@@ -158,16 +161,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <span className="help-spark">
               <Sparkles size={19} aria-hidden="true" />
             </span>
-            <h3>
-              Меньше очередей.
-              <br />
-              Больше жизни.
-            </h3>
-            <p>
-              Деканат теперь там,
-              <br />
-              где удобно тебе.
-            </p>
+            <h3>Заявка в деканат</h3>
+            <p>Заказ справки или подача заявления. Статус сохраняется в документах.</p>
             <Link href="/dashboard/documents?new=1" onClick={() => setMenu(false)}>
               Обратиться в деканат
               <ArrowUpRight size={15} aria-hidden="true" />
@@ -212,6 +207,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </span>
           </div>
           <div className="header-actions">
+            <ThemeToggle />
             <form action="/dashboard/search" className="global-search" role="search">
               <Search size={17} aria-hidden="true" />
               <input
@@ -247,7 +243,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           {children}
         </main>
         <footer className="site-footer">
-          <span>Орбита · Учёба в твоём ритме</span>
+          <span>Орбита · Студенческий кабинет</span>
           <span>Неофициальный конкурсный прототип · Все данные вымышлены</span>
         </footer>
       </div>

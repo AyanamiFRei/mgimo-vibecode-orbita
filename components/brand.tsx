@@ -1,4 +1,4 @@
-export function Brand({ light = false }: { light?: boolean }) {
+export function Brand({ light = false, caption = true }: { light?: boolean; caption?: boolean }) {
   return (
     <span className={`brand${light ? " brand-light" : ""}`} translate="no">
       <svg width="38" height="38" viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -9,9 +9,7 @@ export function Brand({ light = false }: { light?: boolean }) {
         </g>
         <circle cx="48" cy="18" r="5" fill="var(--brand-orbit, #d9edbb)" />
       </svg>
-      <span>
-        орбита<span className="brand-caption">СТУДЕНЧЕСКИЙ КАБИНЕТ</span>
-      </span>
+      <span>орбита{caption && <span className="brand-caption">СТУДЕНЧЕСКИЙ КАБИНЕТ</span>}</span>
     </span>
   );
 }

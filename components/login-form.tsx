@@ -90,7 +90,7 @@ export function LoginForm() {
         </button>
       </form>
       <p className="auth-switch">
-        Хочешь свой кабинет? <Link href="/register">Создать аккаунт</Link>
+        Новый аккаунт: <Link href="/register">Создать аккаунт</Link>
       </p>
       <details className="demo-accounts" open>
         <summary>Тестовые аккаунты для знакомства</summary>

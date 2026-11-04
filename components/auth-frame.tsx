@@ -1,5 +1,6 @@
 import { Brand } from "./brand";
-import { ArrowUpRight, Check, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 export function AuthFrame({
   title,
@@ -13,39 +14,25 @@ export function AuthFrame({
   return (
     <main className="login-page">
       <section className="login-story">
-        <Brand light />
+        <Brand light caption={false} />
         <div className="login-story-body">
-          <span className="login-kicker">ТВОЙ УНИВЕРСИТЕТ. ТВОЯ ОРБИТА.</span>
           <h1>
-            <span>Больше жизни.</span>
-            <span>Меньше</span>
-            <em>формальностей.</em>
+            <span>Больше жизни.</span>{" "}
+            <span>
+              Меньше <em>формальностей.</em>
+            </span>
           </h1>
-          <p>
-            Расписание, оценки и деканат —<br />в одном пространстве, в твоём ритме.
-          </p>
-          <div className="login-pills">
-            <span>
-              <Check size={15} aria-hidden="true" />
-              Без очередей
-            </span>
-            <span>
-              <Check size={15} aria-hidden="true" />
-              Всегда под рукой
-            </span>
-          </div>
         </div>
         <div className="login-orbit" aria-hidden="true">
           <div />
           <div />
           <span>✳</span>
         </div>
-        <span className="login-university">
-          УНИВЕРСИТЕТ НОВЫХ ГОРИЗОНТОВ
-          <ArrowUpRight size={17} aria-hidden="true" />
-        </span>
       </section>
       <section className="login-panel">
+        <div className="auth-tools">
+          <ThemeToggle />
+        </div>
         <div className="login-form-wrap">
           <span className="badge concept-badge">КОНКУРСНЫЙ ПРОТОТИП</span>
           <h2>{title}</h2>
@@ -59,7 +46,7 @@ export function AuthFrame({
             </p>
           </div>
         </div>
-        <footer>Орбита © 2026 · Сделано с заботой о студентах</footer>
+        <footer>Орбита © 2026 · Студенческий кабинет</footer>
       </section>
     </main>
   );

@@ -120,8 +120,8 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
           <X size={22} />
         </button>
       </div>
-      <h2 id="request-form-title">Деканат без очередей</h2>
-      <p>Заполни заявку — остальное мы берём на себя.</p>
+      <h2 id="request-form-title">Создание заявки</h2>
+      <p>Выбери документ и укажи, куда он нужен.</p>
       <form ref={form} className="request-form" onSubmit={submit} onChange={saveDraft}>
         <label htmlFor="request-type">Что тебе нужно?</label>
         <select id="request-type" name="type" defaultValue={initialType}>
@@ -299,9 +299,9 @@ export function Documents() {
   return (
     <>
       <PageTitle
-        eyebrow="БЕЗ БУМАЖНОЙ ВОЛОКИТЫ"
+        eyebrow="СПРАВКИ И ЗАЯВЛЕНИЯ"
         title="Документы"
-        description="Справки и заявления — за пару минут, из любой точки."
+        description="Заказ документов, подача заявлений и отслеживание статуса."
       >
         <Link href="?new=1" className="button primary" role="button">
           <Plus size={18} aria-hidden="true" />
