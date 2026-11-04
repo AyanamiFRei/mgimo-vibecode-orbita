@@ -1,0 +1,17 @@
+.git
+.agents
+.codex
+.tools
+.env*
+data
+output
+tmp
+coverage
+test-results
+playwright-report
+docs
+e2e
+tests
+node_modules
+.next
+*.tsbuildinfo

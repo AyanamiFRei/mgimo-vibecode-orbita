@@ -12,3 +12,5 @@ data/
 .openai/
 tmp/
 output/
+
+.vercel
