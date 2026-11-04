@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "source": "https://github.com/vercel-labs/agent-skills",
+  "commit": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+  "source_path": "skills/web-design-guidelines",
+  "installed_date": "2026-11-04",
+  "scope": "project",
+  "skills": [
+    "web-design-guidelines"
+  ],
+  "adaptations": [],
+  "files": [
+    {
+      "path": ".agents/skills/web-design-guidelines/SKILL.md",
+      "sha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f"
+    },
+    {
+      "path": ".tools/vercel-web-design/README.md",
+      "sha256": "ec38c25807314216f0f2a40b5c0e1dcf46f88dede0bc283ea3ca0c79f0e9d6ee"
+    },
+    {
+      "path": ".tools/vercel-web-design/uninstall.ps1",
+      "sha256": "713138ccff8c1564ffc9bd2abf764b9f0cc0c52aa31349c0f627dec11847be02"
+    }
+  ],
+  "directories": [
+    ".agents",
+    ".agents/skills",
+    ".agents/skills/web-design-guidelines",
+    ".tools",
+    ".tools/vercel-web-design"
+  ]
+}

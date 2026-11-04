@@ -1,0 +1,167 @@
+[
+  {
+    "name": "@libsql/client",
+    "version": "0.18.0",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/tursodatabase/libsql-client-ts",
+      "directory": "packages/libsql-client"
+    }
+  },
+  {
+    "name": "bcryptjs",
+    "version": "3.0.3",
+    "license": "BSD-3-Clause",
+    "repository": {
+      "type": "url",
+      "url": "https://github.com/dcodeIO/bcrypt.js.git"
+    }
+  },
+  {
+    "name": "lucide-react",
+    "version": "1.68.0",
+    "license": "ISC",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/lucide-icons/lucide.git",
+      "directory": "packages/lucide-react"
+    }
+  },
+  {
+    "name": "next",
+    "version": "16.4.5",
+    "license": "MIT",
+    "repository": "vercel/next.js"
+  },
+  {
+    "name": "next-auth",
+    "version": "4.24.15",
+    "license": "ISC",
+    "repository": "https://github.com/nextauthjs/next-auth.git"
+  },
+  {
+    "name": "react",
+    "version": "19.3.1",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/react/react.git",
+      "directory": "packages/react"
+    }
+  },
+  {
+    "name": "react-dom",
+    "version": "19.3.1",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/react/react.git",
+      "directory": "packages/react-dom"
+    }
+  },
+  {
+    "name": "tsx",
+    "version": "4.23.15",
+    "license": "MIT",
+    "repository": "privatenumber/tsx"
+  },
+  {
+    "name": "zod",
+    "version": "4.6.7",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/colinhacks/zod.git"
+    }
+  },
+  {
+    "name": "@playwright/test",
+    "version": "1.64.1",
+    "license": "Apache-2.0",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/microsoft/playwright.git"
+    }
+  },
+  {
+    "name": "@types/node",
+    "version": "26.6.6",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "directory": "types/node"
+    }
+  },
+  {
+    "name": "@types/react",
+    "version": "19.3.0",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "directory": "types/react"
+    }
+  },
+  {
+    "name": "@types/react-dom",
+    "version": "19.3.0",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "directory": "types/react-dom"
+    }
+  },
+  {
+    "name": "@vitest/coverage-v8",
+    "version": "5.1.0",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/vitest-dev/vitest.git",
+      "directory": "packages/coverage-v8"
+    }
+  },
+  {
+    "name": "eslint",
+    "version": "9.39.5",
+    "license": "MIT",
+    "repository": "eslint/eslint"
+  },
+  {
+    "name": "eslint-config-next",
+    "version": "16.4.5",
+    "license": "MIT",
+    "repository": {
+      "url": "vercel/next.js",
+      "directory": "packages/eslint-config-next"
+    }
+  },
+  {
+    "name": "prettier",
+    "version": "3.9.10",
+    "license": "MIT",
+    "repository": "prettier/prettier"
+  },
+  {
+    "name": "typescript",
+    "version": "6.0.3",
+    "license": "Apache-2.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/microsoft/TypeScript.git"
+    }
+  },
+  {
+    "name": "vitest",
+    "version": "5.1.0",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/vitest-dev/vitest.git",
+      "directory": "packages/vitest"
+    }
+  }
+]

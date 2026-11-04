@@ -1,0 +1,9 @@
+.next
+node_modules
+.tools
+.agents
+.codex
+coverage
+output
+tmp
+package-lock.json

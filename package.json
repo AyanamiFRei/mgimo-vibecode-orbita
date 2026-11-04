@@ -1,0 +1,40 @@
+{
+  "name": "orbita-student-campus",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "node tooling/build.mjs",
+    "start": "node tooling/start.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint app components lib scripts tests e2e",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "db:setup": "tsx scripts/setup-db.ts",
+    "format": "prettier --write app components lib scripts tests e2e tooling *.ts *.mjs *.json"
+  },
+  "dependencies": {
+    "@libsql/client": "0.18.0",
+    "bcryptjs": "3.0.3",
+    "lucide-react": "1.68.0",
+    "next": "16.4.5",
+    "next-auth": "4.24.15",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tsx": "4.23.15",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitest/coverage-v8": "5.1.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.5",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

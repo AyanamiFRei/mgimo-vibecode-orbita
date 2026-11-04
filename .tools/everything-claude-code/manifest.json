@@ -1,0 +1,531 @@
+{
+  "schema_version": 1,
+  "source": "https://github.com/worldflowai/everything-claude-code",
+  "commit": "432485ba6b92c14fb357276a98957f348bcff9ee",
+  "installed_date": "2026-11-04",
+  "scope": "project",
+  "skills": [
+    "ecc-backend-patterns",
+    "ecc-clickhouse-io",
+    "ecc-coding-standards",
+    "ecc-continuous-learning",
+    "ecc-eval-harness",
+    "ecc-frontend-patterns",
+    "ecc-project-guidelines-example",
+    "ecc-security-review",
+    "ecc-strategic-compact",
+    "ecc-tdd-workflow",
+    "ecc-verification-loop"
+  ],
+  "agents": [
+    "ecc-architect",
+    "ecc-build-error-resolver",
+    "ecc-code-reviewer",
+    "ecc-doc-updater",
+    "ecc-e2e-runner",
+    "ecc-planner",
+    "ecc-refactor-cleaner",
+    "ecc-security-reviewer",
+    "ecc-tdd-guide"
+  ],
+  "adaptations": [
+    "ecc- prefix for skills and agents",
+    "Frontmatter added to eval-harness, verification-loop, project-guidelines-example",
+    "Native Codex TOML agents; parent model, reasoning, and permissions inherited",
+    "Read-only instruction preserved for planner, architect, code-reviewer",
+    "Manual project-local continuous-learning and strategic-compact; no active hook scripts",
+    "Explicit-only invocation for continuous-learning, strategic-compact, project-guidelines-example",
+    "Original tracked upstream files retained without .git"
+  ],
+  "not_enabled": [
+    "Claude hooks",
+    "Claude commands",
+    "global rules",
+    "MCP servers",
+    "additional plugins"
+  ],
+  "files": [
+    {
+      "path": ".agents/skills/ecc-backend-patterns/SKILL.md",
+      "sha256": "85c85caf5faef26ffda7e5981472a09785e2a87d73d81f3c53ef5a7bfea807c8"
+    },
+    {
+      "path": ".agents/skills/ecc-clickhouse-io/SKILL.md",
+      "sha256": "0831714a41c18f4864aef3364118464c446406c3d637e2db49188b2f0c165630"
+    },
+    {
+      "path": ".agents/skills/ecc-coding-standards/SKILL.md",
+      "sha256": "d77fa50f5828ad5199a2efe3f605a71b527a924d42f491d1c64b46c45c48f10f"
+    },
+    {
+      "path": ".agents/skills/ecc-continuous-learning/agents/openai.yaml",
+      "sha256": "3bf863a8856d04a6a1c4f23b3aae6cbf5388544129662c55cc733c2d9c23bbbf"
+    },
+    {
+      "path": ".agents/skills/ecc-continuous-learning/config.json",
+      "sha256": "bfa8e8318c261fc8f8b612809482e7f11011c3e743957ef31f74157018dccc4c"
+    },
+    {
+      "path": ".agents/skills/ecc-continuous-learning/SKILL.md",
+      "sha256": "758d617ed656ecfc37cb1d4292d9b29456fcc526e35137a6e353cbe87d5a41e3"
+    },
+    {
+      "path": ".agents/skills/ecc-eval-harness/SKILL.md",
+      "sha256": "13fba6e816cc2b90fa4b3359b2e95bc24a33e54f1d8f4eb8638d5d55ceaafee3"
+    },
+    {
+      "path": ".agents/skills/ecc-frontend-patterns/SKILL.md",
+      "sha256": "f90989ffd243d6009bf11306279bb0fcb369100ba20962505f8174f7c66e8f74"
+    },
+    {
+      "path": ".agents/skills/ecc-project-guidelines-example/agents/openai.yaml",
+      "sha256": "3bf863a8856d04a6a1c4f23b3aae6cbf5388544129662c55cc733c2d9c23bbbf"
+    },
+    {
+      "path": ".agents/skills/ecc-project-guidelines-example/SKILL.md",
+      "sha256": "a5fe67472a156377b950259615364526b77b662f6ed66ab76caf8595f85e7653"
+    },
+    {
+      "path": ".agents/skills/ecc-security-review/SKILL.md",
+      "sha256": "f471639332c8871e9757082ea57f59cb8ee1611a8dad6c0bc023e7e144af792a"
+    },
+    {
+      "path": ".agents/skills/ecc-strategic-compact/agents/openai.yaml",
+      "sha256": "3bf863a8856d04a6a1c4f23b3aae6cbf5388544129662c55cc733c2d9c23bbbf"
+    },
+    {
+      "path": ".agents/skills/ecc-strategic-compact/SKILL.md",
+      "sha256": "8390acdcf2b50e09fb5b4683abcb5a65c123e57ecbfa63a01a7ed71808009081"
+    },
+    {
+      "path": ".agents/skills/ecc-tdd-workflow/SKILL.md",
+      "sha256": "e56aa4573f467fa82a4f1a9899331caa3279903a7b8de9511405d288dbb17a12"
+    },
+    {
+      "path": ".agents/skills/ecc-verification-loop/SKILL.md",
+      "sha256": "e5888e4f982b4d3d9af891672d1c781c97ecdabe8701a732fb6837fe5201b85a"
+    },
+    {
+      "path": ".codex/agents/ecc-architect.toml",
+      "sha256": "8a5cf2ac70dd3695be99fd70fecb9e8486543ed6167e52f2aa6857ed57be2437"
+    },
+    {
+      "path": ".codex/agents/ecc-build-error-resolver.toml",
+      "sha256": "a1e428159ab5c82e8e64487864b7da0c26850af59769ef388d7006a6d9868936"
+    },
+    {
+      "path": ".codex/agents/ecc-code-reviewer.toml",
+      "sha256": "75fedaeec8102b1f0306a84423d2f9c069458b37ac4ab2710b0aa08b3201be51"
+    },
+    {
+      "path": ".codex/agents/ecc-doc-updater.toml",
+      "sha256": "40675777bedffcf2a9c96f48d2006a0f6264245ed3b91915379e969efbc69b10"
+    },
+    {
+      "path": ".codex/agents/ecc-e2e-runner.toml",
+      "sha256": "ed644ccef39e7e8049f765c9809e46553ac3b47866fc1aabf80a723046661d13"
+    },
+    {
+      "path": ".codex/agents/ecc-planner.toml",
+      "sha256": "483210389802129ec9f34e7e907592a6a98d27844d5b0fa95d435289636292ed"
+    },
+    {
+      "path": ".codex/agents/ecc-refactor-cleaner.toml",
+      "sha256": "3e5ef2ab9cf5d5ff81452036466d39b0263ffe05b1d7a610fd29b97a027b4410"
+    },
+    {
+      "path": ".codex/agents/ecc-security-reviewer.toml",
+      "sha256": "72c586ff38db18672d0753124d3ec2188b98d52b766ecc2fb50ebbf4bf205eca"
+    },
+    {
+      "path": ".codex/agents/ecc-tdd-guide.toml",
+      "sha256": "05105d7a042d751e33566b3bd86d8dab70aa05ff93b6940c32f4a000adf550cd"
+    },
+    {
+      "path": ".tools/everything-claude-code/README.md",
+      "sha256": "cc9daa1d21b94deaccaaa60db58f9c3aac170c16388dec746ae5fe873a333923"
+    },
+    {
+      "path": ".tools/everything-claude-code/uninstall.ps1",
+      "sha256": "24098b5a0f31f37318474eb70675b0cb1d4050b2a24f843225a20e431d0b4aeb"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/.claude/package-manager.json",
+      "sha256": "ab03b32702035bf52ba7ff40b38876ae1cde09d6855f5e6f4909ea1911371103"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/.claude-plugin/marketplace.json",
+      "sha256": "1a909780b1d4cc103f65e9753baeb220484db7ec51b3b139d8513e83bc89c650"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/.claude-plugin/plugin.json",
+      "sha256": "f46dbe4390ff8c02edec1b25806253df767d764ad5a06510f2f43e87f2e795cf"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/.gitignore",
+      "sha256": "901f9de0d3c1f673840f7987a9d57953db5af182cdde3166ba04bc0328aed9e3"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/architect.md",
+      "sha256": "573158c1a4de8fb8f136416697f12e7fa2a193c2cd06079239edbbedf9d7b550"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/build-error-resolver.md",
+      "sha256": "26e3d804c710d10caaf1b9ec9be2882e2d295f517babf0596efb1311a1ee1bc1"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/code-reviewer.md",
+      "sha256": "79c68872b0548829e405744a83ea3a69e80bf80aea2d4c0cf68c2146876dcf8b"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/doc-updater.md",
+      "sha256": "3029399362df149882c4656ccc4df0c055f527bd6763ec1ea8ae6c2e08e3b74e"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/e2e-runner.md",
+      "sha256": "c185205c0da4bb91f4ace5e0ebff37fa864ec40f35f32248beea8a42c51d9b63"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/planner.md",
+      "sha256": "bdec67acd218c10703421494c2f97154dd10187a20b96af874f5f578adde5fef"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/refactor-cleaner.md",
+      "sha256": "5aec15bc08f09a8524007787c07c9dcc39db199583fd9453ee3ddc2a04e98baa"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/security-reviewer.md",
+      "sha256": "49d9e917411f3140c912cad2584003d061a17cbe346b8faf9f044942596632a5"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/agents/tdd-guide.md",
+      "sha256": "c4e924cf7f60b4817c02aa4db29e94798b8120ae21c8221db2cea55639559f70"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/build-fix.md",
+      "sha256": "7237dc42076a37ad56cab807e1f2ed0ea1833d35ee2cdee4d2cb277fd0f86554"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/checkpoint.md",
+      "sha256": "fedc1d9e2a8971d07f5107bac178d8fcc8a2d9c8cf568d570d16f730d3bbeb97"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/code-review.md",
+      "sha256": "04862b0340ed73a9a68a8d072ffa30acf3e02cb113c6f734b6c06f1917dc7dbc"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/e2e.md",
+      "sha256": "0026f5ef73a05cf9cf7270b77a495bf71c4c1fd60a7ff23e726156e5ea885d79"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/eval.md",
+      "sha256": "dff96a273fdd69bb599dd4b7e9169cf0bac6de2804ce1431ccb5c6081c12ddee"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/learn.md",
+      "sha256": "cbc2102f528d72e66e1bbfc22652aef4604a7a511ce6f69291bd23798a87b2bb"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/orchestrate.md",
+      "sha256": "ea4056958683398b8454770d6b26872a9c7980d25f03de6edcbabfb32671e86a"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/plan.md",
+      "sha256": "f292bd167dc88041f7671fe8968ed01d65cbf7dfd7ab8404739a2ff7c5549d0d"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/refactor-clean.md",
+      "sha256": "a32bdc77bf1d5d78ac806e95d9faa67ef0f3c216a88ea688c39b3fab037d4973"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/setup-pm.md",
+      "sha256": "f0041d6fd69ee607e9a29ac19c0ee1d0b57af64562cb9e5384c74ae828bcbbd1"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/tdd.md",
+      "sha256": "233cbc7fe0d7be027e231d983e817de9604b995e7fae8a15c3eaf480e373c867"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/test-coverage.md",
+      "sha256": "0d1daa0eeac4bd00034906cb344ea2942a3c61ae9a7437b39a98aff8d5b51171"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/update-codemaps.md",
+      "sha256": "170eeeb1f93adf0f11d259eb7bdb3eaf08cf00dd961008f8e3db240520a2dee6"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/update-docs.md",
+      "sha256": "705dc1ffeae55e508ba3f97932ea24925435598d688833b1a58f909344d4023d"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/commands/verify.md",
+      "sha256": "0cedb891a48259db00845e577dcdaab635d1a762c80a42df93214ca8d0cc3fef"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/contexts/dev.md",
+      "sha256": "772024dc171caac7d2e610a6f1ed57ab8f615471d3383f555248c57d5cf1718d"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/contexts/research.md",
+      "sha256": "c2b818e15a6497cd53d0864a1cfa52961f5e173518b171c913be33b2af59ea74"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/contexts/review.md",
+      "sha256": "9cb1350ab2ca7dc7cc3766a49f8149c9df2129f3ec6dd7701040ff9182080960"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/CONTRIBUTING.md",
+      "sha256": "10bc469da0083c271f8adddcbb7cfa85a8190ee1f493380d7446390884003eab"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/examples/CLAUDE.md",
+      "sha256": "40a575110e2909b9fafc799874ed20858099e7ad5370eb44dd344c928d6830b7"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/examples/sessions/2026-01-17-debugging-memory.tmp",
+      "sha256": "7c3529778908bcdd6348c2ba99f070194398fc47557eebd02658f100d0cb8975"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/examples/sessions/2026-01-19-refactor-api.tmp",
+      "sha256": "c04f540f36fc571bfa16228a453f7dbbbff0e4d2b83091609e10009084d6c2ff"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/examples/sessions/2026-01-20-feature-auth.tmp",
+      "sha256": "052e43c464945ff14f7347c57a4f17a5d78f94713e446b3571788b5209a583be"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/examples/statusline.json",
+      "sha256": "bae6329d5d2252dd3dcd828192351a6976ad55d34fc177287183e02159a0b124"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/examples/user-CLAUDE.md",
+      "sha256": "aa0941eb0f2294484481e59b040abb4d0e3876edf1a28afb0a8e25bacecf153b"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/hooks/hooks.json",
+      "sha256": "7d7dcf338d2557936fff36414b6e2b2155833994de9d208a9900613cf41fe6d7"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/hooks/memory-persistence/pre-compact.sh",
+      "sha256": "3fabb61286d60646aa571f5fa26feadd75f5ca381970d97e82341bc508b11222"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/hooks/memory-persistence/session-end.sh",
+      "sha256": "a314ca09050310f9ae8b6f7374150e833f22394ccdbc209263578bea498e3e7f"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/hooks/memory-persistence/session-start.sh",
+      "sha256": "71f50f7d4f71ba5f4836e78e01ecddbaed14c092ce67f13bc2e96ac6d78a62cb"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/hooks/strategic-compact/suggest-compact.sh",
+      "sha256": "c20006e179e52e56518d6ede3808ceb75134b907a270e1fabac5d5b396eecf89"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/mcp-configs/mcp-servers.json",
+      "sha256": "4f328a9223f6d76da3344da706620e115eaa38b05775040b375569a97ddb4508"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/plugins/README.md",
+      "sha256": "46bbeb38e79d23293659543c91cce37c0bf89796bd8ede895f41fec373a6ac90"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/README.md",
+      "sha256": "55363d30d24b327795d376be28d60f6c495ced64e58def18984d402af7976e10"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/agents.md",
+      "sha256": "57b569260e947c9d2d93940689f905ab6f791565c0d63acff3582edabb4a5e73"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/coding-style.md",
+      "sha256": "12b0b8784ad05234167d0578a9e557a4f22e6c784433c7f9fcdcfef5fde9c3db"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/git-workflow.md",
+      "sha256": "db64e8900691ae54213ca30a7071541f6140932115fe6bedfe3c4d0e0d5367f5"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/hooks.md",
+      "sha256": "773ab2918a2a4806f864c0450022ea8c9094042b395e9a4eafeae9ecdabe8f3a"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/patterns.md",
+      "sha256": "64c528dd94759024a3274f8b1b964c133c13596465efe155bcfcc58e7a277b66"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/performance.md",
+      "sha256": "113cf68696bc8086381a8f78c8e09b2f64d42e8e339bb18279f17979957acf8e"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/security.md",
+      "sha256": "81f5135d988d507e3ad7451aa13b7fa0a5bebb390ceb6abb4316d3bc371b20f7"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/rules/testing.md",
+      "sha256": "9accac04911a9ff1513f8d0e2c7a60f55e0a79883bba2d6d05b3d2656a5d1802"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/hooks/evaluate-session.js",
+      "sha256": "3ba0d7161ae9cf22b6604b8335dd03f597d64aca8a349df52b360816a2078b9d"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/hooks/pre-compact.js",
+      "sha256": "9cf6f0bac5ef3a1d9b90bdafbb613a74cb70d63e2220d87bef098f471029780c"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/hooks/session-end.js",
+      "sha256": "65b5890ef10ca936bad0737aa447222c4a0b5056795144e8721fd82d50e44d62"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/hooks/session-start.js",
+      "sha256": "bbcdb6bc8c449be04c78429de76ed883b6612b5e793ba82e4242e70d0357a6dd"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/hooks/suggest-compact.js",
+      "sha256": "1c551b9e4e59e0691270e8712a8edc73ed7fc71308599ee64a8961a6a11bff8b"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/lib/package-manager.js",
+      "sha256": "eed00284b85a956f40fd3e5d08c8ecc6da39fa78bf207355e1fdb8836d8d7428"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/lib/utils.js",
+      "sha256": "09256b0d3c7102ed28a3b88abcb1b530266210df560ec1c5a0b3c3a09c6e77c5"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/scripts/setup-package-manager.js",
+      "sha256": "e47f83f1591a70f872a5d86b6c3343c28457ddf1f8d87f2337aaaec45605b497"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/backend-patterns/SKILL.md",
+      "sha256": "8e737fa42d4da02a13d86a3377cbafb053ba1c2d0bd21728d1325b1bc20e199b"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/clickhouse-io/SKILL.md",
+      "sha256": "ef083d804c0724c642f4e28bfb7d64f6b310cde934ef9e92e5ac4062efe2f24e"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/coding-standards/SKILL.md",
+      "sha256": "ec78aec0d88b887c8bdb62bd2811c3b646fdd1f5d0a08016893c8a0613d0d23a"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/continuous-learning/config.json",
+      "sha256": "6508e57220a11c7c306d6422bcddf2ac6e24f57836266829df2953e4a7b3e175"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/continuous-learning/evaluate-session.sh",
+      "sha256": "28a41005bbbaae6666b343f6825eea89b906711be114e8ffb300d59f9e81182a"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/continuous-learning/SKILL.md",
+      "sha256": "ac8936f701e0ff85e2dc73451515de8fb4adb29a1a69e75dacff80470518d0ac"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/eval-harness/SKILL.md",
+      "sha256": "a89ef77a2a31cf1d17461d98ae62f897b8cae1ee41cdde6f6da6bbf80a83bd6e"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/frontend-patterns/SKILL.md",
+      "sha256": "9ccfa4011d22938d875e955b37758bf70c2a02ebdfb0fe0e1e784bde7d2dd43b"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/project-guidelines-example/SKILL.md",
+      "sha256": "7731ded0bd954435d94224f85db93fdbf8fee8132499bab98c6050ca6ec13514"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/security-review/SKILL.md",
+      "sha256": "5d3f7a82cf6f9030bedff19f7fb18c42a1e7a8fa413bf068854cae03adf256ae"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/strategic-compact/SKILL.md",
+      "sha256": "86183873c7dab388bca950f778046e6a2557f046b7e9d2731d8d2b87a50463da"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/strategic-compact/suggest-compact.sh",
+      "sha256": "c20006e179e52e56518d6ede3808ceb75134b907a270e1fabac5d5b396eecf89"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/tdd-workflow/SKILL.md",
+      "sha256": "2452577bf62c5109f31bf68ca2562e444bd4f402e6cf69e8f54e0b89663b2f0d"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/skills/verification-loop/SKILL.md",
+      "sha256": "d371e554e1cce8a2f640e354e6541ac7743c7daea2a14fe43c7fa0dc84d6afaf"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/tests/hooks/hooks.test.js",
+      "sha256": "ad4902e0b77c3bebf63afb33217e3246817cc7fd52c7a160c554a85bc48b044e"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/tests/lib/package-manager.test.js",
+      "sha256": "a0af34cec19ca2b851c581d0de66856a108538ca0d03d7bb9d51fe2b697b4be6"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/tests/lib/utils.test.js",
+      "sha256": "26f8e5c7d4d819a47e05f417bd7d1995573764538571f5434ce53ae824bfdddb"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/tests/run-all.js",
+      "sha256": "67cdcb0d85e875fe606cfa3a762e86207b8eb47b90765ecdf6f9587d6fd5bd75"
+    },
+    {
+      "path": ".tools/everything-claude-code/upstream/WORLDFLOWAI.md",
+      "sha256": "2389dc9c61846fd5d8d46779c7fac726c6220fa0d1c398e386ea43b14cbad3f2"
+    }
+  ],
+  "directories": [
+    ".agents",
+    ".agents/skills",
+    ".agents/skills/ecc-backend-patterns",
+    ".agents/skills/ecc-clickhouse-io",
+    ".agents/skills/ecc-coding-standards",
+    ".agents/skills/ecc-continuous-learning",
+    ".agents/skills/ecc-continuous-learning/agents",
+    ".agents/skills/ecc-eval-harness",
+    ".agents/skills/ecc-frontend-patterns",
+    ".agents/skills/ecc-project-guidelines-example",
+    ".agents/skills/ecc-project-guidelines-example/agents",
+    ".agents/skills/ecc-security-review",
+    ".agents/skills/ecc-strategic-compact",
+    ".agents/skills/ecc-strategic-compact/agents",
+    ".agents/skills/ecc-tdd-workflow",
+    ".agents/skills/ecc-verification-loop",
+    ".codex",
+    ".codex/agents",
+    ".tools",
+    ".tools/everything-claude-code",
+    ".tools/everything-claude-code/upstream",
+    ".tools/everything-claude-code/upstream/.claude",
+    ".tools/everything-claude-code/upstream/.claude-plugin",
+    ".tools/everything-claude-code/upstream/agents",
+    ".tools/everything-claude-code/upstream/commands",
+    ".tools/everything-claude-code/upstream/contexts",
+    ".tools/everything-claude-code/upstream/examples",
+    ".tools/everything-claude-code/upstream/examples/sessions",
+    ".tools/everything-claude-code/upstream/hooks",
+    ".tools/everything-claude-code/upstream/hooks/memory-persistence",
+    ".tools/everything-claude-code/upstream/hooks/strategic-compact",
+    ".tools/everything-claude-code/upstream/mcp-configs",
+    ".tools/everything-claude-code/upstream/plugins",
+    ".tools/everything-claude-code/upstream/rules",
+    ".tools/everything-claude-code/upstream/scripts",
+    ".tools/everything-claude-code/upstream/scripts/hooks",
+    ".tools/everything-claude-code/upstream/scripts/lib",
+    ".tools/everything-claude-code/upstream/skills",
+    ".tools/everything-claude-code/upstream/skills/backend-patterns",
+    ".tools/everything-claude-code/upstream/skills/clickhouse-io",
+    ".tools/everything-claude-code/upstream/skills/coding-standards",
+    ".tools/everything-claude-code/upstream/skills/continuous-learning",
+    ".tools/everything-claude-code/upstream/skills/eval-harness",
+    ".tools/everything-claude-code/upstream/skills/frontend-patterns",
+    ".tools/everything-claude-code/upstream/skills/project-guidelines-example",
+    ".tools/everything-claude-code/upstream/skills/security-review",
+    ".tools/everything-claude-code/upstream/skills/strategic-compact",
+    ".tools/everything-claude-code/upstream/skills/tdd-workflow",
+    ".tools/everything-claude-code/upstream/skills/verification-loop",
+    ".tools/everything-claude-code/upstream/tests",
+    ".tools/everything-claude-code/upstream/tests/hooks",
+    ".tools/everything-claude-code/upstream/tests/lib"
+  ]
+}

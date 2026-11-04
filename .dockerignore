@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.env*
+data
+coverage
+test-results
+playwright-report
+output
+tmp
+.tools
+.agents
+.codex
+docs/screenshots
