@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { Bell, CalendarDays, Files, Clock3, CheckCheck, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { apiMutation, useWorkspace } from "./workspace-provider";
+import { QueryLink } from "./query-link";
+import { SelectionTrack } from "./selection-track";
 import { DateText, EmptyState, PageTitle } from "./ui";
 const icons = { news: Bell, schedule: CalendarDays, request: Files, deadline: Clock3 };
 const names = {
@@ -50,7 +52,12 @@ export function Notifications() {
         </button>
       </PageTitle>
       <div className="filter-row">
-        <div className="segmented wrap-segmented">
+        <SelectionTrack
+          as="nav"
+          className="segmented wrap-segmented"
+          label="Фильтр уведомлений"
+          activeKey={filter}
+        >
           {[
             { id: "all", name: "Все" },
             { id: "unread", name: "Непрочитанные" },
@@ -58,11 +65,16 @@ export function Notifications() {
             { id: "request", name: "Документы" },
             { id: "news", name: "Новости" },
           ].map((f) => (
-            <Link key={f.id} href={`?filter=${f.id}`} className={filter === f.id ? "selected" : ""}>
+            <QueryLink
+              key={f.id}
+              href={`?filter=${f.id}`}
+              className={filter === f.id ? "selected" : ""}
+              aria-current={filter === f.id ? "true" : undefined}
+            >
               {f.name}
-            </Link>
+            </QueryLink>
           ))}
-        </div>
+        </SelectionTrack>
       </div>
       {error && (
         <p role="alert" className="form-error">

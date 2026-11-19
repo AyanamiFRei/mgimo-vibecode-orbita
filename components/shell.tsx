@@ -24,6 +24,7 @@ import { dashboardDestination, dashboardTitles } from "@/lib/navigation-history"
 import { Brand } from "./brand";
 import { clearNavigationHistory, NavigationBreadcrumbs } from "./navigation-breadcrumbs";
 import { NavigationLink } from "./navigation-link";
+import { SelectionTrack } from "./selection-track";
 import { UserAvatar } from "./user-avatar";
 import { useWorkspace } from "./workspace-provider";
 import { ThemeToggle } from "./theme-toggle";
@@ -182,7 +183,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
         <div className="nav-caption">РАЗДЕЛЫ КАБИНЕТА</div>
-        <nav className="main-nav" aria-label="Основная навигация">
+        <SelectionTrack
+          as="nav"
+          className="main-nav"
+          label="Основная навигация"
+          activeKey={pathname}
+        >
           {navigation.map(({ href, icon: Icon }) => {
             const title = dashboardTitles[href];
             const sectionActive =
@@ -210,13 +216,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <NavigationLink
               href="/dashboard/staff"
               className={`nav-item ${pathname === "/dashboard/staff" ? "active" : ""}`}
+              aria-current={pathname === "/dashboard/staff" ? "page" : undefined}
               onNavigate={() => setMenu(false)}
             >
               <UsersRound size={19} aria-hidden="true" />
               <span>Очередь деканата</span>
             </NavigationLink>
           )}
-        </nav>
+        </SelectionTrack>
         <div className="sidebar-bottom">
           <div className="help-card">
             <span className="help-spark">

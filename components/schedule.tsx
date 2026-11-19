@@ -4,32 +4,12 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays, ChevronLeft, ChevronRight, Info, RefreshCw } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
+import { QueryLink, setLocalQuery } from "./query-link";
+import { SelectionTrack } from "./selection-track";
 import { DateText, EmptyState, Lesson, PageTitle } from "./ui";
 import type { ScheduleData as WeekData, Teacher } from "@/lib/types";
 import { addDays, moscowDate } from "@/lib/time";
 
-function selectSchedule(href: string) {
-  if (href !== window.location.search) window.history.pushState(null, "", href);
-}
-
-function CalendarLink({
-  href,
-  ...props
-}: Omit<React.ComponentProps<typeof Link>, "href"> & {
-  href: string;
-}) {
-  return (
-    <Link
-      {...props}
-      href={href}
-      prefetch={false}
-      onNavigate={(event) => {
-        event.preventDefault();
-        selectSchedule(href);
-      }}
-    />
-  );
-}
 function validDate(value: string) {
   return (
     /^\d{4}-\d{2}-\d{2}$/.test(value) &&
@@ -94,7 +74,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
             id="semester"
             value={semesterId}
             onChange={(event) =>
-              selectSchedule(
+              setLocalQuery(
                 `?date=${event.target.value === "spring-2027" ? "2027-02-08" : "2026-09-01"}&view=${view}`,
               )
             }
@@ -113,7 +93,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
             max="2027-06-30"
             onChange={(event) => {
               if (validDate(event.target.value))
-                selectSchedule(`?date=${event.target.value}&view=${view}`);
+                setLocalQuery(`?date=${event.target.value}&view=${view}`);
             }}
           />
         </label>
@@ -125,13 +105,13 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
       <div className="schedule-toolbar">
         <div className="week-switch">
           {addDays(selected, -7) >= "2026-09-01" ? (
-            <CalendarLink
+            <QueryLink
               className="icon-button"
               href={`?date=${addDays(selected, -7)}&view=${view}`}
               aria-label="Предыдущая неделя"
             >
               <ChevronLeft size={20} />
-            </CalendarLink>
+            </QueryLink>
           ) : (
             <span className="icon-button muted" aria-hidden="true">
               <ChevronLeft size={20} />
@@ -142,47 +122,47 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
             <DateText value={week[6]} options={{ day: "numeric", month: "short" }} />
           </strong>
           {addDays(selected, 7) <= "2027-06-30" ? (
-            <CalendarLink
+            <QueryLink
               className="icon-button"
               href={`?date=${addDays(selected, 7)}&view=${view}`}
               aria-label="Следующая неделя"
             >
               <ChevronRight size={20} />
-            </CalendarLink>
+            </QueryLink>
           ) : (
             <span className="icon-button muted" aria-hidden="true">
               <ChevronRight size={20} />
             </span>
           )}
         </div>
-        <CalendarLink
+        <QueryLink
           className="button secondary small"
           href={`?date=${validDate(today) ? today : "2026-09-01"}&view=${view}`}
         >
           Сегодня
-        </CalendarLink>
-        <div className="segmented">
-          <CalendarLink
+        </QueryLink>
+        <SelectionTrack as="nav" className="segmented" label="Вид расписания" activeKey={view}>
+          <QueryLink
             href={`?date=${selected}&view=day`}
             className={view === "day" ? "selected" : ""}
             aria-current={view === "day" ? "true" : undefined}
           >
             День
-          </CalendarLink>
-          <CalendarLink
+          </QueryLink>
+          <QueryLink
             href={`?date=${selected}&view=week`}
             className={view === "week" ? "selected" : ""}
             aria-current={view === "week" ? "true" : undefined}
           >
             Неделя
-          </CalendarLink>
-        </div>
+          </QueryLink>
+        </SelectionTrack>
       </div>
       <div className="week-days">
         {week.map((date) => {
           const meta = loaded?.days.find((d) => d.date === date);
           return validDate(date) ? (
-            <CalendarLink
+            <QueryLink
               key={date}
               href={`?date=${date}&view=${view}`}
               className={`day-tab ${selected === date ? "selected" : ""} ${date === today ? "is-today" : ""} ${meta?.kind === "holiday" ? "is-holiday" : ""}`}
@@ -197,7 +177,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
               </span>
               <strong>{new Date(`${date}T12:00:00Z`).getUTCDate()}</strong>
               <i className={classes.some((c) => c.date === date) ? "has-lessons" : ""} />
-            </CalendarLink>
+            </QueryLink>
           ) : (
             <span key={date} className="day-tab outside-semester" aria-hidden="true">
               <span>—</span>

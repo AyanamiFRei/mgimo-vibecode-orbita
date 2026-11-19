@@ -11,7 +11,8 @@
   --motion-effects-fast: 150ms;
   --motion-effects-default: 231ms;
   --motion-effects-slow: 327ms;
-  --motion-spatial-curve: cubic-bezier(0.27, 1.06, 0.18, 1);
+  --motion-spatial-fallback: cubic-bezier(0.27, 1.06, 0.18, 1);
+  --motion-spatial-curve: var(--motion-spatial-fallback);
   --motion-effects-curve: cubic-bezier(0.2, 0, 0, 1);
 }
 @supports (animation-timing-function: linear(0, 1)) {
@@ -96,6 +97,43 @@ textarea {
 }
 .sidebar {
   transition: transform var(--motion-spatial-default) var(--motion-spatial-curve);
+}
+.selection-track {
+  position: relative;
+  isolation: isolate;
+  --selection-duration: var(--motion-spatial-fast);
+}
+.main-nav.selection-track {
+  --selection-duration: var(--motion-spatial-default);
+}
+.selection-indicator {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  visibility: hidden;
+  transform-origin: top left;
+  background: var(--surface-base);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px #2633200c;
+}
+.main-nav > .selection-indicator {
+  background: var(--surface-selected);
+  border-radius: 9px;
+  box-shadow: none;
+}
+.selection-track[data-selection-ready] > .selection-indicator {
+  visibility: visible;
+}
+/* Server-rendered links paint their selection until the pill is in position. */
+.selection-track[data-selection-ready] > :is(.selected, .active) {
+  background: transparent;
+  box-shadow: none;
+}
+.selection-track[data-selection-ready] > :is(a, button) {
+  transition-property: color, opacity;
+}
+.segmented:has(> .selected:hover) > .selection-indicator {
+  background: var(--surface-hover);
 }
 /* A slow link can live inside a closed mobile drawer. Keep its feedback in the shell. */
 .app-shell::after {

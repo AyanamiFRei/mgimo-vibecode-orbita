@@ -1,8 +1,9 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { Check, GraduationCap, TrendingUp, BookOpen } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
+import { QueryLink } from "./query-link";
+import { SelectionTrack } from "./selection-track";
 import { DateText, EmptyState, PageTitle } from "./ui";
 export function Grades() {
   const { data } = useWorkspace();
@@ -54,17 +55,22 @@ export function Grades() {
         </div>
       </div>
       <div className="filter-row">
-        <div className="segmented">
+        <SelectionTrack as="nav" className="segmented" label="Фильтр дисциплин" activeKey={filter}>
           {[
             { id: "all", title: "Все дисциплины" },
             { id: "active", title: "В процессе" },
             { id: "passed", title: "Закрытые" },
           ].map((f) => (
-            <Link key={f.id} href={`?filter=${f.id}`} className={filter === f.id ? "selected" : ""}>
+            <QueryLink
+              key={f.id}
+              href={`?filter=${f.id}`}
+              className={filter === f.id ? "selected" : ""}
+              aria-current={filter === f.id ? "true" : undefined}
+            >
               {f.title}
-            </Link>
+            </QueryLink>
           ))}
-        </div>
+        </SelectionTrack>
         <span className="muted">Текущий учебный период</span>
       </div>
       <section className="panel grade-list">

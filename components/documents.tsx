@@ -13,6 +13,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { apiMutation, useWorkspace } from "./workspace-provider";
+import { QueryLink } from "./query-link";
+import { SelectionTrack } from "./selection-track";
 import { DateText, EmptyState, PageTitle, requestTitles, Status, statusTitles } from "./ui";
 import type { RequestType, StudentRequest } from "@/lib/types";
 
@@ -329,17 +331,22 @@ export function Documents() {
         <h2>
           Твои заявки <span className="count-bubble">{data.requests.length}</span>
         </h2>
-        <div className="segmented">
+        <SelectionTrack as="nav" className="segmented" label="Фильтр заявок" activeKey={filter}>
           {[
             { id: "all", name: "Все" },
             { id: "active", name: "В работе" },
             { id: "ready", name: "Готовые" },
           ].map((f) => (
-            <Link key={f.id} className={filter === f.id ? "selected" : ""} href={`?filter=${f.id}`}>
+            <QueryLink
+              key={f.id}
+              className={filter === f.id ? "selected" : ""}
+              href={`?filter=${f.id}`}
+              aria-current={filter === f.id ? "true" : undefined}
+            >
               {f.name}
-            </Link>
+            </QueryLink>
           ))}
-        </div>
+        </SelectionTrack>
       </div>
       <section className="panel requests-list">
         {filtered.length ? (
