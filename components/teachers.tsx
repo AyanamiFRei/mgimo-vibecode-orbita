@@ -1,43 +1,32 @@
-"use client";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import Form from "next/form";
 import { ArrowUpRight, Clock3, Info, MapPin, MessageSquare, Search } from "lucide-react";
-import type { Teacher } from "@/lib/types";
-import { useWorkspace } from "./workspace-provider";
+import type { Role, Teacher } from "@/lib/types";
 import { EmptyState, PageTitle } from "./ui";
-import { getData, TeacherAvatar } from "./teacher-conversation";
+import { TeacherAvatar } from "./teacher-conversation";
+import { NavigationLink } from "./navigation-link";
 
-export function Teachers() {
-  const {
-    data: { user },
-  } = useWorkspace();
-  const params = useSearchParams();
-  const [result, setResult] = useState<{ teachers: Teacher[]; error?: string }>();
-  const [retry, setRetry] = useState(0);
-  const query = params.get("q") || "";
-  useEffect(() => {
-    const controller = new AbortController();
-    getData<Teacher[]>("/api/teachers", controller.signal)
-      .then((teachers) => setResult({ teachers }))
-      .catch((error) => {
-        if (error.name !== "AbortError") setResult({ teachers: [], error: error.message });
-      });
-    return () => controller.abort();
-  }, [retry]);
-  const teachers =
-    result?.teachers.filter((teacher) =>
-      `${teacher.name} ${teacher.department} ${teacher.subjects.join(" ")}`
-        .toLocaleLowerCase("ru-RU")
-        .includes(query.toLocaleLowerCase("ru-RU")),
-    ) || [];
+export function Teachers({
+  teachers,
+  role,
+  query,
+}: {
+  teachers: Teacher[];
+  role: Role;
+  query: string;
+}) {
+  const normalizedQuery = query.toLocaleLowerCase("ru-RU");
+  const matches = teachers.filter((teacher) =>
+    `${teacher.name} ${teacher.department} ${teacher.subjects.join(" ")}`
+      .toLocaleLowerCase("ru-RU")
+      .includes(normalizedQuery),
+  );
   return (
     <>
       <PageTitle title="Преподаватели" description="Дисциплины, кафедры и часы консультаций.">
-        <Link className="button primary" href="/dashboard/chats">
+        <NavigationLink className="button primary" href="/dashboard/chats">
           <MessageSquare size={17} aria-hidden="true" />
           Открыть чаты
-        </Link>
+        </NavigationLink>
       </PageTitle>
       <div className="info-strip">
         <Info size={18} aria-hidden="true" />
@@ -45,12 +34,18 @@ export function Teachers() {
           Каталог вымышленных преподавателей. Переписка доступна в отдельном разделе «Чаты».
         </span>
       </div>
-      <form action="/dashboard/teachers" className="search-page-form" role="search">
+      <Form
+        action="/dashboard/teachers"
+        prefetch={false}
+        className="search-page-form"
+        role="search"
+      >
         <Search size={20} aria-hidden="true" />
         <label className="sr-only" htmlFor="teacher-search">
           Найти преподавателя
         </label>
         <input
+          key={query}
           id="teacher-search"
           name="q"
           defaultValue={query}
@@ -61,34 +56,23 @@ export function Teachers() {
         <button className="button secondary" type="submit">
           Найти
         </button>
-      </form>
-      {!result ? (
-        <div className="panel loading-state" role="status">
-          <span className="spinner" />
-          Загружаем преподавателей…
-        </div>
-      ) : result.error ? (
-        <section className="panel" role="alert">
-          <p className="form-error">{result.error}</p>
-          <button className="button secondary" onClick={() => setRetry((n) => n + 1)}>
-            Попробовать ещё раз
-          </button>
-        </section>
-      ) : (
+      </Form>
+      {matches.length ? (
         <div className="teachers-grid">
-          {teachers.map((teacher) => (
+          {matches.map((teacher) => (
             <article key={teacher.id} className="panel teacher-card">
               <div className="teacher-card-top">
                 <TeacherAvatar teacher={teacher} />
                 <span className="badge status-ready">Вымышленный профиль</span>
               </div>
               <h2>
-                <Link
+                <NavigationLink
                   className="teacher-profile-link"
+                  prefetch={false}
                   href={`/dashboard/teachers/${encodeURIComponent(teacher.id)}`}
                 >
                   {teacher.name} <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
+                </NavigationLink>
               </h2>
               <p className="teacher-title">
                 {teacher.title} · {teacher.department}
@@ -107,21 +91,21 @@ export function Teachers() {
                 <MapPin size={15} aria-hidden="true" />
                 <span>{teacher.office}</span>
               </div>
-              {user.role === "student" && (
-                <Link
+              {role === "student" && (
+                <NavigationLink
                   className="button secondary teacher-write"
                   role="button"
+                  prefetch={false}
                   href={`/dashboard/chats?compose=${encodeURIComponent(teacher.id)}`}
                 >
                   <MessageSquare size={16} aria-hidden="true" />
                   Написать преподавателю
-                </Link>
+                </NavigationLink>
               )}
             </article>
           ))}
         </div>
-      )}
-      {result && !result.error && !teachers.length && (
+      ) : (
         <section className="panel">
           <EmptyState
             title="Преподаватели не найдены"

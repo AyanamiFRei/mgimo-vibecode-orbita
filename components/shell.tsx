@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Form from "next/form";
+import { usePathname, useSearchParams } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
   House,
@@ -19,10 +19,11 @@ import {
   GraduationCap,
   MessageSquare,
 } from "lucide-react";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { dashboardTitles } from "@/lib/navigation-history";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { dashboardDestination, dashboardTitles } from "@/lib/navigation-history";
 import { Brand } from "./brand";
 import { clearNavigationHistory, NavigationBreadcrumbs } from "./navigation-breadcrumbs";
+import { NavigationLink } from "./navigation-link";
 import { UserAvatar } from "./user-avatar";
 import { useWorkspace } from "./workspace-provider";
 import { ThemeToggle } from "./theme-toggle";
@@ -42,6 +43,27 @@ const subscribeMobile = (callback: () => void) => {
   return () => media.removeEventListener("change", callback);
 };
 const mobileSnapshot = () => window.matchMedia("(max-width: 720px)").matches;
+
+function DashboardMain({ pathname, children }: { pathname: string; children: React.ReactNode }) {
+  const params = useSearchParams();
+  const identity = dashboardDestination(`${pathname}?${params}`)?.identity ?? pathname;
+  // The compose and request forms open over the current page with their own dialog motion.
+  const page = identity.endsWith("?new") || identity.includes("?compose=") ? pathname : identity;
+  const previousPage = useRef(page);
+  const main = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    if (previousPage.current === page || !main.current) return;
+    previousPage.current = page;
+    // Switch CSS animation names before paint, keeping the routed subtree and focus intact.
+    main.current.toggleAttribute("data-alternate-motion");
+  }, [page]);
+  return (
+    <main ref={main} id="main" className="main-content" tabIndex={-1}>
+      {children}
+    </main>
+  );
+}
+
 export function Shell({ children }: { children: React.ReactNode }) {
   const { data } = useWorkspace();
   const pathname = usePathname();
@@ -105,14 +127,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
         aria-modal={mobile && menu ? true : undefined}
         aria-label="Навигация кабинета"
       >
-        <Link
+        <NavigationLink
           href="/dashboard"
           className="brand-link"
           aria-label="Орбита — главная"
-          onClick={() => setMenu(false)}
+          prefetch={false}
+          onNavigate={() => setMenu(false)}
         >
           <Brand />
-        </Link>
+        </NavigationLink>
         <button
           className="mobile-close icon-button"
           onClick={() => setMenu(false)}
@@ -135,13 +158,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
             const sectionActive =
               pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
             return (
-              <Link
+              <NavigationLink
                 key={href}
                 href={href}
                 aria-label={title}
                 className={`nav-item ${sectionActive ? "active" : ""}`}
                 aria-current={pathname === href ? "page" : sectionActive ? "location" : undefined}
-                onClick={() => setMenu(false)}
+                onNavigate={() => setMenu(false)}
               >
                 <Icon size={19} aria-hidden="true" />
                 <span>{title}</span>
@@ -150,18 +173,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     {unread}
                   </span>
                 )}
-              </Link>
+              </NavigationLink>
             );
           })}
           {data.user.role === "staff" && (
-            <Link
+            <NavigationLink
               href="/dashboard/staff"
               className={`nav-item ${pathname === "/dashboard/staff" ? "active" : ""}`}
-              onClick={() => setMenu(false)}
+              onNavigate={() => setMenu(false)}
             >
               <UsersRound size={19} aria-hidden="true" />
               <span>Очередь деканата</span>
-            </Link>
+            </NavigationLink>
           )}
         </nav>
         <div className="sidebar-bottom">
@@ -171,10 +194,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </span>
             <h3>Заявка в деканат</h3>
             <p>Заказ справки или подача заявления. Статус сохраняется в документах.</p>
-            <Link href="/dashboard/documents?new=1" onClick={() => setMenu(false)}>
+            <NavigationLink
+              href="/dashboard/documents?new=1"
+              prefetch={false}
+              onNavigate={() => setMenu(false)}
+            >
               Обратиться в деканат
               <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
+            </NavigationLink>
           </div>
           <div className="concept-tag">
             <ShieldCheck size={14} aria-hidden="true" />
@@ -212,7 +239,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="header-actions">
             <ThemeToggle />
-            <form action="/dashboard/search" className="global-search" role="search">
+            <Form
+              action="/dashboard/search"
+              prefetch={false}
+              className="global-search"
+              role="search"
+            >
               <Search size={17} aria-hidden="true" />
               <input
                 name="q"
@@ -221,28 +253,32 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 autoComplete="off"
               />
               <kbd>↵</kbd>
-            </form>
-            <Link
+            </Form>
+            <NavigationLink
               href="/dashboard/notifications"
               className="notification-button icon-button"
+              prefetch={false}
               aria-label={`Уведомления, ${unread} непрочитанных`}
             >
               <Bell size={20} />
               {unread > 0 && <i />}
-            </Link>
+            </NavigationLink>
             <span className="header-divider" />
-            <Link className="user-link" href="/dashboard/profile" aria-label="Профиль">
+            <NavigationLink
+              className="user-link"
+              href="/dashboard/profile"
+              prefetch={false}
+              aria-label="Профиль"
+            >
               <UserAvatar user={data.user} />
               <span className="user-short">
                 <strong>{data.user.firstName}</strong>
                 <small>{data.user.role === "staff" ? "Сотрудник деканата" : data.user.group}</small>
               </span>
-            </Link>
+            </NavigationLink>
           </div>
         </header>
-        <main id="main" className="main-content" tabIndex={-1}>
-          {children}
-        </main>
+        <DashboardMain pathname={pathname}>{children}</DashboardMain>
         <footer className="site-footer">
           <span>Орбита · Студенческий кабинет</span>
           <span>Неофициальный конкурсный прототип · Все данные вымышлены</span>

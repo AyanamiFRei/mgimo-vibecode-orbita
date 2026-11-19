@@ -4,7 +4,7 @@ import type { Client, Row } from "@libsql/client";
 import { programs } from "@/lib/catalog";
 import { withWriteTransaction } from "@/lib/database-write";
 import { notFound } from "@/lib/errors";
-import { requireActor, requireRole, type SqlConnection } from "@/lib/users";
+import { requireActor, requireRequestActor, requireRole, type SqlConnection } from "@/lib/users";
 import { validate } from "@/lib/validation";
 import type {
   ProgramKey,
@@ -100,20 +100,20 @@ export class TeacherService {
   ) {}
 
   async findTeacher(actorId: string, teacherId: string): Promise<Teacher | null> {
-    await requireActor(this.db, actorId);
+    await requireRequestActor(this.db, actorId);
     return findTeacherById(this.db, teacherId);
   }
 
   async getTeachers(actorId: string): Promise<Teacher[]> {
-    const actor = await requireActor(this.db, actorId);
-    const result = await this.db.execute("SELECT * FROM teachers ORDER BY id");
-    const teachers = result.rows.map(teacherFromRow);
-    if (actor.role === "staff") return teachers;
-    const enrollment = await this.db.execute({
-      sql: "SELECT program_key FROM user_enrollments WHERE user_id=?",
+    const actor = await requireRequestActor(this.db, actorId);
+    const result = await this.db.execute({
+      sql: `SELECT t.*, e.program_key FROM teachers t
+            LEFT JOIN user_enrollments e ON e.user_id=? ORDER BY t.id`,
       args: [actorId],
     });
-    const programKey = enrollment.rows[0]?.program_key as ProgramKey | undefined;
+    const teachers = result.rows.map(teacherFromRow);
+    if (actor.role === "staff") return teachers;
+    const programKey = result.rows[0]?.program_key as ProgramKey | null | undefined;
     const subjects = programKey && programs[programKey]?.subjects;
     return subjects
       ? teachers.map((teacher) => ({
@@ -124,7 +124,7 @@ export class TeacherService {
   }
 
   async listThreads(actorId: string): Promise<TeacherThread[]> {
-    const actor = await requireActor(this.db, actorId);
+    const actor = await requireRequestActor(this.db, actorId);
     requireRole(actor, "student");
     const result = await this.db.execute({
       sql: `SELECT ${threadColumns} FROM teacher_threads t WHERE t.user_id=? ORDER BY t.updated_at DESC,t.rowid DESC LIMIT 50`,
@@ -134,7 +134,7 @@ export class TeacherService {
   }
 
   async getInbox(actorId: string): Promise<StaffTeacherThread[]> {
-    const actor = await requireActor(this.db, actorId);
+    const actor = await requireRequestActor(this.db, actorId);
     requireRole(actor, "staff");
     const result = await this.db.execute(
       `SELECT ${threadColumns},u.name AS student_name,u.group_name AS student_group FROM teacher_threads t JOIN users u ON u.id=t.user_id ORDER BY (t.staff_unread>0) DESC,t.updated_at DESC,t.rowid DESC LIMIT 50`,

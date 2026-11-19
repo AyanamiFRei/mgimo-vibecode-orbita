@@ -1,9 +1,10 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { authenticateCredentials } from "@/lib/credentials";
 import { getDb } from "@/lib/db";
-import { findUser } from "@/lib/users";
+import { findRequestUser } from "@/lib/users";
 import type { User } from "@/lib/types";
 
 export function assertAuthConfiguration(): void {
@@ -45,7 +46,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      const user = token.sub ? await findUser(getDb(), token.sub) : null;
+      const user = token.sub ? await findRequestUser(getDb(), token.sub) : null;
       session.user = user
         ? { id: user.id, role: user.role, name: user.name, email: user.email }
         : { id: "", role: "student", name: null, email: null };
@@ -64,11 +65,11 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export async function getSessionUser(): Promise<User | null> {
+export const getSessionUser = cache(async (): Promise<User | null> => {
   assertAuthConfiguration();
   const session = await getServerSession(authOptions);
-  return session?.user.id ? findUser(getDb(), session.user.id) : null;
-}
+  return session?.user.id ? findRequestUser(getDb(), session.user.id) : null;
+});
 
 export async function requireUser(): Promise<User> {
   const user = await getSessionUser();

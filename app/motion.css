@@ -118,10 +118,108 @@ textarea {
 .theme-toggle:active svg {
   transform: rotate(24deg);
 }
-.main-content > .page-title,
-.main-content > .teacher-profile,
-.schedule-view > .panel,
-.conversation-messages > .message-bubble,
+/* A slow link can live inside a closed mobile drawer. Keep its feedback in the shell. */
+.app-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  height: 3px;
+  pointer-events: none;
+  background: var(--text-accent);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.app-shell:has(.nav-pending[data-pending])::after {
+  opacity: 1;
+  transform: scaleX(0.65);
+  transition:
+    transform var(--motion-spatial-slow) var(--motion-spatial-curve) 120ms,
+    opacity var(--motion-effects-fast) var(--motion-effects-curve) 120ms;
+}
+
+/* Alternating names restart the entrance on a committed pathname without a layout read.
+   A streamed route starts its entrance when the dashboard fallback leaves the main. */
+.main-content {
+  --route-spatial: orbita-route-spatial-a;
+  --route-effects: orbita-route-effects-a;
+}
+.main-content[data-alternate-motion] {
+  --route-spatial: orbita-route-spatial-b;
+  --route-effects: orbita-route-effects-b;
+}
+.main-content:not(:has(> .dashboard-loading)) {
+  animation:
+    var(--route-spatial) var(--motion-spatial-default) var(--motion-spatial-curve),
+    var(--route-effects) var(--motion-effects-default) var(--motion-effects-curve);
+}
+@keyframes orbita-route-spatial-a {
+  from {
+    transform: translateY(12px);
+  }
+}
+@keyframes orbita-route-spatial-b {
+  from {
+    transform: translateY(12px);
+  }
+}
+@keyframes orbita-route-effects-a {
+  from {
+    opacity: 0.68;
+  }
+}
+@keyframes orbita-route-effects-b {
+  from {
+    opacity: 0.68;
+  }
+}
+
+.dashboard-loading,
+.schedule-loading {
+  min-height: clamp(14rem, 45vh, 26rem);
+  animation: orbita-enter-effects var(--motion-effects-fast) var(--motion-effects-curve) 100ms
+    backwards;
+}
+.dashboard-loading p {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+}
+.dashboard-loading-rows {
+  display: grid;
+  gap: 22px;
+  padding: 28px;
+}
+.dashboard-loading-rows span {
+  display: block;
+  width: min(84%, 34rem);
+  height: 0.8rem;
+  border-radius: 6px;
+  background: var(--surface-subtle);
+}
+.dashboard-loading-rows span:nth-child(2) {
+  width: min(66%, 23rem);
+}
+.dashboard-loading-rows span:last-child {
+  width: min(74%, 28rem);
+}
+
+.teacher-profile-link svg,
+.chat-card-footer svg,
+.chat-teacher-option > svg {
+  transition: transform var(--motion-spatial-fast) var(--motion-spatial-curve);
+}
+@media (hover: hover) and (pointer: fine) {
+  .teacher-profile-link:hover svg,
+  .chat-card:hover .chat-card-footer svg {
+    transform: translate(2px, -2px);
+  }
+  .chat-teacher-option:hover > svg {
+    transform: scale(1.12);
+  }
+}
+.empty-icon,
+.conversation-messages > .message-bubble:last-child,
 .profile-photo-controls [role="status"],
 .breadcrumb-overflow details[open] .breadcrumb-menu {
   animation:

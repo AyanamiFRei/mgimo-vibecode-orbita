@@ -5,7 +5,7 @@ import { classFromRow } from "@/lib/academics";
 import { calendarDay } from "@/lib/calendar";
 import { AppError, notFound } from "@/lib/errors";
 import { addDays, mondayInMoscow, requestDueAt } from "@/lib/time";
-import { requireActor, requireRole, type SqlConnection } from "@/lib/users";
+import { requireActor, requireRequestActor, requireRole, type SqlConnection } from "@/lib/users";
 import {
   createRequestSchema,
   readNotificationsSchema,
@@ -107,7 +107,7 @@ export class CampusService {
   ) {}
 
   async getWorkspace(actorId: string): Promise<Workspace> {
-    const user = await requireActor(this.db, actorId);
+    const user = await requireRequestActor(this.db, actorId);
     const weekStart = mondayInMoscow(this.clock());
     const results = await this.db.batch(
       [

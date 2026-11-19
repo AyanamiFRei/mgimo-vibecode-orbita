@@ -26,12 +26,27 @@ test("teacher profile and calendar keep a usable navigation trail and filters", 
   page.on("pageerror", (error) => errors.push(error.message));
   await loginFresh(page);
   await page.goto("/dashboard/teachers?q=Вера");
-  await page
-    .locator(".teacher-card")
-    .getByRole("link", { name: /Вера Лунова/ })
-    .click();
+  const main = page.locator("main#main");
+  const startMotion = await main.evaluate((element) => getComputedStyle(element).animationName);
+  const releaseProfile = Promise.withResolvers<void>();
+  await page.route("**/dashboard/teachers/teacher-1?*", async (route) => {
+    await releaseProfile.promise;
+    await route.continue();
+  });
+  try {
+    await page
+      .locator(".teacher-card")
+      .getByRole("link", { name: /Вера Лунова/ })
+      .click({ noWaitAfter: true });
+    await expect(
+      page.locator(".nav-pending").or(page.locator(".dashboard-loading")).first(),
+    ).toBeAttached();
+  } finally {
+    releaseProfile.resolve();
+  }
   await expect(page).toHaveURL(/\/dashboard\/teachers\/teacher-1$/);
   await expect(page.getByRole("heading", { name: "Вера Лунова", exact: true })).toBeVisible();
+  await expect(main).not.toHaveCSS("animation-name", startMotion);
   await expect(page.locator(".teacher-profile-details")).toContainText("Консультации");
   await page.screenshot({
     path: `output/qa/teacher-profile-${info.project.name}.png`,
@@ -40,10 +55,12 @@ test("teacher profile and calendar keep a usable navigation trail and filters", 
   await page.getByRole("link", { name: "Расписание преподавателя", exact: true }).click();
   await expect(page).toHaveURL(/\/teachers\/teacher-1\/schedule$/);
   await expect(page.locator(".lesson").first()).toBeVisible();
+  const scheduleMotion = await main.evaluate((element) => getComputedStyle(element).animationName);
   await page.getByLabel("Перейти к дате").fill("2027-04-12");
   await expect(page.getByLabel("Семестр")).toHaveValue("spring-2027");
   await expect(page.locator(".schedule-view")).toContainText("БИ-23-01");
   await expect(page.locator(".schedule-view")).toContainText("МО-24-02");
+  await expect(main).toHaveCSS("animation-name", scheduleMotion);
   const scheduleUrl = page.url();
   await page.screenshot({
     path: `output/qa/teacher-schedule-${info.project.name}.png`,
@@ -71,13 +88,13 @@ test("warm light surfaces and Material motion respect reduced motion", async ({ 
   await loginFresh(page);
   await expect(page.locator("body")).toHaveCSS("background-color", "rgb(220, 201, 169)");
   await expect(page.locator(".panel").first()).toHaveCSS("background-color", "rgb(248, 241, 228)");
-  await expect(page.locator(".page-title")).toHaveCSS("animation-name", /orbita-enter-spatial/);
+  await expect(page.locator("main#main")).toHaveCSS("animation-name", /orbita-route-spatial/);
   await page.screenshot({
     path: `output/qa/warm-dashboard-${info.project.name}.png`,
     fullPage: true,
   });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.locator(".page-title")).toHaveCSS("animation-name", "none");
+  await expect(page.locator("main#main")).toHaveCSS("animation-name", "none");
   await expect(page.locator(".sidebar")).toHaveCSS("transition-duration", "0s");
   await page.getByRole("button", { name: "Тёмная тема", exact: true }).click();
   await expect(page.locator("body")).toHaveCSS("background-color", "rgb(23, 27, 25)");

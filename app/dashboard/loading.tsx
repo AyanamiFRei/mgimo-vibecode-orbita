@@ -1,8 +1,12 @@
 export default function Loading() {
   return (
-    <div className="loading-state" role="status">
-      <span className="spinner" />
-      Собираем твой кабинет…
-    </div>
+    <section className="dashboard-loading" role="status">
+      <p>Загружаем раздел…</p>
+      <div className="panel dashboard-loading-rows" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+    </section>
   );
 }

@@ -1,16 +1,34 @@
 "use client";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays, ChevronLeft, ChevronRight, Info, RefreshCw } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
 import { DateText, EmptyState, Lesson, PageTitle } from "./ui";
 import type { ScheduleData as WeekData, Teacher } from "@/lib/types";
+import { addDays, moscowDate } from "@/lib/time";
 
-function addDays(date: string, days: number) {
-  const value = new Date(`${date}T12:00:00Z`);
-  value.setUTCDate(value.getUTCDate() + days);
-  return value.toISOString().slice(0, 10);
+function selectSchedule(href: string) {
+  if (href !== window.location.search) window.history.pushState(null, "", href);
+}
+
+function CalendarLink({
+  href,
+  ...props
+}: Omit<React.ComponentProps<typeof Link>, "href"> & {
+  href: string;
+}) {
+  return (
+    <Link
+      {...props}
+      href={href}
+      prefetch={false}
+      onNavigate={(event) => {
+        event.preventDefault();
+        selectSchedule(href);
+      }}
+    />
+  );
 }
 function validDate(value: string) {
   return (
@@ -24,8 +42,7 @@ function validDate(value: string) {
 export function Schedule({ teacher }: { teacher?: Teacher }) {
   const { data } = useWorkspace();
   const params = useSearchParams();
-  const router = useRouter();
-  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Moscow" }).format(new Date());
+  const today = moscowDate();
   const requested = params.get("date") || today;
   const selected = validDate(requested) ? requested : "2026-09-01";
   const semesterId = selected < "2027-02-01" ? "autumn-2026" : "spring-2027";
@@ -77,7 +94,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
             id="semester"
             value={semesterId}
             onChange={(event) =>
-              router.push(
+              selectSchedule(
                 `?date=${event.target.value === "spring-2027" ? "2027-02-08" : "2026-09-01"}&view=${view}`,
               )
             }
@@ -96,7 +113,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
             max="2027-06-30"
             onChange={(event) => {
               if (validDate(event.target.value))
-                router.push(`?date=${event.target.value}&view=${view}`);
+                selectSchedule(`?date=${event.target.value}&view=${view}`);
             }}
           />
         </label>
@@ -108,13 +125,13 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
       <div className="schedule-toolbar">
         <div className="week-switch">
           {addDays(selected, -7) >= "2026-09-01" ? (
-            <Link
+            <CalendarLink
               className="icon-button"
               href={`?date=${addDays(selected, -7)}&view=${view}`}
               aria-label="Предыдущая неделя"
             >
               <ChevronLeft size={20} />
-            </Link>
+            </CalendarLink>
           ) : (
             <span className="icon-button muted" aria-hidden="true">
               <ChevronLeft size={20} />
@@ -125,39 +142,47 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
             <DateText value={week[6]} options={{ day: "numeric", month: "short" }} />
           </strong>
           {addDays(selected, 7) <= "2027-06-30" ? (
-            <Link
+            <CalendarLink
               className="icon-button"
               href={`?date=${addDays(selected, 7)}&view=${view}`}
               aria-label="Следующая неделя"
             >
               <ChevronRight size={20} />
-            </Link>
+            </CalendarLink>
           ) : (
             <span className="icon-button muted" aria-hidden="true">
               <ChevronRight size={20} />
             </span>
           )}
         </div>
-        <Link
+        <CalendarLink
           className="button secondary small"
           href={`?date=${validDate(today) ? today : "2026-09-01"}&view=${view}`}
         >
           Сегодня
-        </Link>
+        </CalendarLink>
         <div className="segmented">
-          <Link href={`?date=${selected}&view=day`} className={view === "day" ? "selected" : ""}>
+          <CalendarLink
+            href={`?date=${selected}&view=day`}
+            className={view === "day" ? "selected" : ""}
+            aria-current={view === "day" ? "true" : undefined}
+          >
             День
-          </Link>
-          <Link href={`?date=${selected}&view=week`} className={view === "week" ? "selected" : ""}>
+          </CalendarLink>
+          <CalendarLink
+            href={`?date=${selected}&view=week`}
+            className={view === "week" ? "selected" : ""}
+            aria-current={view === "week" ? "true" : undefined}
+          >
             Неделя
-          </Link>
+          </CalendarLink>
         </div>
       </div>
       <div className="week-days">
         {week.map((date) => {
           const meta = loaded?.days.find((d) => d.date === date);
           return validDate(date) ? (
-            <Link
+            <CalendarLink
               key={date}
               href={`?date=${date}&view=${view}`}
               className={`day-tab ${selected === date ? "selected" : ""} ${date === today ? "is-today" : ""} ${meta?.kind === "holiday" ? "is-holiday" : ""}`}
@@ -172,7 +197,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
               </span>
               <strong>{new Date(`${date}T12:00:00Z`).getUTCDate()}</strong>
               <i className={classes.some((c) => c.date === date) ? "has-lessons" : ""} />
-            </Link>
+            </CalendarLink>
           ) : (
             <span key={date} className="day-tab outside-semester" aria-hidden="true">
               <span>—</span>
@@ -189,8 +214,8 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
         </span>
       </div>
       {!loaded && !error && (
-        <div className="panel loading-state" role="status">
-          <span className="spinner" />
+        <div className="panel loading-state schedule-loading" role="status">
+          <span className="spinner" aria-hidden="true" />
           Загружаем неделю…
         </div>
       )}

@@ -1,93 +1,53 @@
-"use client";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { ArrowUpRight, Info, MessageSquare, Plus } from "lucide-react";
-import type { StaffTeacherThread, Teacher, TeacherThread } from "@/lib/types";
-import { useWorkspace } from "./workspace-provider";
+import type { Role, StaffTeacherThread, Teacher, TeacherThread } from "@/lib/types";
 import { DateText, EmptyState, PageTitle } from "./ui";
-import {
-  getData,
-  TeacherAvatar,
-  TeacherCompose,
-  TeacherConversationView,
-} from "./teacher-conversation";
+import { TeacherAvatar, TeacherCompose } from "./teacher-conversation";
+import { NavigationLink } from "./navigation-link";
 
-export function Chats() {
-  const {
-    data: { user },
-  } = useWorkspace();
-  const params = useSearchParams();
-  const threadId = params.get("thread");
-  const [result, setResult] = useState<{
-    teachers: Teacher[];
-    threads: (TeacherThread | StaffTeacherThread)[];
-    error?: string;
-  }>();
-  const [retry, setRetry] = useState(0);
-  useEffect(() => {
-    if (threadId) return;
-    const controller = new AbortController();
-    Promise.all([
-      getData<Teacher[]>("/api/teachers", controller.signal),
-      getData<(TeacherThread | StaffTeacherThread)[]>(
-        user.role === "staff" ? "/api/staff/teacher-threads" : "/api/teacher-threads",
-        controller.signal,
-      ),
-    ])
-      .then(([teachers, threads]) => setResult({ teachers, threads }))
-      .catch((error) => {
-        if (error.name !== "AbortError")
-          setResult({ teachers: [], threads: [], error: error.message });
-      });
-    return () => controller.abort();
-  }, [threadId, user.role, retry]);
-  if (threadId) return <TeacherConversationView key={threadId} id={threadId} />;
-  const composeTeacher = result?.teachers.find((teacher) => teacher.id === params.get("compose"));
+export function Chats({
+  teachers,
+  threads,
+  role,
+  compose,
+}: {
+  teachers: Teacher[];
+  threads: (TeacherThread | StaffTeacherThread)[];
+  role: Role;
+  compose?: string;
+}) {
+  const teachersById = new Map(teachers.map((teacher) => [teacher.id, teacher]));
+  const composeTeacher = compose && teachersById.get(compose);
   return (
     <>
       <PageTitle
         title="Чаты"
         description={
-          user.role === "staff"
+          role === "staff"
             ? "Обращения студентов и ответы сотрудника."
             : "Переписка с преподавателями по учебным вопросам."
         }
       >
-        {user.role === "student" && (
-          <Link href="#new-chat" className="button primary">
+        {role === "student" && (
+          <a href="#new-chat" className="button primary">
             <Plus size={17} aria-hidden="true" />
             Новый чат
-          </Link>
+          </a>
         )}
       </PageTitle>
       <section className="existing-chats" aria-labelledby="existing-chats-title">
         <div className="section-head">
-          <h2 id="existing-chats-title">
-            {user.role === "staff" ? "Входящие обращения" : "Ваши чаты"}
-          </h2>
-          {result && !result.error && <span className="count-bubble">{result.threads.length}</span>}
+          <h2 id="existing-chats-title">{role === "staff" ? "Входящие обращения" : "Ваши чаты"}</h2>
+          <span className="count-bubble">{threads.length}</span>
         </div>
-        {!result ? (
-          <div className="panel loading-state" role="status">
-            <span className="spinner" />
-            Загружаем чаты…
-          </div>
-        ) : result.error ? (
-          <div className="panel" role="alert">
-            <p className="form-error">{result.error}</p>
-            <button className="button secondary" onClick={() => setRetry((n) => n + 1)}>
-              Попробовать ещё раз
-            </button>
-          </div>
-        ) : result.threads.length ? (
+        {threads.length ? (
           <div className="chat-cards">
-            {result.threads.map((thread) => {
-              const teacher = result.teachers.find((item) => item.id === thread.teacherId);
+            {threads.map((thread) => {
+              const teacher = teachersById.get(thread.teacherId);
               return (
-                <Link
+                <NavigationLink
                   key={thread.id}
                   className="panel chat-card"
+                  prefetch={false}
                   href={`/dashboard/chats?thread=${encodeURIComponent(thread.id)}`}
                 >
                   <div className="chat-card-heading">
@@ -127,7 +87,7 @@ export function Chats() {
                       <ArrowUpRight size={15} aria-hidden="true" />
                     </span>
                   </div>
-                </Link>
+                </NavigationLink>
               );
             })}
           </div>
@@ -136,7 +96,7 @@ export function Chats() {
             <EmptyState
               title="Чатов пока нет"
               text={
-                user.role === "staff"
+                role === "staff"
                   ? "Обращения студентов появятся в этом разделе."
                   : "Выберите преподавателя ниже, чтобы начать переписку."
               }
@@ -144,22 +104,23 @@ export function Chats() {
           </div>
         )}
       </section>
-      {user.role === "student" && (
+      {role === "student" && (
         <section id="new-chat" className="new-chat-section" aria-labelledby="new-chat-title">
           <div className="section-head">
             <h2 id="new-chat-title">Начать новый чат</h2>
-            <Link href="/dashboard/teachers" className="text-link">
+            <NavigationLink href="/dashboard/teachers" className="text-link">
               Каталог преподавателей
               <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
+            </NavigationLink>
           </div>
           <p className="panel-description">Выберите преподавателя и укажите тему обращения.</p>
           <div className="chat-teacher-picker">
-            {result?.teachers.map((teacher) => (
-              <Link
+            {teachers.map((teacher) => (
+              <NavigationLink
                 href={`/dashboard/chats?compose=${encodeURIComponent(teacher.id)}`}
                 key={teacher.id}
                 className="panel chat-teacher-option"
+                prefetch={false}
               >
                 <TeacherAvatar teacher={teacher} />
                 <span>
@@ -167,7 +128,7 @@ export function Chats() {
                   <small>{teacher.subjects.join(" · ")}</small>
                 </span>
                 <Plus size={18} aria-hidden="true" />
-              </Link>
+              </NavigationLink>
             ))}
           </div>
         </section>
@@ -179,7 +140,7 @@ export function Chats() {
           письма не отправляются.
         </span>
       </div>
-      {composeTeacher && user.role === "student" && (
+      {composeTeacher && role === "student" && (
         <TeacherCompose key={composeTeacher.id} teacher={composeTeacher} />
       )}
     </>

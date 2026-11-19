@@ -1,4 +1,5 @@
 import type { Client, Row, Transaction } from "@libsql/client";
+import { cache } from "react";
 import { AppError } from "@/lib/errors";
 import type { User } from "@/lib/types";
 
@@ -39,10 +40,20 @@ export async function findUser(db: SqlConnection, id: string): Promise<User | nu
   return result.rows[0] ? userFromRow(result.rows[0]) : null;
 }
 
-export async function requireActor(db: SqlConnection, id: string): Promise<User> {
-  const user = await findUser(db, id);
+// React shares these reads only within a server render. Writes still check their own transaction.
+export const findRequestUser = cache((db: Client, id: string) => findUser(db, id));
+
+function activeUser(user: User | null): User {
   if (!user) throw new AppError(401, "UNAUTHENTICATED", "Войдите в кабинет, чтобы продолжить.");
   return user;
+}
+
+export async function requireRequestActor(db: Client, id: string): Promise<User> {
+  return activeUser(await findRequestUser(db, id));
+}
+
+export async function requireActor(db: SqlConnection, id: string): Promise<User> {
+  return activeUser(await findUser(db, id));
 }
 
 export function requireRole(user: User, role: User["role"]): void {
