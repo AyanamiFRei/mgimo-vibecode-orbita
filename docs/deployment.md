@@ -1,6 +1,8 @@
 # Публикация: Vercel или самостоятельный сервер
 
-Приложение опубликовано 4 ноября 2026 года: **[mgimo-vibecode-orbita.vercel.app](https://mgimo-vibecode-orbita.vercel.app)**. Исходники: [AyanamiFRei/mgimo-vibecode-orbita](https://github.com/AyanamiFRei/mgimo-vibecode-orbita).
+Приложение впервые опубликовано 4 ноября 2026 года: **[mgimo-vibecode-orbita.vercel.app](https://mgimo-vibecode-orbita.vercel.app)**. Исходники: [AyanamiFRei/mgimo-vibecode-orbita](https://github.com/AyanamiFRei/mgimo-vibecode-orbita).
+
+Обновление от 19 ноября 2026 года опубликовано из коммита `aa405f6`: песочная светлая тема, важные красные акценты, профили и расписания преподавателей, фото профиля, история переходов и анимации Material 3. Deployment `dpl_kdTm5gNe4vcuQMHGPB3AU9so5kM9` имеет статус READY, Node.js 24.x, регион функций `arn1`. На production проверены новая регистрация и вход, профили, группы обеих программ в расписании, загрузка/чтение/удаление WebP-аватара из Turso и запрет чужого Origin. Временный QA-аккаунт удалён вместе с его учебными записями; все 5 существовавших аккаунтов сохранены, foreign_key_check не выявил ошибок. Три серверных узла в Москве и Санкт-Петербурге вернули HTTP 200: [отчёт от 19 ноября](https://check-host.net/check-report/5901632fkb0f). Проверка отдельных узлов не гарантирует доступ со всех домашних и мобильных операторов.
 
 ## Текущая публикация
 
@@ -9,7 +11,7 @@
 - БД: Turso Free, отдельная от локальной SQLite. Созданы схема и вымышленные начальные данные. После проверки оставлены демонстрационные заявка, переписка и отдельный вымышленный аккаунт регистрации.
 - Серверные переменные production: `DATABASE_URL`, `DATABASE_AUTH_TOKEN`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `TRUST_PROXY=true`. Токен БД и секрет NextAuth сохранены в Vercel как Secret. Значения не публикуются в исходниках.
 - Канонический origin: `https://mgimo-vibecode-orbita.vercel.app`. Preview-адреса и дополнительные aliases не предназначены для отправки форм с этим production `NEXTAUTH_URL`.
-- Публикация выполнена Vercel CLI 65.11.0 из коммита приложения `f18953d`. Автодеплой GitHub не подключён: `vercel git connect` отклонён сервисом. Исходники доступны в GitHub, повторную публикацию выполняйте CLI либо подключите этот репозиторий через Settings → Git в Vercel.
+- Первоначальная публикация выполнена Vercel CLI 65.11.0 из коммита приложения `f18953d`. Автодеплой GitHub не подключён: `vercel git connect` отклонён сервисом. Исходники доступны в GitHub; репозиторий можно подключить через Settings → Git в Vercel после связывания GitHub с аккаунтом владельца.
 
 Повторная публикация из этого checkout после изменения и проверки исходников:
 
@@ -18,6 +20,27 @@ npx --yes vercel@65.11.0 deploy --prod --scope sahar8s-projects
 ```
 
 В новом checkout сначала выполните `npx --yes vercel@65.11.0 login`, затем `npx --yes vercel@65.11.0 link --project mgimo-vibecode-orbita --scope sahar8s-projects --yes`. Оплаченные возможности и trial Pro не включались. Бесплатные тарифы действуют в пределах квот поставщиков: [Vercel Hobby](https://vercel.com/docs/plans/hobby), [Turso Free](https://turso.tech/pricing).
+
+19 ноября Vercel отклонил публикацию из Git working tree: автор коммита не связан с владельцем проекта. Владелец проекта может выполнить поддерживаемую [ручную CLI-публикацию независимо от Git](https://vercel.com/docs/deployments) из чистого снимка проверенного коммита. Она использует существующие проект и production-переменные; секреты и рабочие БД в архив не входят. Для повторения из корня репозитория в PowerShell:
+
+```powershell
+$releaseCommit = git rev-parse --verify HEAD
+if ($LASTEXITCODE -ne 0) { throw 'Не удалось определить проверенный коммит' }
+$releaseFolder = Join-Path $env:TEMP ("orbita-release-" + [guid]::NewGuid().ToString('N'))
+$releaseArchive = $releaseFolder + '.zip'
+git archive --format=zip $releaseCommit --output=$releaseArchive
+if ($LASTEXITCODE -ne 0) { throw 'Не удалось собрать снимок исходников' }
+Expand-Archive -LiteralPath $releaseArchive -DestinationPath $releaseFolder -ErrorAction Stop
+Push-Location -LiteralPath $releaseFolder -ErrorAction Stop
+try {
+  npx --yes vercel@65.11.0 deploy --project mgimo-vibecode-orbita --prod --yes --scope sahar8s-projects --meta "releaseCommit=$releaseCommit"
+  if ($LASTEXITCODE -ne 0) { throw 'Vercel не опубликовал обновление' }
+} finally {
+  Pop-Location
+}
+```
+
+Архив включает только уже закоммиченные файлы; `.vercelignore` дополнительно ограничивает состав загрузки. Публиковать следует после тестов и проверки staged diff.
 
 Production-проверка прошла: вход `student1`, `student2`, `dean`; страницы кабинета; оба семестра и отсутствие занятий 4 ноября; создание заявки, статусы `processing` → `ready`, документ; 404 для чужой заявки/чата, 403 для staff API студенту и чужого Origin; создание чата, ответ сотрудника и регистрация отдельного вымышленного студента. Неавторизованный `/api/workspace` возвращает 401. Рабочая запись и чтение идут через Vercel в Turso.
 
