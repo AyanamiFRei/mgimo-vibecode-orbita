@@ -165,16 +165,16 @@ textarea {
   --route-effects: orbita-route-effects-b;
 }
 .main-content[data-route-motion]:not(:has(.dashboard-loading, .loading-state)) {
-  animation: var(--route-effects) var(--motion-effects-fast) var(--motion-effects-curve);
+  animation: var(--route-effects) var(--motion-effects-default) var(--motion-effects-curve);
 }
 @keyframes orbita-route-effects-a {
   from {
-    opacity: 0.94;
+    opacity: 0.88;
   }
 }
 @keyframes orbita-route-effects-b {
   from {
-    opacity: 0.94;
+    opacity: 0.88;
   }
 }
 

@@ -12,6 +12,14 @@ type SelectionTrackProps = {
 
 type Box = Pick<DOMRect, "x" | "y" | "width" | "height">;
 
+function cssTimeInMilliseconds(value: string) {
+  // CSS optimization can serialize 224ms as .224s. Web Animations expects milliseconds.
+  const time = value.trim();
+  if (time.endsWith("ms")) return Number.parseFloat(time);
+  if (time.endsWith("s")) return Number.parseFloat(time) * 1000;
+  return NaN;
+}
+
 function sameBox(first: Box | undefined, second: Box) {
   // A translated mobile drawer can introduce tiny viewport rounding differences.
   return (
@@ -59,7 +67,7 @@ function placeIndicator(
     const style = getComputedStyle(indicator);
     slide = {
       from: `translate(${start.x - target.x}px, ${start.y - target.y}px) scale(${start.width / target.width}, ${start.height / target.height})`,
-      duration: Number.parseFloat(style.getPropertyValue("--selection-duration")),
+      duration: cssTimeInMilliseconds(style.getPropertyValue("--selection-duration")),
       easing: style.getPropertyValue("--motion-spatial-curve").trim(),
       fallback: style.getPropertyValue("--motion-spatial-fallback").trim(),
     };
@@ -73,7 +81,7 @@ function placeIndicator(
   });
   track.setAttribute("data-selection-ready", "");
   indicator.getAnimations().forEach((animation) => animation.cancel());
-  if (slide && Number.isFinite(slide.duration)) {
+  if (slide && Number.isFinite(slide.duration) && slide.duration > 0) {
     const frames = [{ transform: slide.from }, { transform: "none" }];
     try {
       indicator.animate(frames, { duration: slide.duration, easing: slide.easing });

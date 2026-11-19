@@ -28,8 +28,11 @@ test("filter and sidebar indicators track current links, including history and r
   await page.addInitScript(() => {
     const animate = Element.prototype.animate;
     Element.prototype.animate = function (keyframes, options) {
-      if (this.classList.contains("selection-indicator")) this.setAttribute("data-animated", "");
-      return animate.call(this, keyframes, options);
+      const animation = animate.call(this, keyframes, options);
+      if (this.classList.contains("selection-indicator")) {
+        this.setAttribute("data-animation-ms", String(animation.effect?.getTiming().duration));
+      }
+      return animation;
     };
   });
   await page.goto("/login");
@@ -52,7 +55,7 @@ test("filter and sidebar indicators track current links, including history and r
   await filters.getByRole("link", { name: "Готовые", exact: true }).press("Enter");
   await expect(page).toHaveURL(/\?filter=ready$/);
   await expectIndicatorOnSelection(filters);
-  await expect(filters.locator(".selection-indicator")).toHaveAttribute("data-animated", "");
+  await expect(filters.locator(".selection-indicator")).toHaveAttribute("data-animation-ms", "224");
   expect(await filters.getByRole("link", { name: "Все", exact: true }).boundingBox()).toEqual(
     initialBox,
   );
@@ -67,22 +70,22 @@ test("filter and sidebar indicators track current links, including history and r
   const sidebar = page.getByRole("navigation", { name: "Основная навигация" });
   if (isMobile) await page.getByRole("button", { name: "Открыть меню" }).click();
   await expectIndicatorOnSelection(sidebar);
-  await expect(sidebar.locator(".selection-indicator")).not.toHaveAttribute("data-animated");
+  await expect(sidebar.locator(".selection-indicator")).not.toHaveAttribute("data-animation-ms");
   await sidebar.getByRole("link", { name: "Успеваемость", exact: true }).click();
   await expect(page).toHaveURL(/\/dashboard\/grades$/);
   if (isMobile) await page.getByRole("button", { name: "Открыть меню" }).click();
   await expectIndicatorOnSelection(sidebar);
-  await expect(sidebar.locator(".selection-indicator")).toHaveAttribute("data-animated", "");
+  await expect(sidebar.locator(".selection-indicator")).toHaveAttribute("data-animation-ms", "317");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await sidebar
     .locator(".selection-indicator")
-    .evaluate((el) => el.removeAttribute("data-animated"));
+    .evaluate((el) => el.removeAttribute("data-animation-ms"));
   await sidebar.getByRole("link", { name: "Уведомления", exact: true }).click();
   await expect(page).toHaveURL(/\/dashboard\/notifications$/);
   if (isMobile) await page.getByRole("button", { name: "Открыть меню" }).click();
   await expectIndicatorOnSelection(sidebar);
-  await expect(sidebar.locator(".selection-indicator")).not.toHaveAttribute("data-animated");
+  await expect(sidebar.locator(".selection-indicator")).not.toHaveAttribute("data-animation-ms");
   expect(
     await sidebar.locator(".selection-indicator").evaluate((el) => el.getAnimations().length),
   ).toBe(0);
