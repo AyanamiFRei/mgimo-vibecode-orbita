@@ -45,20 +45,50 @@ const subscribeMobile = (callback: () => void) => {
 const mobileSnapshot = () => window.matchMedia("(max-width: 720px)").matches;
 
 function DashboardMain({ pathname, children }: { pathname: string; children: React.ReactNode }) {
-  const params = useSearchParams();
-  const identity = dashboardDestination(`${pathname}?${params}`)?.identity ?? pathname;
-  // The compose and request forms open over the current page with their own dialog motion.
-  const page = identity.endsWith("?new") || identity.includes("?compose=") ? pathname : identity;
-  const previousPage = useRef(page);
+  const query = useSearchParams().toString();
+  const identity = dashboardDestination(`${pathname}?${query}`)?.identity ?? pathname;
+  const dialog = identity.endsWith("?new") || identity.includes("?compose=");
+  const previous = useRef({ pathname, identity, dialog });
+  const lastMotion = useRef<"a" | "b">("b");
   const main = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
-    if (previousPage.current === page || !main.current) return;
-    previousPage.current = page;
-    // Switch CSS animation names before paint, keeping the routed subtree and focus intact.
-    main.current.toggleAttribute("data-alternate-motion");
-  }, [page]);
+    const from = previous.current;
+    previous.current = { pathname, identity, dialog };
+    const element = main.current;
+    if (!element) return;
+
+    const clearMotion = () => element.removeAttribute("data-route-motion");
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (
+      from.identity === identity ||
+      (from.pathname === pathname && (from.dialog || dialog)) ||
+      motionPreference.matches
+    ) {
+      clearMotion();
+      return;
+    }
+    // A different name interrupts an in-flight fade without reflow or remounting the page.
+    lastMotion.current = lastMotion.current === "a" ? "b" : "a";
+    element.dataset.routeMotion = lastMotion.current;
+    motionPreference.addEventListener("change", clearMotion);
+    return () => motionPreference.removeEventListener("change", clearMotion);
+  }, [pathname, query, identity, dialog]);
   return (
-    <main ref={main} id="main" className="main-content" tabIndex={-1}>
+    <main
+      ref={main}
+      id="main"
+      className="main-content"
+      tabIndex={-1}
+      onAnimationEnd={(event) => {
+        const element = event.currentTarget;
+        if (
+          event.target === element &&
+          event.animationName === `orbita-route-effects-${element.dataset.routeMotion}`
+        ) {
+          element.removeAttribute("data-route-motion");
+        }
+      }}
+    >
       {children}
     </main>
   );

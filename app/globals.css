@@ -1,11 +1,11 @@
 :root {
-  --bg: #dcc9a9;
-  --paper: #f8f1e4;
+  --bg: #f6f7f3;
+  --paper: #fff;
   --ink: #263b33;
   --muted: #7c847e;
   --green: #285340;
   --lime: #d9edb8;
-  --border: #cbbb9e;
+  --border: #e7eae3;
   --radius: 17px;
   --font: Arial, "Helvetica Neue", sans-serif;
 }
@@ -964,17 +964,18 @@ progress::-webkit-progress-value {
   color: #a0a793;
 }
 .lesson-line {
+  --lesson-rail: #a7bc92;
   width: 3px;
-  background: #a7bc92;
+  background: var(--lesson-rail);
   border-radius: 3px;
   flex-shrink: 0;
   margin: 1px 0;
 }
 .line-1 {
-  background: #c6b08b;
+  --lesson-rail: #c6b08b;
 }
 .line-2 {
-  background: #a1b0c2;
+  --lesson-rail: #a1b0c2;
 }
 .lesson-info {
   min-width: 0;

@@ -44,7 +44,7 @@ describe("server-rendered theme preference", () => {
     const viewport = await generateViewport();
     expect(viewport.colorScheme).toBe("light dark");
     expect(viewport.themeColor).toEqual([
-      { media: "(prefers-color-scheme: light)", color: "#dcc9a9" },
+      { media: "(prefers-color-scheme: light)", color: "#f6f7f3" },
       { media: "(prefers-color-scheme: dark)", color: "#171b19" },
     ]);
   });

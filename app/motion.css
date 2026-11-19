@@ -74,6 +74,7 @@
 }
 button,
 a,
+.teacher-card,
 summary,
 input,
 select,
@@ -83,40 +84,18 @@ textarea {
     background-color var(--motion-effects-fast) var(--motion-effects-curve),
     border-color var(--motion-effects-fast) var(--motion-effects-curve),
     box-shadow var(--motion-effects-fast) var(--motion-effects-curve),
-    transform var(--motion-spatial-fast) var(--motion-spatial-curve),
     opacity var(--motion-effects-fast) var(--motion-effects-curve);
 }
-.button:active:not(:disabled),
-.icon-button:active,
-.day-tab:active,
-.demo-logins button:active {
-  transform: scale(0.97);
+:disabled,
+[aria-disabled="true"] {
+  transition: none;
 }
-@media (hover: hover) and (pointer: fine) {
-  .stat-card:hover,
-  .teacher-card:hover,
-  .chat-card:hover,
-  .document-type-card:hover {
-    transform: translateY(-2px);
-  }
+:is(button:enabled, a[href]):is(.button, .icon-button, .day-tab):not([aria-disabled="true"]):active,
+.demo-logins button:enabled:active {
+  opacity: 0.88;
 }
-.stat-card,
-.teacher-card,
-.chat-card,
-.document-type-card,
 .sidebar {
-  transition:
-    transform var(--motion-spatial-default) var(--motion-spatial-curve),
-    border-color var(--motion-effects-fast) var(--motion-effects-curve),
-    background-color var(--motion-effects-fast) var(--motion-effects-curve),
-    box-shadow var(--motion-effects-fast) var(--motion-effects-curve);
-}
-.theme-toggle svg,
-.notification-button svg {
-  transition: transform var(--motion-spatial-fast) var(--motion-spatial-curve);
-}
-.theme-toggle:active svg {
-  transform: rotate(24deg);
+  transition: transform var(--motion-spatial-default) var(--motion-spatial-curve);
 }
 /* A slow link can live inside a closed mobile drawer. Keep its feedback in the shell. */
 .app-shell::after {
@@ -139,47 +118,31 @@ textarea {
     opacity var(--motion-effects-fast) var(--motion-effects-curve) 120ms;
 }
 
-/* Alternating names restart the entrance on a committed pathname without a layout read.
-   A streamed route starts its entrance when the dashboard fallback leaves the main. */
-.main-content {
-  --route-spatial: orbita-route-spatial-a;
+/* A committed navigation arms one fade. Loading states stay fully visible while
+   streaming or fetching data, and ordinary rerenders keep the page still. */
+.main-content[data-route-motion="a"] {
   --route-effects: orbita-route-effects-a;
 }
-.main-content[data-alternate-motion] {
-  --route-spatial: orbita-route-spatial-b;
+.main-content[data-route-motion="b"] {
   --route-effects: orbita-route-effects-b;
 }
-.main-content:not(:has(> .dashboard-loading)) {
-  animation:
-    var(--route-spatial) var(--motion-spatial-default) var(--motion-spatial-curve),
-    var(--route-effects) var(--motion-effects-default) var(--motion-effects-curve);
-}
-@keyframes orbita-route-spatial-a {
-  from {
-    transform: translateY(12px);
-  }
-}
-@keyframes orbita-route-spatial-b {
-  from {
-    transform: translateY(12px);
-  }
+.main-content[data-route-motion]:not(:has(.dashboard-loading, .loading-state)) {
+  animation: var(--route-effects) var(--motion-effects-fast) var(--motion-effects-curve);
 }
 @keyframes orbita-route-effects-a {
   from {
-    opacity: 0.68;
+    opacity: 0.94;
   }
 }
 @keyframes orbita-route-effects-b {
   from {
-    opacity: 0.68;
+    opacity: 0.94;
   }
 }
 
 .dashboard-loading,
 .schedule-loading {
   min-height: clamp(14rem, 45vh, 26rem);
-  animation: orbita-enter-effects var(--motion-effects-fast) var(--motion-effects-curve) 100ms
-    backwards;
 }
 .dashboard-loading p {
   margin: 0 0 20px;
@@ -204,12 +167,18 @@ textarea {
   width: min(74%, 28rem);
 }
 
-.teacher-profile-link svg,
-.chat-card-footer svg,
-.chat-teacher-option > svg {
-  transition: transform var(--motion-spatial-fast) var(--motion-spatial-curve);
+@media (prefers-reduced-motion: no-preference) {
+  .theme-toggle:enabled svg,
+  .teacher-profile-link svg,
+  .chat-card-footer svg,
+  .chat-teacher-option > svg {
+    transition: transform var(--motion-spatial-fast) var(--motion-spatial-curve);
+  }
+  .theme-toggle:enabled:active svg {
+    transform: rotate(12deg);
+  }
 }
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .teacher-profile-link:hover svg,
   .chat-card:hover .chat-card-footer svg {
     transform: translate(2px, -2px);
@@ -218,9 +187,6 @@ textarea {
     transform: scale(1.12);
   }
 }
-.empty-icon,
-.conversation-messages > .message-bubble:last-child,
-.profile-photo-controls [role="status"],
 .breadcrumb-overflow details[open] .breadcrumb-menu {
   animation:
     orbita-enter-spatial var(--motion-spatial-default) var(--motion-spatial-curve),
@@ -237,7 +203,7 @@ textarea {
 }
 @keyframes orbita-enter-spatial {
   from {
-    transform: translateY(8px);
+    transform: translateY(-4px);
   }
   to {
     transform: translateY(0);
@@ -253,7 +219,7 @@ textarea {
 }
 @keyframes orbita-dialog-spatial {
   from {
-    transform: translateY(12px) scale(0.98);
+    transform: translateY(6px) scale(0.99);
   }
   to {
     transform: translateY(0) scale(1);
@@ -265,7 +231,8 @@ textarea {
   }
   *,
   *::before,
-  *::after {
+  *::after,
+  ::backdrop {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;

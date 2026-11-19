@@ -1,25 +1,24 @@
 :root {
   color-scheme: light;
-  --surface-base: #f8f1e4;
-  --surface-sidebar: #f3e9d7;
-  --surface-header: #f3e9d7;
-  --surface-subtle: #eae0c9;
-  --surface-hover: #e4dcc3;
-  --surface-selected: #dce2c0;
-  --surface-input: #fff9ef;
-  --muted: #505744;
-  --text-secondary: #505744;
-  --text-accent: #3b572e;
-  --text-placeholder: #71705c;
+  --surface-base: #ffffff;
+  --surface-sidebar: #fcfdf9;
+  --surface-header: #fafbf7;
+  --surface-subtle: #eff2e8;
+  --surface-hover: #eaf0e4;
+  --surface-selected: #eaf0df;
+  --surface-input: #ffffff;
+  --text-secondary: #66735f;
+  --text-accent: #496b3c;
+  --text-placeholder: #737f6b;
   --brand-mark: #29503e;
   --brand-orbit-normal: #d9edbb;
-  --hero-bg: #e1e3c6;
+  --hero-bg: #e9eedc;
   --hero-text: #263b33;
   --hero-muted: #566547;
   --orbit-stroke: #d0dabd;
   --orbit-fill: #9caf7f;
-  --ticket-bg: #fff7e8ed;
-  --ticket-border: #f8f1e4;
+  --ticket-bg: #fffef4ed;
+  --ticket-border: #ffffff;
   --ticket-icon-bg: #edf1e2;
   --status-ready-bg: #eaf3e5;
   --status-ready-ink: #4e7444;
@@ -27,24 +26,21 @@
   --status-processing-ink: #876822;
   --status-submitted-bg: #eef0ed;
   --status-submitted-ink: #69746a;
-  --status-rejected-bg: #f3d6cb;
-  --status-rejected-ink: #a03227;
+  --status-rejected-bg: #fbeaea;
+  --status-rejected-ink: #a34d4d;
   --warm-bg: #f2eee1;
   --warm-ink: #746133;
   --cool-bg: #edf0f0;
   --cool-ink: #557064;
   --notice-bg: #edf2e7;
   --notice-ink: #5b7353;
-  --danger-bg: #f3d6cb;
-  --danger-ink: #a03227;
-  --danger-border: #d79e90;
-  --important: #b83a2d;
-  --important-ink: #972d23;
-  --important-on: #fff7f0;
+  --danger-bg: #fff2f0;
+  --danger-ink: #a94343;
+  --danger-border: #f2d8d3;
   --message-incoming: #f1f4ed;
   --message-outgoing: #eaf1e2;
-  --avatar-bg: #e5d1af;
-  --avatar-ink: #6c573d;
+  --avatar-bg: #e9dfcd;
+  --avatar-ink: #8d7655;
   --purple-bg: #e8e4f1;
   --purple-ink: #756485;
   --blue-bg: #e0eaf1;
@@ -102,7 +98,7 @@ html[data-theme="dark"] {
   --danger-border: #775449;
   --important: #ef9b8c;
   --important-ink: #ffc0b3;
-  --important-on: #3c231e;
+  --important-bg: var(--danger-bg);
   --message-incoming: #29342b;
   --message-outgoing: #30452d;
   --avatar-bg: #49412f;
@@ -164,7 +160,7 @@ html[data-theme="dark"] {
     --danger-border: #775449;
     --important: #ef9b8c;
     --important-ink: #ffc0b3;
-    --important-on: #3c231e;
+    --important-bg: var(--danger-bg);
     --message-incoming: #29342b;
     --message-outgoing: #30452d;
     --avatar-bg: #49412f;
@@ -409,7 +405,6 @@ a:hover {
 .type-seminar,
 .change-note,
 .label-amber,
-.deadline-date,
 .notice-schedule,
 .calendar-day-note {
   background: var(--warm-bg);
@@ -426,14 +421,23 @@ a:hover {
 .type-practice,
 .type-exam,
 .notice-request,
-.deadline-2,
 .day-kind-exam {
   background: var(--cool-bg);
   color: var(--cool-ink);
 }
+.deadline-date {
+  --deadline-bg: var(--warm-bg);
+  --deadline-ink: var(--warm-ink);
+  background: var(--deadline-bg);
+  color: var(--deadline-ink);
+}
 .deadline-1 {
-  background: var(--status-ready-bg);
-  color: var(--status-ready-ink);
+  --deadline-bg: var(--status-ready-bg);
+  --deadline-ink: var(--status-ready-ink);
+}
+.deadline-2 {
+  --deadline-bg: var(--cool-bg);
+  --deadline-ink: var(--cool-ink);
 }
 .changed-label {
   color: var(--warm-ink);

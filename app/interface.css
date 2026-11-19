@@ -1,31 +1,36 @@
 /* Important states retain a text/icon cue; color is never their only meaning. */
 .notification-button > i {
-  background: var(--important);
+  background: var(--important, #9eb878);
 }
 .changed-label,
 .day-tab.is-holiday:not(.selected),
 .calendar-day-note.day-kind-holiday {
-  color: var(--important-ink);
+  color: var(--important-ink, var(--warm-ink));
 }
 .change-note,
 .calendar-day-note.day-kind-holiday,
-.notice-deadline,
+.notice-deadline {
+  color: var(--important-ink, var(--warm-ink));
+  background: var(--important-bg, var(--warm-bg));
+}
 .type-exam,
 .day-kind-exam {
-  color: var(--important-ink);
-  background: var(--danger-bg);
+  color: var(--important-ink, var(--cool-ink));
+  background: var(--important-bg, var(--cool-bg));
 }
 .lesson-changed .lesson-line,
 .lesson:has(.type-exam) .lesson-line {
-  background: var(--important);
+  background: var(--important, var(--lesson-rail));
 }
 .is-urgent .deadline-date {
-  background: var(--danger-bg);
-  color: var(--important-ink);
+  background: var(--important-bg, var(--deadline-bg));
+  color: var(--important-ink, var(--deadline-ink));
 }
-.is-urgent > span:last-child > strong,
+.is-urgent > span:last-child > strong {
+  color: var(--important-ink, var(--text-accent));
+}
 .is-urgent em {
-  color: var(--important-ink);
+  color: var(--important-ink, var(--text-secondary));
 }
 .button.danger {
   background: var(--danger-bg);
@@ -33,7 +38,7 @@
   color: var(--danger-ink);
 }
 .button.danger:hover {
-  border-color: var(--important);
+  border-color: var(--important, var(--danger-ink));
 }
 .header-left {
   flex: 1;
