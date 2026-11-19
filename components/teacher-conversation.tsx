@@ -290,11 +290,15 @@ export function TeacherConversationView({ id }: { id: string }) {
             </section>
             <aside className="panel teacher-conversation-card">
               <TeacherAvatar teacher={conversation.teacher} />
-              <h2>{conversation.teacher.name}</h2>
+              <h2>
+                <Link href={`/dashboard/teachers/${encodeURIComponent(conversation.teacher.id)}`}>
+                  {conversation.teacher.name}
+                </Link>
+              </h2>
               <p>{conversation.teacher.department}</p>
               <div className="teacher-detail">
                 <Clock3 size={16} aria-hidden="true" />
-                <span>{conversation.teacher.officeHours}</span>
+                <span>Консультации: {conversation.teacher.officeHours}</span>
               </div>
               <div className="teacher-detail">
                 <MapPin size={16} aria-hidden="true" />

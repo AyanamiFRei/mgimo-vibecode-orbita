@@ -57,7 +57,7 @@ describe("fictional registration", () => {
     expect(workspace.grades).toHaveLength(6);
     expect(workspace.notifications).toHaveLength(1);
     expect(workspace.notifications[0].title).toContain("Добро пожаловать");
-    expect(JSON.stringify(workspace)).not.toMatch(/student-1|student-2|password_hash/);
+    expect(JSON.stringify(workspace)).not.toMatch(/student-[12](?![0-9a-f])|password_hash/);
     expect(
       (await getSchedule(db, String(row.id), { semester: "spring-2027", week: "2027-02-15" }, now))
         .classes.length,

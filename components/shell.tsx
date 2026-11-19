@@ -20,18 +20,21 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { dashboardTitles } from "@/lib/navigation-history";
 import { Brand } from "./brand";
+import { clearNavigationHistory, NavigationBreadcrumbs } from "./navigation-breadcrumbs";
+import { UserAvatar } from "./user-avatar";
 import { useWorkspace } from "./workspace-provider";
 import { ThemeToggle } from "./theme-toggle";
 
 const navigation = [
-  { href: "/dashboard", title: "Главная", icon: House },
-  { href: "/dashboard/schedule", title: "Расписание", icon: CalendarDays },
-  { href: "/dashboard/grades", title: "Успеваемость", icon: ChartNoAxesCombined },
-  { href: "/dashboard/teachers", title: "Преподаватели", icon: GraduationCap },
-  { href: "/dashboard/chats", title: "Чаты", icon: MessageSquare },
-  { href: "/dashboard/documents", title: "Документы", icon: Files },
-  { href: "/dashboard/notifications", title: "Уведомления", icon: Bell },
+  { href: "/dashboard", icon: House },
+  { href: "/dashboard/schedule", icon: CalendarDays },
+  { href: "/dashboard/grades", icon: ChartNoAxesCombined },
+  { href: "/dashboard/teachers", icon: GraduationCap },
+  { href: "/dashboard/chats", icon: MessageSquare },
+  { href: "/dashboard/documents", icon: Files },
+  { href: "/dashboard/notifications", icon: Bell },
 ];
 const subscribeMobile = (callback: () => void) => {
   const media = window.matchMedia("(max-width: 720px)");
@@ -127,24 +130,29 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
         <div className="nav-caption">РАЗДЕЛЫ КАБИНЕТА</div>
         <nav className="main-nav" aria-label="Основная навигация">
-          {navigation.map(({ href, title, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              aria-label={title}
-              className={`nav-item ${pathname === href ? "active" : ""}`}
-              aria-current={pathname === href ? "page" : undefined}
-              onClick={() => setMenu(false)}
-            >
-              <Icon size={19} aria-hidden="true" />
-              <span>{title}</span>
-              {title === "Уведомления" && unread > 0 && (
-                <span className="nav-count" aria-label={`${unread} непрочитанных`}>
-                  {unread}
-                </span>
-              )}
-            </Link>
-          ))}
+          {navigation.map(({ href, icon: Icon }) => {
+            const title = dashboardTitles[href];
+            const sectionActive =
+              pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-label={title}
+                className={`nav-item ${sectionActive ? "active" : ""}`}
+                aria-current={pathname === href ? "page" : sectionActive ? "location" : undefined}
+                onClick={() => setMenu(false)}
+              >
+                <Icon size={19} aria-hidden="true" />
+                <span>{title}</span>
+                {href === "/dashboard/notifications" && unread > 0 && (
+                  <span className="nav-count" aria-label={`${unread} непрочитанных`}>
+                    {unread}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
           {data.user.role === "staff" && (
             <Link
               href="/dashboard/staff"
@@ -176,7 +184,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <small>Все данные вымышлены</small>
             </span>
           </div>
-          <button className="signout" onClick={() => signOut({ callbackUrl: "/login" })}>
+          <button
+            className="signout"
+            onClick={() => {
+              clearNavigationHistory();
+              void signOut({ callbackUrl: "/login" });
+            }}
+          >
             <LogOut size={16} aria-hidden="true" />
             Выйти из кабинета
           </button>
@@ -194,17 +208,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             >
               <Menu size={22} />
             </button>
-            <span className="breadcrumb">
-              Личный кабинет <span>/</span>{" "}
-              <strong>
-                {navigation.find((n) => n.href === pathname)?.title ||
-                  (pathname.endsWith("profile")
-                    ? "Профиль"
-                    : pathname.endsWith("staff")
-                      ? "Деканат"
-                      : "Поиск")}
-              </strong>
-            </span>
+            <NavigationBreadcrumbs userId={data.user.id} />
           </div>
           <div className="header-actions">
             <ThemeToggle />
@@ -227,11 +231,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
               {unread > 0 && <i />}
             </Link>
             <span className="header-divider" />
-            <Link className="user-link" href="/dashboard/profile">
-              <span className="avatar">
-                {data.user.firstName.slice(0, 1)}
-                {data.user.name.split(" ")[0]?.slice(0, 1)}
-              </span>
+            <Link className="user-link" href="/dashboard/profile" aria-label="Профиль">
+              <UserAvatar user={data.user} />
               <span className="user-short">
                 <strong>{data.user.firstName}</strong>
                 <small>{data.user.role === "staff" ? "Сотрудник деканата" : data.user.group}</small>

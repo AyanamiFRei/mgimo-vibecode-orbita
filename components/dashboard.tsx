@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -18,6 +19,7 @@ import { DateText, EmptyState, Lesson, PageTitle, RequestSummary, SectionHead } 
 
 export function Dashboard() {
   const { data } = useWorkspace();
+  const [viewTime] = useState(() => Date.now());
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Moscow" }).format(new Date());
   const lessons = data.classes
     .filter((c) => c.date === today)
@@ -203,7 +205,7 @@ export function Dashboard() {
                 <Link
                   key={d.id}
                   href={d.kind === "document" ? "/dashboard/documents" : "/dashboard/grades"}
-                  className="deadline-item"
+                  className={`deadline-item ${new Date(d.dueAt).getTime() - viewTime <= 48 * 60 * 60_000 ? "is-urgent" : ""}`}
                 >
                   <span className={`deadline-date deadline-${i}`}>
                     <strong>

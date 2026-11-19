@@ -1,0 +1,266 @@
+/* Important states retain a text/icon cue; color is never their only meaning. */
+.notification-button > i {
+  background: var(--important);
+}
+.changed-label,
+.day-tab.is-holiday:not(.selected),
+.calendar-day-note.day-kind-holiday {
+  color: var(--important-ink);
+}
+.change-note,
+.calendar-day-note.day-kind-holiday,
+.notice-deadline,
+.type-exam,
+.day-kind-exam {
+  color: var(--important-ink);
+  background: var(--danger-bg);
+}
+.lesson-changed .lesson-line,
+.lesson:has(.type-exam) .lesson-line {
+  background: var(--important);
+}
+.is-urgent .deadline-date {
+  background: var(--danger-bg);
+  color: var(--important-ink);
+}
+.is-urgent > span:last-child > strong,
+.is-urgent em {
+  color: var(--important-ink);
+}
+.button.danger {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger-ink);
+}
+.button.danger:hover {
+  border-color: var(--important);
+}
+.header-left {
+  flex: 1;
+  min-width: 0;
+}
+.navigation-breadcrumbs {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.navigation-breadcrumbs ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.navigation-breadcrumbs > ol,
+.navigation-breadcrumbs > ol > li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.navigation-breadcrumbs a,
+.navigation-breadcrumbs [aria-current="page"] {
+  display: block;
+  max-width: 27ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 8px 1px;
+}
+.navigation-breadcrumbs a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.navigation-breadcrumbs [aria-current="page"] {
+  font-weight: 650;
+  color: var(--ink);
+}
+.breadcrumb-overflow {
+  position: relative;
+  flex-shrink: 0;
+}
+.breadcrumb-overflow summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 8px;
+  border-radius: 8px;
+}
+.breadcrumb-overflow summary::-webkit-details-marker {
+  display: none;
+}
+.breadcrumb-overflow summary:hover {
+  background: var(--surface-hover);
+}
+.navigation-breadcrumbs .breadcrumb-menu {
+  position: absolute;
+  inset: calc(100% + 8px) auto auto 0;
+  z-index: 60;
+  min-width: 200px;
+  max-width: min(310px, calc(100vw - 36px));
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 8px;
+  background: var(--surface-base);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px #18271d24;
+}
+.breadcrumb-menu a {
+  max-width: none;
+  padding: 10px;
+  border-radius: 7px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.breadcrumb-menu a:hover {
+  background: var(--surface-hover);
+}
+.avatar:has(img) {
+  overflow: hidden;
+}
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.profile-photo-controls {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+.profile-photo-controls p {
+  margin: 0;
+}
+.profile-photo-controls input[type="file"] {
+  padding: 9px;
+  font-size: 12px;
+}
+.profile-photo-controls input::file-selector-button {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: var(--surface-subtle);
+  color: var(--ink);
+  cursor: pointer;
+  margin-right: 7px;
+}
+.profile-photo-actions,
+.teacher-profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.profile-photo-actions {
+  justify-content: center;
+}
+.teacher-card {
+  position: relative;
+}
+.teacher-profile-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+.teacher-profile-link:focus-visible {
+  outline: none;
+}
+.teacher-profile-link:focus-visible::after {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+.teacher-card:hover {
+  border-color: var(--text-accent);
+}
+.teacher-card .teacher-write {
+  position: relative;
+  z-index: 1;
+}
+.teacher-profile {
+  margin-top: 24px;
+}
+.teacher-profile-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.teacher-profile-heading h2,
+.teacher-profile-heading p {
+  margin-bottom: 6px;
+}
+.teacher-profile-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-block: 24px;
+}
+.teacher-profile-details dt {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.teacher-profile-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+.teacher-profile .teacher-bio {
+  max-width: 70ch;
+}
+@media (max-width: 1100px) {
+  .navigation-breadcrumbs a,
+  .navigation-breadcrumbs [aria-current="page"] {
+    max-width: 18ch;
+  }
+}
+@media (max-width: 720px) {
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    height: auto;
+    min-height: 69px;
+    padding-block: 10px;
+    row-gap: 2px;
+    position: relative;
+  }
+  .header-left {
+    display: contents;
+  }
+  .menu-button {
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: start;
+  }
+  .header-actions {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .navigation-breadcrumbs {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    font-size: 12px;
+  }
+  .navigation-breadcrumbs > ol,
+  .navigation-breadcrumbs > ol > li {
+    gap: 3px;
+  }
+  .navigation-breadcrumbs a,
+  .navigation-breadcrumbs [aria-current="page"] {
+    max-width: 20ch;
+  }
+  .navigation-breadcrumbs .breadcrumb-menu {
+    min-width: 190px;
+  }
+  .teacher-profile-heading {
+    align-items: flex-start;
+    gap: 13px;
+  }
+  .teacher-profile-details {
+    grid-template-columns: 1fr;
+  }
+  .teacher-profile-actions .button {
+    flex: 1 1 auto;
+  }
+}

@@ -37,7 +37,7 @@ function applyAppearance(theme: ThemePreference) {
   const dark = theme === "dark" || (theme === "system" && window.matchMedia(darkQuery).matches);
   // CSS resolves system preference before JavaScript; read its actual background for the browser chrome.
   const color =
-    getComputedStyle(root).getPropertyValue("--bg").trim() || (dark ? "#171b19" : "#f6f7f3");
+    getComputedStyle(root).getPropertyValue("--bg").trim() || (dark ? "#171b19" : "#dcc9a9");
   document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
     meta.content = color;
   });

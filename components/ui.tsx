@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   MapPin,
   UserRound,
+  UsersRound,
   Check,
   Clock3,
   CircleDashed,
@@ -135,7 +136,7 @@ export function Lesson({ lesson, index }: { lesson: ClassItem; index: number }) 
           <span>
             <UserRound size={13} aria-hidden="true" />
             {lesson.teacherId ? (
-              <Link href={`/dashboard/teachers?teacher=${encodeURIComponent(lesson.teacherId)}`}>
+              <Link href={`/dashboard/teachers/${encodeURIComponent(lesson.teacherId)}`}>
                 {lesson.teacher}
               </Link>
             ) : (
@@ -146,6 +147,12 @@ export function Lesson({ lesson, index }: { lesson: ClassItem; index: number }) 
             <MapPin size={13} aria-hidden="true" />
             {lesson.room} · {lesson.building}
           </span>
+          {lesson.groups?.length ? (
+            <span>
+              <UsersRound size={13} aria-hidden="true" />
+              {lesson.groups.length === 1 ? "Группа" : "Группы"} {lesson.groups.join(", ")}
+            </span>
+          ) : null}
         </div>
         {lesson.changed && <p className="change-note">{lesson.changeNote}</p>}
       </div>

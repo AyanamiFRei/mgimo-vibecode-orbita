@@ -6,6 +6,7 @@ const Context = createContext<{
   data: Workspace;
   refresh: () => Promise<void>;
   addRequest: (request: StudentRequest) => void;
+  setAvatarUrl: (avatarUrl: string | null) => void;
 } | null>(null);
 export function WorkspaceProvider({
   initial,
@@ -29,7 +30,14 @@ export function WorkspaceProvider({
       })),
     [],
   );
-  return <Context.Provider value={{ data, refresh, addRequest }}>{children}</Context.Provider>;
+  const setAvatarUrl = useCallback((avatarUrl: string | null) => {
+    setData((current) => ({ ...current, user: { ...current.user, avatarUrl } }));
+  }, []);
+  return (
+    <Context.Provider value={{ data, refresh, addRequest, setAvatarUrl }}>
+      {children}
+    </Context.Provider>
+  );
 }
 export function useWorkspace() {
   const value = useContext(Context);

@@ -2,7 +2,7 @@ import type { InStatement, Row } from "@libsql/client";
 import { calendarDay, semesters, teachingWeekday } from "@/lib/calendar";
 import { programs, teacherCatalog } from "@/lib/catalog";
 import { addDays } from "@/lib/time";
-import type { ClassItem, ProgramKey, SemesterId } from "@/lib/types";
+import type { ClassItem, ProgramKey, Semester, SemesterId } from "@/lib/types";
 
 export function teacherSeedStatements(): InStatement[] {
   return teacherCatalog.map((teacher) => ({
@@ -42,6 +42,84 @@ export function classFromRow(row: Row): ClassItem {
   };
 }
 
+type AcademicLesson = Omit<ClassItem, "id" | "groups"> & {
+  slot: number | "exam";
+  semesterId: SemesterId;
+  teacherId: string;
+};
+
+const classTimes = [
+  ["09:00", "10:30"],
+  ["10:45", "12:15"],
+  ["13:00", "14:30"],
+];
+const examCourses: Partial<Record<string, number>> = {
+  "2027-01-12": 0,
+  "2027-01-14": 1,
+  "2027-01-18": 2,
+  "2027-01-20": 4,
+  "2027-06-08": 0,
+  "2027-06-10": 1,
+  "2027-06-16": 2,
+  "2027-06-18": 4,
+};
+
+export function programLessonsForDay(
+  programKey: ProgramKey,
+  semester: Semester,
+  date: string,
+): AcademicLesson[] {
+  if (date < semester.startDate || date > semester.endDate) return [];
+  const { kind } = calendarDay(date);
+  const program = programs[programKey];
+  const offset = programKey === "business-informatics" ? 0 : 1;
+  const common = { date, semesterId: semester.id, building: "Главный корпус" };
+  if (kind === "exam") {
+    const course = examCourses[date];
+    if (course === undefined) return [];
+    const teacher = teacherCatalog[course];
+    return [
+      {
+        ...common,
+        slot: "exam",
+        type: "exam",
+        subject: program.subjects[course],
+        startTime: offset === 0 ? "10:00" : "13:00",
+        endTime: offset === 0 ? "12:00" : "15:00",
+        teacher: teacher.name,
+        teacherId: teacher.id,
+        room: "401",
+        changed: false,
+        changeNote: null,
+      },
+    ];
+  }
+  if (kind !== "study") return [];
+  const day = teachingWeekday(date);
+  const count = day === 0 || day === 2 ? 3 : 2;
+  return classTimes.slice(0, count).map(([startTime, endTime], slot) => {
+    const course = (day + slot + offset) % program.subjects.length;
+    const teacher = teacherCatalog[course];
+    const changed = date === "2026-11-11" && slot === 1;
+    const room = changed ? String(412 + offset) : `${2 + day}${10 + slot + 20 * offset}`;
+    return {
+      ...common,
+      slot,
+      startTime,
+      endTime,
+      subject: program.subjects[course],
+      type: slot === 0 ? "lecture" : slot === 1 ? "seminar" : "practice",
+      teacher: teacher.name,
+      teacherId: teacher.id,
+      room,
+      changed,
+      changeNote: changed
+        ? `Аудитория изменилась: ${305 + offset} → ${room}. Время занятия прежнее.`
+        : null,
+    };
+  });
+}
+
 /** Only catalog-generated rows are reconciled; user-created requests, messages and manual lessons are untouched. */
 export function academicStatements(
   userId: string,
@@ -65,41 +143,47 @@ export function academicStatements(
   }
 
   for (const semester of semesters) {
-    for (let date = semester.startDate; date <= semester.teachingEndDate; date = addDays(date, 1)) {
-      if (calendarDay(date).kind !== "study") continue;
-      const day = teachingWeekday(date);
-      const count = day === 0 || day === 2 ? 3 : 2;
-      for (let slot = 0; slot < count; slot += 1) {
-        const course = (day + slot + offset) % program.subjects.length;
-        const teacher = teacherCatalog[course];
-        const changed = date === "2026-11-11" && slot === 1;
-        const times = [
-          ["09:00", "10:30"],
-          ["10:45", "12:15"],
-          ["13:00", "14:30"],
-        ];
+    for (let date = semester.startDate; date <= semester.endDate; date = addDays(date, 1)) {
+      const lessons = programLessonsForDay(programKey, semester, date);
+      for (const lesson of lessons) {
+        const exam = lesson.type === "exam";
         statements.push({
           sql: `INSERT OR IGNORE INTO classes (id,user_id,date,start_time,end_time,subject,type,teacher,room,building,changed,change_note,teacher_id,semester_id,is_exam,generator_version)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,'academic-v2')`,
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'academic-v2')`,
           args: [
-            `acad-v2:${userId}:${date}:${slot}`,
+            `acad-v2:${userId}:${date}:${lesson.slot}`,
             userId,
             date,
-            times[slot][0],
-            times[slot][1],
-            program.subjects[course],
-            slot === 0 ? "lecture" : slot === 1 ? "seminar" : "practice",
-            teacher.name,
-            changed ? "412" : `${2 + day}${10 + slot}`,
-            "Главный корпус",
-            changed ? 1 : 0,
-            changed ? "Аудитория изменилась: 305 → 412. Время занятия прежнее." : null,
-            teacher.id,
-            semester.id,
+            lesson.startTime,
+            lesson.endTime,
+            lesson.subject,
+            exam ? "practice" : lesson.type,
+            lesson.teacher,
+            lesson.room,
+            lesson.building,
+            Number(lesson.changed),
+            lesson.changeNote,
+            lesson.teacherId,
+            lesson.semesterId,
+            Number(exam),
           ],
         });
+        if (exam) {
+          statements.push({
+            sql: `INSERT INTO deadlines (id,user_id,title,subject,due_at,kind) VALUES (?,?,?,?,?,'exam')
+              ON CONFLICT(id) DO UPDATE SET due_at=excluded.due_at
+              WHERE deadlines.user_id=excluded.user_id AND deadlines.kind='exam'`,
+            args: [
+              `academic-exam:${userId}:${date}`,
+              userId,
+              "Экзамен",
+              lesson.subject,
+              new Date(`${date}T${lesson.startTime}:00+03:00`).toISOString(),
+            ],
+          });
+        }
       }
-      if (day === 4)
+      if (lessons.length && lessons[0].type !== "exam" && teachingWeekday(date) === 4)
         statements.push({
           sql: "INSERT OR IGNORE INTO deadlines (id,user_id,title,subject,due_at,kind) VALUES (?,?,?,?,?,'assignment')",
           args: [
@@ -110,41 +194,6 @@ export function academicStatements(
             new Date(`${date}T18:00:00+03:00`).toISOString(),
           ],
         });
-    }
-    const examDates =
-      semester.id === "autumn-2026"
-        ? ["2027-01-12", "2027-01-14", "2027-01-18", "2027-01-20"]
-        : ["2027-06-08", "2027-06-10", "2027-06-16", "2027-06-18"];
-    for (const [index, course] of [0, 1, 2, 4].entries()) {
-      const date = examDates[index];
-      const teacher = teacherCatalog[course];
-      statements.push({
-        sql: `INSERT OR IGNORE INTO classes (id,user_id,date,start_time,end_time,subject,type,teacher,room,building,teacher_id,semester_id,is_exam,generator_version)
-          VALUES (?,?,?,?,?,?,'practice',?,?,?,?,?,1,'academic-v2')`,
-        args: [
-          `acad-v2:${userId}:${date}:exam`,
-          userId,
-          date,
-          "10:00",
-          "12:00",
-          program.subjects[course],
-          teacher.name,
-          "401",
-          "Главный корпус",
-          teacher.id,
-          semester.id,
-        ],
-      });
-      statements.push({
-        sql: "INSERT OR IGNORE INTO deadlines (id,user_id,title,subject,due_at,kind) VALUES (?,?,?,?,?,'exam')",
-        args: [
-          `academic-exam:${userId}:${date}`,
-          userId,
-          "Экзамен",
-          program.subjects[course],
-          new Date(`${date}T10:00:00+03:00`).toISOString(),
-        ],
-      });
     }
   }
 

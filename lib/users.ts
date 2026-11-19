@@ -7,6 +7,10 @@ export type SqlConnection = Pick<Client | Transaction, "execute">;
 export const publicUserColumns =
   "id, login, role, name, first_name, email, faculty, program, year, group_name, student_number, avatar_color";
 
+export function profileAvatarUrl(version: number): string {
+  return `/api/profile/avatar?v=${version}`;
+}
+
 export function userFromRow(row: Row): User {
   return {
     id: String(row.id),
@@ -21,12 +25,15 @@ export function userFromRow(row: Row): User {
     group: String(row.group_name),
     studentNumber: String(row.student_number),
     avatarColor: String(row.avatar_color),
+    avatarUrl: row.avatar_version == null ? null : profileAvatarUrl(Number(row.avatar_version)),
   };
 }
 
 export async function findUser(db: SqlConnection, id: string): Promise<User | null> {
   const result = await db.execute({
-    sql: `SELECT ${publicUserColumns} FROM users WHERE id = ? AND disabled = 0`,
+    sql: `SELECT ${publicUserColumns},
+          (SELECT updated_at FROM user_avatars WHERE user_id = users.id) AS avatar_version
+          FROM users WHERE id = ? AND disabled = 0`,
     args: [id],
   });
   return result.rows[0] ? userFromRow(result.rows[0]) : null;

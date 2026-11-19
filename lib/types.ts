@@ -15,6 +15,7 @@ export interface User {
   group: string;
   studentNumber: string;
   avatarColor: string;
+  avatarUrl?: string | null;
 }
 export interface ClassItem {
   id: string;
@@ -30,6 +31,7 @@ export interface ClassItem {
   building: string;
   changed: boolean;
   changeNote: string | null;
+  groups?: string[];
 }
 export interface Grade {
   id: string;

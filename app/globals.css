@@ -1,11 +1,11 @@
 :root {
-  --bg: #f6f7f3;
-  --paper: #fff;
+  --bg: #dcc9a9;
+  --paper: #f8f1e4;
   --ink: #263b33;
   --muted: #7c847e;
   --green: #285340;
   --lime: #d9edb8;
-  --border: #e7eae3;
+  --border: #cbbb9e;
   --radius: 17px;
   --font: Arial, "Helvetica Neue", sans-serif;
 }

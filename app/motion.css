@@ -1,0 +1,175 @@
+/* Material 3 Standard scheme: functional motion with minimal bounce.
+   https://m3.material.io/styles/motion
+   Spring source: AndroidX StandardMotionTokens.kt (damping .9 spatial, 1 effects;
+   stiffness fast/default/slow 1400/700/300 spatial, 3800/1600/800 effects).
+   linear() samples the damped step response to a 0.001 settling tolerance.
+   Color/opacity use the bounded effects curve; transforms use the spatial curve. */
+:root {
+  --motion-spatial-fast: 224ms;
+  --motion-spatial-default: 317ms;
+  --motion-spatial-slow: 484ms;
+  --motion-effects-fast: 150ms;
+  --motion-effects-default: 231ms;
+  --motion-effects-slow: 327ms;
+  --motion-spatial-curve: cubic-bezier(0.27, 1.06, 0.18, 1);
+  --motion-effects-curve: cubic-bezier(0.2, 0, 0, 1);
+}
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    --motion-spatial-curve: linear(
+      0,
+      0.0496,
+      0.1613,
+      0.2961,
+      0.4311,
+      0.5541,
+      0.6597,
+      0.7466,
+      0.8156,
+      0.8689,
+      0.9091,
+      0.9387,
+      0.96,
+      0.9749,
+      0.9851,
+      0.9919,
+      0.9962,
+      0.9989,
+      1.0004,
+      1.0012,
+      1.0015,
+      1.0015,
+      1.0014,
+      1.0012,
+      1
+    );
+    --motion-effects-curve: linear(
+      0,
+      0.0576,
+      0.1805,
+      0.3211,
+      0.4555,
+      0.5733,
+      0.6714,
+      0.7504,
+      0.8125,
+      0.8604,
+      0.8968,
+      0.9242,
+      0.9446,
+      0.9597,
+      0.9708,
+      0.979,
+      0.9849,
+      0.9892,
+      0.9922,
+      0.9945,
+      0.9961,
+      0.9972,
+      0.998,
+      0.9986,
+      1
+    );
+  }
+}
+button,
+a,
+summary,
+input,
+select,
+textarea {
+  transition:
+    color var(--motion-effects-fast) var(--motion-effects-curve),
+    background-color var(--motion-effects-fast) var(--motion-effects-curve),
+    border-color var(--motion-effects-fast) var(--motion-effects-curve),
+    box-shadow var(--motion-effects-fast) var(--motion-effects-curve),
+    transform var(--motion-spatial-fast) var(--motion-spatial-curve),
+    opacity var(--motion-effects-fast) var(--motion-effects-curve);
+}
+.button:active:not(:disabled),
+.icon-button:active,
+.day-tab:active,
+.demo-logins button:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .stat-card:hover,
+  .teacher-card:hover,
+  .chat-card:hover,
+  .document-type-card:hover {
+    transform: translateY(-2px);
+  }
+}
+.stat-card,
+.teacher-card,
+.chat-card,
+.document-type-card,
+.sidebar {
+  transition:
+    transform var(--motion-spatial-default) var(--motion-spatial-curve),
+    border-color var(--motion-effects-fast) var(--motion-effects-curve),
+    background-color var(--motion-effects-fast) var(--motion-effects-curve),
+    box-shadow var(--motion-effects-fast) var(--motion-effects-curve);
+}
+.theme-toggle svg,
+.notification-button svg {
+  transition: transform var(--motion-spatial-fast) var(--motion-spatial-curve);
+}
+.theme-toggle:active svg {
+  transform: rotate(24deg);
+}
+.main-content > .page-title,
+.main-content > .teacher-profile,
+.schedule-view > .panel,
+.conversation-messages > .message-bubble,
+.profile-photo-controls [role="status"],
+.breadcrumb-overflow details[open] .breadcrumb-menu {
+  animation:
+    orbita-enter-spatial var(--motion-spatial-default) var(--motion-spatial-curve),
+    orbita-enter-effects var(--motion-effects-default) var(--motion-effects-curve);
+}
+.request-dialog[open] {
+  animation:
+    orbita-dialog-spatial var(--motion-spatial-default) var(--motion-spatial-curve),
+    orbita-enter-effects var(--motion-effects-default) var(--motion-effects-curve);
+}
+.request-dialog[open]::backdrop,
+.sidebar-backdrop {
+  animation: orbita-enter-effects var(--motion-effects-fast) var(--motion-effects-curve);
+}
+@keyframes orbita-enter-spatial {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes orbita-enter-effects {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes orbita-dialog-spatial {
+  from {
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

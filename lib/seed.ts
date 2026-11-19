@@ -1,6 +1,7 @@
 import { hash } from "bcryptjs";
 import type { Client, InStatement } from "@libsql/client";
-import { academicStatements, teacherSeedStatements } from "@/lib/academics";
+import { academicStatements, programLessonsForDay, teacherSeedStatements } from "@/lib/academics";
+import { semesters } from "@/lib/calendar";
 import { personas, programs } from "@/lib/catalog";
 import { withWriteTransaction } from "@/lib/database-write";
 import { addDays, mondayInMoscow } from "@/lib/time";
@@ -117,12 +118,16 @@ export async function seedDatabase(db: Client, now = new Date(), bcryptRounds = 
         }),
       );
     }
+    const changedLesson = programLessonsForDay(student.program, semesters[0], "2026-11-11").find(
+      (lesson) => lesson.changed,
+    );
+    if (!changedLesson) throw new Error("The room change notice requires a scheduled lesson.");
     const notifications = [
       [
         "schedule",
         "Новая аудитория 11 ноября",
-        `11 ноября занятие «${program.subjects[(3 + studentIndex) % 6]}» пройдёт в аудитории 412. Начало в 10:45.`,
-        "/dashboard/schedule",
+        `11 ноября занятие «${changedLesson.subject}» пройдёт в аудитории ${changedLesson.room}. Начало в ${changedLesson.startTime}.`,
+        `/dashboard/schedule?date=${changedLesson.date}`,
         0,
       ],
       [

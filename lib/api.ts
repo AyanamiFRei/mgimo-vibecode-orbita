@@ -16,7 +16,15 @@ export async function requireApiUser(
   const user = await getSessionUser();
   if (!user) throw new AppError(401, "UNAUTHENTICATED", "Войдите в кабинет, чтобы продолжить.");
   const creation = bucket === "create-request" || bucket === "teacher-thread";
-  const limit = creation ? 20 : bucket === "teacher-message" ? 30 : mutation ? 90 : 240;
+  const limit = creation
+    ? 20
+    : bucket === "profile-avatar-write"
+      ? 10
+      : bucket === "teacher-message"
+        ? 30
+        : mutation
+          ? 90
+          : 240;
   const window = creation ? 60 * 60_000 : 60_000;
   if (!(await consumeRateLimit(getDb(), `api:${bucket}:${user.id}`, limit, window))) {
     throw new AppError(

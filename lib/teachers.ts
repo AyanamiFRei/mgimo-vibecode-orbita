@@ -51,6 +51,11 @@ function threadFromRow(row: Row, actor: User): TeacherThread {
     unreadCount: Number(actor.role === "staff" ? row.staff_unread : row.student_unread),
   };
 }
+
+async function findTeacherById(db: SqlConnection, id: string): Promise<Teacher | null> {
+  const result = await db.execute({ sql: "SELECT * FROM teachers WHERE id=?", args: [id] });
+  return result.rows[0] ? teacherFromRow(result.rows[0]) : null;
+}
 function messageFromRow(row: Row): TeacherMessage {
   return {
     id: String(row.id),
@@ -75,18 +80,15 @@ async function conversation(
   id: string,
 ): Promise<TeacherConversation> {
   const thread = await visibleThread(db, actor, id);
-  const teachers = await db.execute({
-    sql: "SELECT * FROM teachers WHERE id=?",
-    args: [String(thread.teacher_id)],
-  });
-  if (!teachers.rows[0]) notFound();
+  const teacher = await findTeacherById(db, String(thread.teacher_id));
+  if (!teacher) notFound();
   const messages = await db.execute({
     sql: "SELECT * FROM teacher_messages WHERE thread_id=? ORDER BY created_at DESC,rowid DESC LIMIT 100",
     args: [id],
   });
   return {
     thread: threadFromRow(thread, actor),
-    teacher: teacherFromRow(teachers.rows[0]),
+    teacher,
     messages: messages.rows.reverse().map(messageFromRow),
   };
 }
@@ -96,6 +98,11 @@ export class TeacherService {
     private readonly db: Client,
     private readonly clock: () => Date = () => new Date(),
   ) {}
+
+  async findTeacher(actorId: string, teacherId: string): Promise<Teacher | null> {
+    await requireActor(this.db, actorId);
+    return findTeacherById(this.db, teacherId);
+  }
 
   async getTeachers(actorId: string): Promise<Teacher[]> {
     const actor = await requireActor(this.db, actorId);

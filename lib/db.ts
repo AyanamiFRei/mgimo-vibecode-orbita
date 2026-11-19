@@ -36,6 +36,10 @@ export async function createSchema(db: Client): Promise<void> {
       program TEXT NOT NULL, year INTEGER NOT NULL, group_name TEXT NOT NULL,
       student_number TEXT NOT NULL, avatar_color TEXT NOT NULL
     )`,
+      `CREATE TABLE IF NOT EXISTS user_avatars (
+        user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        image BLOB NOT NULL CHECK(length(image) BETWEEN 1 AND 102400), updated_at INTEGER NOT NULL
+      )`,
       `CREATE TABLE IF NOT EXISTS classes (
       id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), date TEXT NOT NULL,
       start_time TEXT NOT NULL, end_time TEXT NOT NULL, subject TEXT NOT NULL,
@@ -120,7 +124,7 @@ export async function createSchema(db: Client): Promise<void> {
       "write",
     );
   await db.execute({
-    sql: "INSERT OR IGNORE INTO schema_migrations (version, applied_at) VALUES ('002-academics-and-contact', ?)",
+    sql: "INSERT OR IGNORE INTO schema_migrations (version, applied_at) VALUES ('002-academics-and-contact', ?1), ('003-profile-avatar', ?1)",
     args: [new Date().toISOString()],
   });
 }

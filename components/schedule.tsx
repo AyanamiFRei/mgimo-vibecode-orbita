@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CalendarDays, ChevronLeft, ChevronRight, Info, RefreshCw } from "lucide-react";
+import { ArrowLeft, CalendarDays, ChevronLeft, ChevronRight, Info, RefreshCw } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
 import { DateText, EmptyState, Lesson, PageTitle } from "./ui";
-import type { ScheduleData as WeekData } from "@/lib/types";
+import type { ScheduleData as WeekData, Teacher } from "@/lib/types";
 
 function addDays(date: string, days: number) {
   const value = new Date(`${date}T12:00:00Z`);
@@ -21,7 +21,7 @@ function validDate(value: string) {
     value <= "2027-06-30"
   );
 }
-export function Schedule() {
+export function Schedule({ teacher }: { teacher?: Teacher }) {
   const { data } = useWorkspace();
   const params = useSearchParams();
   const router = useRouter();
@@ -32,14 +32,18 @@ export function Schedule() {
   const day = new Date(`${selected}T12:00:00Z`).getUTCDay();
   const monday = addDays(selected, day === 0 ? -6 : 1 - day);
   const week = Array.from({ length: 7 }, (_, i) => addDays(monday, i));
-  const view = params.get("view") === "week" ? "week" : "day";
+  const requestedView = params.get("view");
+  const view = requestedView === "week" || (!requestedView && teacher) ? "week" : "day";
   const [attempt, setAttempt] = useState(0);
-  const query = `semester=${semesterId}&week=${monday}`;
-  const key = `${query}:${attempt}`;
+  const endpoint = teacher
+    ? `/api/teachers/${encodeURIComponent(teacher.id)}/schedule`
+    : "/api/schedule";
+  const url = `${endpoint}?semester=${semesterId}&week=${monday}`;
+  const key = `${url}:${attempt}`;
   const [result, setResult] = useState<{ key: string; data?: WeekData; error?: string }>();
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`/api/schedule?${query}`, { cache: "no-store", signal: controller.signal })
+    fetch(url, { cache: "no-store", signal: controller.signal })
       .then(async (response) => {
         const body = await response.json();
         if (!response.ok) throw new Error(body.error?.message || "Не удалось загрузить расписание");
@@ -49,17 +53,22 @@ export function Schedule() {
         if (error.name !== "AbortError") setResult({ key, error: error.message });
       });
     return () => controller.abort();
-  }, [query, key]);
+  }, [url, key]);
   const loaded = result?.key === key ? result.data : undefined;
   const error = result?.key === key ? result.error : undefined;
   const shown = view === "day" ? [selected] : week;
   const classes = loaded?.classes || [];
   return (
     <>
+      {teacher && (
+        <Link className="back-link" href={`/dashboard/teachers/${encodeURIComponent(teacher.id)}`}>
+          <ArrowLeft size={16} aria-hidden="true" /> Профиль преподавателя
+        </Link>
+      )}
       <PageTitle
         eyebrow="УЧЕБНЫЙ КАЛЕНДАРЬ"
-        title="Расписание"
-        description={`${data.user.group} · Учебный год 2026/27`}
+        title={teacher ? "Расписание преподавателя" : "Расписание"}
+        description={`${teacher ? teacher.name : data.user.group} · Учебный год 2026/27`}
       />
       <div className="semester-controls">
         <label htmlFor="semester">

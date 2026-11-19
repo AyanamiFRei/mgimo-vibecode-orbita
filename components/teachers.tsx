@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Clock3, Info, MapPin, MessageSquare, Search } from "lucide-react";
+import { ArrowUpRight, Clock3, Info, MapPin, MessageSquare, Search } from "lucide-react";
 import type { Teacher } from "@/lib/types";
 import { useWorkspace } from "./workspace-provider";
 import { EmptyState, PageTitle } from "./ui";
@@ -15,7 +15,6 @@ export function Teachers() {
   const params = useSearchParams();
   const [result, setResult] = useState<{ teachers: Teacher[]; error?: string }>();
   const [retry, setRetry] = useState(0);
-  const selected = params.get("teacher");
   const query = params.get("q") || "";
   useEffect(() => {
     const controller = new AbortController();
@@ -27,12 +26,10 @@ export function Teachers() {
     return () => controller.abort();
   }, [retry]);
   const teachers =
-    result?.teachers.filter(
-      (teacher) =>
-        (!selected || teacher.id === selected) &&
-        `${teacher.name} ${teacher.department} ${teacher.subjects.join(" ")}`
-          .toLocaleLowerCase("ru-RU")
-          .includes(query.toLocaleLowerCase("ru-RU")),
+    result?.teachers.filter((teacher) =>
+      `${teacher.name} ${teacher.department} ${teacher.subjects.join(" ")}`
+        .toLocaleLowerCase("ru-RU")
+        .includes(query.toLocaleLowerCase("ru-RU")),
     ) || [];
   return (
     <>
@@ -65,12 +62,6 @@ export function Teachers() {
           Найти
         </button>
       </form>
-      {selected && (
-        <Link href="/dashboard/teachers" className="back-link">
-          <ArrowLeft size={16} aria-hidden="true" />
-          Все преподаватели
-        </Link>
-      )}
       {!result ? (
         <div className="panel loading-state" role="status">
           <span className="spinner" />
@@ -91,7 +82,14 @@ export function Teachers() {
                 <TeacherAvatar teacher={teacher} />
                 <span className="badge status-ready">Вымышленный профиль</span>
               </div>
-              <h2>{teacher.name}</h2>
+              <h2>
+                <Link
+                  className="teacher-profile-link"
+                  href={`/dashboard/teachers/${encodeURIComponent(teacher.id)}`}
+                >
+                  {teacher.name} <ArrowUpRight size={16} aria-hidden="true" />
+                </Link>
+              </h2>
               <p className="teacher-title">
                 {teacher.title} · {teacher.department}
               </p>

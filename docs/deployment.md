@@ -25,6 +25,10 @@ Production-проверка прошла: вход `student1`, `student2`, `dean
 
 ## Vercel + удалённый libSQL
 
+Перед публикацией версии с фото профиля обязательно выполните `node --env-file=.env.turso.local --import tsx scripts/setup-db.ts` против удалённой БД. Команда добавляет `user_avatars` и согласует сгенерированное расписание; пароли, заявки, переписки и отметки прочитанности сохраняются. Эта миграция успешно выполнена 19 ноября 2026 года, неизменность этих данных проверена сравнением хешей до и после. Новых переменных окружения и отдельного файлового хранилища не требуется.
+
+Для движения интерфейса применяется схема Standard из [Material 3](https://m3.material.io/styles/motion). Значения spring-токенов сверены с [официальным AndroidX](https://raw.githubusercontent.com/androidx/androidx/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/StandardMotionTokens.kt); CSS использует linear() с cubic-bezier fallback и полностью отключает движение при reduced motion.
+
 1. Импортируйте [репозиторий проекта](https://github.com/AyanamiFRei/mgimo-vibecode-orbita). В нём есть package-lock.json; `.env.local`, `data`, node_modules и .next исключены.
 2. Создайте удалённую libSQL-совместимую БД, например через Turso. Скопируйте URL и токен в безопасное место. Файловый `file:` URL для Vercel не подходит и блокируется приложением.
 3. В локальном `.env.turso.local` укажите удалённые `DATABASE_URL=libsql://…` и `DATABASE_AUTH_TOKEN=…`, затем выполните `node --env-file=.env.turso.local --import tsx scripts/setup-db.ts`. Это создаст вымышленные аккаунты и начальные данные в удалённой БД, сохранив локальную SQLite-настройку. Файл исключён из Git и Vercel upload; не публикуйте его. Перед повторным seed убедитесь, что выбрана нужная БД.

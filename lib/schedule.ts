@@ -19,13 +19,7 @@ const querySchema = z
   })
   .strict();
 
-export async function getSchedule(
-  db: Client,
-  actorId: string,
-  input: unknown,
-  now = new Date(),
-): Promise<ScheduleData> {
-  await requireActor(db, actorId);
+export function scheduleWeek(input: unknown, now: Date): Omit<ScheduleData, "classes"> {
   const data = validate(querySchema, input);
   const today = moscowDate(now);
   const semester =
@@ -40,20 +34,27 @@ export async function getSchedule(
     (currentWeek < firstWeek ? firstWeek : currentWeek > lastWeek ? lastWeek : currentWeek);
   if (weekStart < firstWeek || weekStart > lastWeek)
     throw new AppError(400, "INVALID_WEEK", "Выберите неделю внутри выбранного семестра.");
+  const days = Array.from({ length: 7 }, (_, index) => calendarDay(addDays(weekStart, index)));
+  return { semesters, semester, weekStart, days, notes: calendarNotes };
+}
+
+export async function getSchedule(
+  db: Client,
+  actorId: string,
+  input: unknown,
+  now = new Date(),
+): Promise<ScheduleData> {
+  await requireActor(db, actorId);
+  const week = scheduleWeek(input, now);
   const rows = await db.execute({
     sql: "SELECT * FROM classes WHERE user_id=? AND date>=? AND date<? AND (semester_id=? OR semester_id IS NULL) ORDER BY date,start_time,id",
-    args: [actorId, weekStart, addDays(weekStart, 7), semester.id],
+    args: [actorId, week.weekStart, addDays(week.weekStart, 7), week.semester.id],
   });
-  const days = Array.from({ length: 7 }, (_, index) => calendarDay(addDays(weekStart, index)));
   const available = new Set(
-    days.filter((day) => day.kind === "study" || day.kind === "exam").map((day) => day.date),
+    week.days.filter((day) => day.kind === "study" || day.kind === "exam").map((day) => day.date),
   );
   return {
-    semesters,
-    semester,
-    weekStart,
+    ...week,
     classes: rows.rows.map(classFromRow).filter((item) => available.has(item.date)),
-    days,
-    notes: calendarNotes,
   };
 }

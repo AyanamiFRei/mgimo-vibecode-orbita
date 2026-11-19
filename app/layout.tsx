@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { ThemeProvider, type ThemePreference } from "@/components/theme-provider";
 import "./globals.css";
 import "./themes.css";
+import "./interface.css";
+import "./motion.css";
 
 export const metadata: Metadata = {
   title: { default: "Орбита — студенческий кабинет", template: "%s · Орбита" },
@@ -24,12 +26,12 @@ export async function generateViewport(): Promise<Viewport> {
     themeColor:
       theme === "system"
         ? [
-            { media: "(prefers-color-scheme: light)", color: "#f6f7f3" },
+            { media: "(prefers-color-scheme: light)", color: "#dcc9a9" },
             { media: "(prefers-color-scheme: dark)", color: "#171b19" },
           ]
         : theme === "dark"
           ? "#171b19"
-          : "#f6f7f3",
+          : "#dcc9a9",
   };
 }
 
