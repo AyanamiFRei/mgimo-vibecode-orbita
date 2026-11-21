@@ -38,7 +38,6 @@ export function Notifications() {
   return (
     <>
       <PageTitle
-        eyebrow="СООБЩЕНИЯ УНИВЕРСИТЕТА"
         title="Уведомления"
         description="Объявления, изменения расписания, ответы и напоминания."
       >
@@ -121,7 +120,7 @@ export function Notifications() {
           })
         ) : (
           <section className="panel">
-            <EmptyState title="Всё спокойно" text="В этой категории пока нет уведомлений." />
+            <EmptyState title="Нет уведомлений" text="Выбери другую категорию." />
           </section>
         )}
       </section>

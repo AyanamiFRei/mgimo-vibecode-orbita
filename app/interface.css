@@ -214,6 +214,267 @@
 .teacher-profile .teacher-bio {
   max-width: 70ch;
 }
+
+.header-actions .compact-search {
+  display: none;
+}
+
+.eyebrow,
+.nav-caption,
+.concept-badge {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.page-title .eyebrow {
+  font-size: 12px;
+  letter-spacing: 0;
+}
+.page-title > div:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.section-head h2,
+.page-title h1 {
+  font-weight: 600;
+}
+.empty-state {
+  padding-block: 32px;
+}
+.empty-state h3 {
+  margin-top: 0;
+}
+
+.hero-banner {
+  min-height: 0;
+}
+.hero-copy {
+  padding: 32px;
+  min-width: 0;
+}
+.hero-copy h2 {
+  max-width: 36ch;
+  margin-block: 8px;
+  line-height: 1.2;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.hero-copy .hero-label {
+  font-size: 13px;
+  letter-spacing: 0;
+  margin-bottom: 0;
+}
+.hero-copy .hero-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.hero-copy .hero-button {
+  min-height: 40px;
+  font-size: 13px;
+}
+.stat-card {
+  padding: 16px;
+}
+.stat-card:hover {
+  box-shadow: none;
+}
+.stat-number {
+  font-variant-numeric: tabular-nums;
+}
+
+.teacher-card-top {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+.teacher-card-top .teacher-avatar {
+  flex: none;
+}
+.teacher-card-identity {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.teacher-card .teacher-card-identity h2,
+.teacher-card .teacher-card-identity p {
+  margin: 0;
+}
+.teacher-card .teacher-card-identity p,
+.teacher-detail,
+.teacher-subjects > span {
+  font-size: 12px;
+}
+.teacher-card .teacher-subjects {
+  margin-block: 12px;
+}
+.teacher-bio {
+  font-size: 14px;
+}
+
+.schedule-view .lesson-meta,
+.schedule-view .lesson-time span,
+.schedule-view .lesson-type,
+.schedule-view .changed-label,
+.semester-caption small {
+  font-size: 12px;
+}
+.schedule-view .lesson-info h3 {
+  font-size: 15px;
+}
+.schedule-view .lesson-time,
+.grade-stat > strong,
+.grade-result,
+.grade-progress {
+  font-variant-numeric: tabular-nums;
+}
+.schedule-view .lesson-time {
+  min-width: 48px;
+}
+.schedule-view .lesson-meta {
+  gap: 4px 12px;
+}
+.schedule-view .lesson-meta > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.schedule-view .change-note {
+  font-size: 12px;
+}
+.calendar-details :is(summary, a) {
+  color: var(--text-accent);
+}
+.segmented > :is(a, button),
+.schedule-toolbar .segmented > a {
+  min-height: 36px;
+  font-size: 12px;
+}
+.grade-stat > span,
+.grade-stat > p,
+.grade-subject small,
+.grade-progress span {
+  font-size: 12px;
+}
+.grade-stat > span {
+  margin-bottom: 4px;
+}
+.notification-copy .eyebrow,
+.notification-top small,
+.notification-links .text-button,
+.chat-card-footer,
+.message-bubble > small,
+.message-sender > span {
+  font-size: 12px;
+}
+.notification-links {
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.notification-copy > p {
+  font-size: 14px;
+}
+.chat-card-person small {
+  font-size: 12px;
+}
+.conversation-disclosure {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.profile-role {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+}
+.profile-photo-controls small {
+  font-size: 12px;
+}
+
+.document-request-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+.document-request-dialog .request-form {
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0;
+}
+.document-request-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.document-request-scroll .dialog-heading {
+  gap: 12px;
+  margin: 0;
+}
+.document-request-scroll h2:focus {
+  outline: none;
+}
+.document-request-scroll .form-error {
+  overflow-wrap: anywhere;
+}
+.document-request-scroll > * {
+  flex-shrink: 0;
+}
+.document-request-scroll :is(input, textarea, select) {
+  font-size: 16px;
+  scroll-margin-block: 12px;
+}
+.document-request-actions {
+  flex: none;
+  display: grid;
+  gap: 8px;
+  padding: 12px 24px max(12px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--surface-base);
+}
+.document-request-actions .button {
+  margin: 0;
+}
+.document-request-dialog .draft-note,
+.document-request-scroll .form-notice {
+  font-size: 12px;
+}
+.document-request-dialog .draft-note {
+  color: var(--text-secondary);
+}
+.document-request-scroll select {
+  background-color: var(--surface-input);
+}
+.staff-fields {
+  display: grid;
+  grid-template-columns: minmax(108px, 1fr) minmax(0, 2fr);
+  gap: 12px;
+  align-items: start;
+}
+.staff-field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.staff-field :is(select, textarea) {
+  width: 100%;
+}
+.staff-form .button {
+  justify-self: start;
+  min-height: 44px;
+}
+
+@media (max-width: 930px) {
+  .header-actions .compact-search {
+    display: inline-flex;
+  }
+}
 @media (max-width: 1100px) {
   .navigation-breadcrumbs a,
   .navigation-breadcrumbs [aria-current="page"] {
@@ -267,5 +528,82 @@
   }
   .teacher-profile-actions .button {
     flex: 1 1 auto;
+  }
+  .page-title {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .hero-copy {
+    padding: 20px;
+  }
+  .hero-copy h2 {
+    max-width: none;
+    font-size: 24px;
+  }
+  .header-actions .compact-search {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .grade-stat {
+    padding: 16px;
+  }
+  .staff-fields {
+    grid-template-columns: 1fr;
+  }
+  .document-request-scroll,
+  .document-request-actions {
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grade-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .grade-stats > :first-child {
+    grid-column: 1 / -1;
+  }
+  .wrap-segmented {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    width: 100%;
+  }
+  .wrap-segmented > a {
+    grid-column: span 2;
+    min-height: 44px;
+    padding: 4px;
+  }
+  .wrap-segmented > a:nth-of-type(-n + 2) {
+    grid-column: span 3;
+  }
+  .schedule-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 8px;
+  }
+  .schedule-toolbar > .segmented {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    margin: 0;
+  }
+  .schedule-toolbar .segmented > a {
+    flex: 1;
+  }
+  .schedule-toolbar .button,
+  .week-switch strong {
+    font-size: 12px;
+  }
+  .week-switch .icon-button {
+    min-width: 36px;
+    min-height: 40px;
+  }
+  .schedule-view .lesson-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .document-request-scroll {
+    padding-block: 16px;
   }
 }

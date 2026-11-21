@@ -23,16 +23,27 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
   const { addRequest, data } = useWorkspace();
   const dialog = useRef<HTMLDialogElement>(null);
   const form = useRef<HTMLFormElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const errorMessage = useRef<HTMLParagraphElement>(null);
   const [dirty, setDirty] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const draftKey = `orbita-draft:${data.user.id}:${initialType}`;
   useEffect(() => {
-    dialog.current?.showModal();
+    const modal = dialog.current;
+    modal?.showModal();
+    heading.current?.focus();
     try {
       const saved = sessionStorage.getItem(draftKey);
       if (saved) {
         const draft = JSON.parse(saved);
+        const type = form.current?.elements.namedItem("type");
+        if (
+          type instanceof HTMLSelectElement &&
+          typeof draft.type === "string" &&
+          Object.hasOwn(requestTitles, draft.type)
+        )
+          type.value = draft.type;
         for (const name of ["purpose", "comment"]) {
           const control = form.current?.elements.namedItem(name);
           if (
@@ -45,7 +56,11 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
     } catch {
       /* A draft is optional when browser storage is unavailable. */
     }
+    return () => modal?.close();
   }, [draftKey]);
+  useEffect(() => {
+    if (error) errorMessage.current?.scrollIntoView({ block: "nearest" });
+  }, [error]);
   function saveDraft() {
     setDirty(true);
     if (!form.current) return;
@@ -53,7 +68,11 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
     try {
       sessionStorage.setItem(
         draftKey,
-        JSON.stringify({ purpose: values.get("purpose"), comment: values.get("comment") }),
+        JSON.stringify({
+          type: values.get("type"),
+          purpose: values.get("purpose"),
+          comment: values.get("comment"),
+        }),
       );
     } catch {
       /* Submission remains available without browser storage. */
@@ -72,8 +91,10 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
       !pending &&
       (!dirty ||
         window.confirm("Закрыть форму? Черновик останется в этой вкладке до отправки заявки."))
-    )
+    ) {
+      dialog.current?.close();
       router.push("/dashboard/documents");
+    }
   }
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -92,6 +113,7 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
         sessionStorage.removeItem(draftKey);
       } catch {}
       setDirty(false);
+      dialog.current?.close();
       router.replace("/dashboard/documents?sent=1");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Не удалось отправить заявку");
@@ -101,87 +123,77 @@ function RequestForm({ initialType }: { initialType: RequestType }) {
   return (
     <dialog
       ref={dialog}
-      className="request-dialog"
+      className="request-dialog document-request-dialog"
       aria-labelledby="request-form-title"
       onCancel={(e) => {
         e.preventDefault();
         close();
       }}
     >
-      <div className="dialog-heading">
-        <span className="document-icon">
-          <FileText size={23} aria-hidden="true" />
-        </span>
-        <button
-          type="button"
-          className="icon-button"
-          aria-label="Закрыть форму"
-          onClick={close}
-          disabled={pending}
-        >
-          <X size={22} />
-        </button>
-      </div>
-      <h2 id="request-form-title">Создание заявки</h2>
-      <p>Выбери документ и укажи, куда он нужен.</p>
       <form ref={form} className="request-form" onSubmit={submit} onChange={saveDraft}>
-        <label htmlFor="request-type">Что тебе нужно?</label>
-        <select id="request-type" name="type" defaultValue={initialType}>
-          {Object.entries(requestTitles).map(([value, title]) => (
-            <option value={value} key={value}>
-              {title}
-            </option>
-          ))}
-        </select>
-        <label htmlFor="purpose">Куда нужна справка</label>
-        <input
-          id="purpose"
-          name="purpose"
-          required
-          minLength={3}
-          maxLength={200}
-          autoComplete="off"
-          placeholder="Например, по месту работы…"
-        />
-        <label htmlFor="comment">
-          Комментарий <span className="muted">· необязательно</span>
-        </label>
-        <textarea
-          id="comment"
-          name="comment"
-          rows={3}
-          maxLength={1500}
-          autoComplete="off"
-          placeholder="Уточни детали, если нужно…"
-        />
-        <p className="draft-note">
-          Черновик сохраняется в этой вкладке. Можно вернуться к нему после перехода назад.
-        </p>
-        <div className="form-notice">
-          <Clock3 size={17} aria-hidden="true" />
-          <span>
-            Обычно готово в течение 3 рабочих дней. В прототипе заявку обрабатывает тестовый
-            сотрудник.
-          </span>
-        </div>
-        {error && (
-          <p role="alert" className="form-error">
-            {error}
-          </p>
-        )}
-        <button className="button primary" disabled={pending}>
-          {pending ? (
-            <>
-              <span className="spinner" />
-              Отправляем…
-            </>
-          ) : (
-            <>
-              Отправить заявку
-              <ArrowRight size={17} aria-hidden="true" />
-            </>
+        <div className="document-request-scroll">
+          <div className="dialog-heading">
+            <h2 id="request-form-title" ref={heading} tabIndex={-1}>
+              Новая заявка
+            </h2>
+            <button
+              type="button"
+              className="icon-button"
+              aria-label="Закрыть форму"
+              onClick={close}
+              disabled={pending}
+            >
+              <X size={20} aria-hidden="true" />
+            </button>
+          </div>
+          <label htmlFor="request-type">Что тебе нужно?</label>
+          <select id="request-type" name="type" defaultValue={initialType}>
+            {Object.entries(requestTitles).map(([value, title]) => (
+              <option value={value} key={value}>
+                {title}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="purpose">Куда нужна справка</label>
+          <input
+            id="purpose"
+            name="purpose"
+            required
+            minLength={3}
+            maxLength={200}
+            autoComplete="off"
+            placeholder="Например, по месту работы"
+          />
+          <label htmlFor="comment">
+            Комментарий <span className="muted">· необязательно</span>
+          </label>
+          <textarea id="comment" name="comment" rows={3} maxLength={1500} autoComplete="off" />
+          <p className="draft-note">Черновик сохраняется в этой вкладке до отправки.</p>
+          <div className="form-notice">
+            <Clock3 size={16} aria-hidden="true" />
+            <span>Обычный срок — 3 рабочих дня. Заявку обработает тестовый сотрудник.</span>
+          </div>
+          {error && (
+            <p role="alert" className="form-error" ref={errorMessage}>
+              {error}
+            </p>
           )}
-        </button>
+        </div>
+        <div className="document-request-actions">
+          <button type="submit" className="button primary" disabled={pending}>
+            {pending ? (
+              <>
+                <span className="spinner" />
+                Отправляем…
+              </>
+            ) : (
+              <>
+                Отправить заявку
+                <ArrowRight size={16} aria-hidden="true" />
+              </>
+            )}
+          </button>
+        </div>
       </form>
     </dialog>
   );
@@ -209,7 +221,7 @@ export function Documents() {
         {selected ? (
           <>
             <PageTitle
-              eyebrow={`ЗАЯВКА № ${selected.number}`}
+              eyebrow={`Заявка № ${selected.number}`}
               title={selected.title}
               description={selected.purpose}
             >
@@ -300,11 +312,7 @@ export function Documents() {
     );
   return (
     <>
-      <PageTitle
-        eyebrow="СПРАВКИ И ЗАЯВЛЕНИЯ"
-        title="Документы"
-        description="Заказ документов, подача заявлений и отслеживание статуса."
-      >
+      <PageTitle title="Документы">
         <Link href="?new=1" className="button primary" role="button">
           <Plus size={18} aria-hidden="true" />
           Новая заявка

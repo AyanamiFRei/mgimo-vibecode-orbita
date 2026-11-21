@@ -15,11 +15,6 @@
   --hero-bg: #e9eedc;
   --hero-text: #263b33;
   --hero-muted: #566547;
-  --orbit-stroke: #d0dabd;
-  --orbit-fill: #9caf7f;
-  --ticket-bg: #fffef4ed;
-  --ticket-border: #ffffff;
-  --ticket-icon-bg: #edf1e2;
   --status-ready-bg: #eaf3e5;
   --status-ready-ink: #4e7444;
   --status-processing-bg: #fff2d8;
@@ -74,11 +69,6 @@ html[data-theme="dark"] {
   --hero-bg: #2a3b2a;
   --hero-text: #e4ece0;
   --hero-muted: #bdcdae;
-  --orbit-stroke: #516748;
-  --orbit-fill: #8ca577;
-  --ticket-bg: #253428ed;
-  --ticket-border: #506344;
-  --ticket-icon-bg: #35482f;
   --status-ready-bg: #31472e;
   --status-ready-ink: #c6e2af;
   --status-processing-bg: #473e28;
@@ -136,11 +126,6 @@ html[data-theme="dark"] {
     --hero-bg: #2a3b2a;
     --hero-text: #e4ece0;
     --hero-muted: #bdcdae;
-    --orbit-stroke: #516748;
-    --orbit-fill: #8ca577;
-    --ticket-bg: #253428ed;
-    --ticket-border: #506344;
-    --ticket-icon-bg: #35482f;
     --status-ready-bg: #31472e;
     --status-ready-ink: #c6e2af;
     --status-processing-bg: #473e28;
@@ -199,10 +184,6 @@ a:hover {
 .segmented button {
   color: var(--text-secondary);
 }
-.empty-icon {
-  background: var(--surface-subtle);
-  color: var(--text-accent);
-}
 :focus-visible {
   outline-color: var(--focus-ring);
 }
@@ -231,7 +212,6 @@ a:hover {
 .demo-accounts,
 .document-icon,
 .teacher-subjects > span,
-.ticket-icon,
 .message-system {
   background-color: var(--surface-subtle);
 }
@@ -354,25 +334,6 @@ a:hover {
 .hero-label,
 .hero-copy p {
   color: var(--hero-muted);
-}
-.orbit {
-  border-color: var(--orbit-stroke);
-}
-.orbit-star {
-  color: var(--orbit-fill);
-}
-.floating-ticket {
-  background: var(--ticket-bg);
-  border-color: var(--ticket-border);
-}
-.floating-ticket strong,
-.floating-ticket small,
-.ticket-icon {
-  color: var(--text-accent);
-}
-.ticket-icon,
-.ticket-icon.light {
-  background: var(--ticket-icon-bg);
 }
 .lesson,
 .request-summary,

@@ -84,6 +84,7 @@ export interface Deadline {
 export interface Workspace {
   user: User;
   classes: ClassItem[];
+  nextWeekLesson?: ClassItem;
   grades: Grade[];
   requests: StudentRequest[];
   notifications: Notification[];

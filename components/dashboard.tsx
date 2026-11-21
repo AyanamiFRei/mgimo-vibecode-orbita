@@ -1,29 +1,74 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import {
-  ArrowUpRight,
-  ArrowRight,
-  CalendarDays,
-  Files,
-  ChartNoAxesCombined,
-  MoveUpRight,
-  Bell,
-  Sparkles,
-  Clock3,
-  Check,
-  Sun,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, ArrowUpRight, Clock3, GraduationCap } from "lucide-react";
+import { mondayInMoscow, moscowDate } from "@/lib/time";
+import type { ClassItem } from "@/lib/types";
 import { useWorkspace } from "./workspace-provider";
 import { DateText, EmptyState, Lesson, PageTitle, RequestSummary, SectionHead } from "./ui";
 
-export function Dashboard() {
-  const { data } = useWorkspace();
-  const [viewTime] = useState(() => Date.now());
-  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Moscow" }).format(new Date());
-  const lessons = data.classes
-    .filter((c) => c.date === today)
-    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+const moscowTime = new Intl.DateTimeFormat("ru-RU", {
+  timeZone: "Europe/Moscow",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+export function Dashboard({ initialTime }: { initialTime: number }) {
+  const { data, refresh } = useWorkspace();
+  const [viewTime, setViewTime] = useState(initialTime);
+  const requestedWeek = useRef<string>(null);
+  useEffect(() => {
+    let timer = window.setTimeout(tick, 0);
+    function tick() {
+      const now = Date.now();
+      setViewTime(now);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(tick, 60_000 - (now % 60_000));
+    }
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, []);
+
+  const now = new Date(viewTime);
+  const today = moscowDate(now);
+  const currentTime = moscowTime.format(now);
+  const weekStart = mondayInMoscow(now);
+  const hasCurrentWeek = data.weekStart === weekStart;
+  useEffect(() => {
+    if (hasCurrentWeek) return;
+    function refreshWeek() {
+      if (requestedWeek.current === weekStart || document.visibilityState === "hidden") return;
+      requestedWeek.current = weekStart;
+      void refresh()
+        .catch(() => {})
+        .finally(() => {
+          if (requestedWeek.current === weekStart) requestedWeek.current = null;
+        });
+    }
+    refreshWeek();
+    window.addEventListener("online", refreshWeek);
+    document.addEventListener("visibilitychange", refreshWeek);
+    return () => {
+      window.removeEventListener("online", refreshWeek);
+      document.removeEventListener("visibilitychange", refreshWeek);
+    };
+  }, [hasCurrentWeek, refresh, weekStart]);
+  const lessons = data.classes.filter((lesson) => lesson.date === today);
+  // The workspace returns classes in chronological order, including timetable changes.
+  const stillAhead = (lesson: ClassItem) =>
+    lesson.date > today || (lesson.date === today && lesson.endTime > currentTime);
+  const highlight =
+    data.classes.find(stillAhead) ??
+    (data.nextWeekLesson && stillAhead(data.nextWeekLesson) ? data.nextWeekLesson : undefined);
+  const inProgress = highlight?.date === today && highlight.startTime <= currentTime;
+  let heroTitle = "Расписание группы";
+  if (highlight) heroTitle = highlight.subject;
+  else if (hasCurrentWeek)
+    heroTitle = lessons.length ? "Занятия на сегодня закончились" : "Сегодня без занятий";
   const passed = data.grades.filter((g) => g.status === "passed").length;
   const scored = data.grades.filter(
     (g) => g.status === "passed" && Number(g.grade) > 0 && Number(g.grade) <= 5,
@@ -36,7 +81,7 @@ export function Dashboard() {
   ).length;
   const ready = data.requests.filter((r) => r.status === "ready").length;
   const upcoming = data.deadlines
-    .filter((d) => new Date(d.dueAt) >= new Date())
+    .filter((d) => Date.parse(d.dueAt) >= viewTime)
     .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
   const unread = data.notifications.filter((n) => !n.read);
   return (
@@ -51,63 +96,43 @@ export function Dashboard() {
       <section className="hero-banner">
         <div className="hero-copy">
           <span className="hero-label">
-            <span />
-            УЧЕБНЫЙ КАБИНЕТ
+            {inProgress
+              ? "Сейчас в расписании"
+              : highlight
+                ? "Ближайшее занятие"
+                : "Учебный календарь"}
           </span>
-          <h2>Расписание и учебные задачи</h2>
-          <p>Занятия, аудитории и дедлайны на текущую неделю.</p>
-          <Link className="button hero-button" href="/dashboard/schedule">
+          <h2>{heroTitle}</h2>
+          {highlight && (
+            <p className="hero-details">
+              <span>
+                <DateText value={highlight.date} /> · {highlight.startTime}–{highlight.endTime} мск
+              </span>
+              <span>
+                Аудитория {highlight.room} · {highlight.building}
+              </span>
+            </p>
+          )}
+          <Link
+            className="button hero-button"
+            href={highlight ? `/dashboard/schedule?date=${highlight.date}` : "/dashboard/schedule"}
+          >
             Открыть расписание
             <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
-        </div>
-        <div className="hero-art" aria-hidden="true">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="orbit orbit-three" />
-          <span className="orbit-star">✳</span>
-          <div className="floating-ticket ticket-top">
-            <span className="ticket-icon">
-              <CalendarDays size={21} />
-            </span>
-            <span>
-              <strong>Расписание</strong>
-              <small>Занятия и аудитории</small>
-            </span>
-            <Check size={16} />
-          </div>
-          <div className="floating-ticket ticket-bottom">
-            <span className="ticket-icon light">
-              <Sparkles size={21} />
-            </span>
-            <span>
-              <strong>Документы</strong>
-              <small>Заявки и статусы</small>
-            </span>
-          </div>
-          <span className="hero-dot dot-one" />
-          <span className="hero-dot dot-two" />
         </div>
       </section>
       <section className="stats-grid" aria-label="Учёба в цифрах">
         <Link className="stat-card" href="/dashboard/schedule">
           <div className="stat-top">
             <span className="stat-label">Пары сегодня</span>
-            <CalendarDays size={19} aria-hidden="true" />
           </div>
-          <div className="stat-number">
-            {lessons.length}
-            <span>занятия</span>
-          </div>
-          <span className="stat-foot">
-            {lessons.length ? `Начало в ${lessons[0].startTime}` : "Занятий нет"}
-            <ArrowUpRight size={14} aria-hidden="true" />
-          </span>
+          <div className="stat-number">{hasCurrentWeek ? lessons.length : "—"}</div>
+          {lessons.length > 0 && <span className="stat-foot">Первая в {lessons[0].startTime}</span>}
         </Link>
         <Link className="stat-card" href="/dashboard/grades">
           <div className="stat-top">
             <span className="stat-label">Средний балл</span>
-            <ChartNoAxesCombined size={19} aria-hidden="true" />
           </div>
           <div className="stat-number">
             {average
@@ -115,38 +140,29 @@ export function Dashboard() {
               : "—"}
             <span>из 5</span>
           </div>
-          <span className="stat-foot positive">
-            <MoveUpRight size={14} aria-hidden="true" />
-            {passed} дисциплин закрыто
+          <span className="stat-foot">
+            Сдано {passed} из {data.grades.length}
           </span>
         </Link>
         <Link className="stat-card" href="/dashboard/documents">
           <div className="stat-top">
             <span className="stat-label">Мои заявки</span>
-            <Files size={19} aria-hidden="true" />
           </div>
           <div className="stat-number">
             {activeRequests}
             <span>в работе</span>
           </div>
-          <span className="stat-foot">
-            {ready ? `${ready} готовы к получению` : "Нет готовых документов"}
-            <span className="small-dot" />
-          </span>
+          <span className="stat-foot">К получению — {ready}</span>
         </Link>
         <Link className="stat-card" href="/dashboard/notifications">
           <div className="stat-top">
             <span className="stat-label">Уведомления</span>
-            <Bell size={19} aria-hidden="true" />
           </div>
           <div className="stat-number">
             {unread.length}
-            <span>новых</span>
+            <span>не прочитано</span>
           </div>
-          <span className="stat-foot">
-            Не пропусти важное
-            <ArrowUpRight size={14} aria-hidden="true" />
-          </span>
+          <span className="stat-foot">Всего — {data.notifications.length}</span>
         </Link>
       </section>
       <div className="dashboard-grid">
@@ -159,13 +175,12 @@ export function Dashboard() {
             />
             <div className="schedule-subhead">
               <span>
-                <span className="small-dot" />
                 <DateText
                   value={today}
                   options={{ weekday: "long", day: "numeric", month: "long" }}
                 />
               </span>
-              <span>{lessons.length} занятия</span>
+              {hasCurrentWeek && <span>Пар в расписании — {lessons.length}</span>}
             </div>
             {lessons.length ? (
               lessons
@@ -173,8 +188,8 @@ export function Dashboard() {
                 .map((lesson, index) => <Lesson key={lesson.id} lesson={lesson} index={index} />)
             ) : (
               <EmptyState
-                title="Сегодня без пар"
-                text="Занятий нет. Открой расписание, чтобы посмотреть другие дни."
+                title={hasCurrentWeek ? "Сегодня без пар" : "Началась новая учебная неделя"}
+                text="Занятия по дням доступны в полном расписании."
               />
             )}
           </section>
@@ -191,7 +206,7 @@ export function Dashboard() {
               />
             )}
             <Link className="new-request-link" href="/dashboard/documents?new=1">
-              <span>＋</span> Заказать справку или подать заявление
+              Заказать справку или подать заявление
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </section>
@@ -199,7 +214,6 @@ export function Dashboard() {
         <div className="dashboard-aside">
           <section className="panel deadline-panel">
             <SectionHead title="Ближайшие дедлайны" href="/dashboard/notifications" link="Все" />
-            <p className="panel-description">Важное, о чём стоит помнить</p>
             {upcoming.length ? (
               upcoming.slice(0, 3).map((d, i) => (
                 <Link
@@ -226,28 +240,24 @@ export function Dashboard() {
                     <small>{d.subject}</small>
                     <em>
                       <Clock3 size={11} aria-hidden="true" />
-                      {new Intl.DateTimeFormat("ru-RU", {
-                        timeZone: "Europe/Moscow",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }).format(new Date(d.dueAt))}
+                      {moscowTime.format(new Date(d.dueAt))}
                     </em>
                   </span>
                 </Link>
               ))
             ) : (
-              <EmptyState title="Без срочных дел" text="Все ближайшие задачи закрыты." />
+              <p className="panel-description">Предстоящих дедлайнов нет.</p>
             )}
           </section>
           <section className="panel news-panel">
-            <SectionHead title="На связи с деканатом" href="/dashboard/notifications" link="Все" />
+            <SectionHead title="Объявления" href="/dashboard/notifications" link="Все" />
             {data.notifications
               .filter((n) => n.kind === "news" || n.kind === "schedule")
               .slice(0, 2)
               .map((n) => (
                 <Link className="news-item" href="/dashboard/notifications" key={n.id}>
                   <span className={`news-label ${n.kind === "schedule" ? "label-amber" : ""}`}>
-                    {n.kind === "schedule" ? "РАСПИСАНИЕ" : "ЖИЗНЬ УНИВЕРСИТЕТА"}
+                    {n.kind === "schedule" ? "Расписание" : "Жизнь университета"}
                   </span>
                   <h3>{n.title}</h3>
                   <p>{n.body}</p>
@@ -259,7 +269,7 @@ export function Dashboard() {
               ))}
           </section>
           <div className="wellbeing-note">
-            <Sun size={23} aria-hidden="true" />
+            <GraduationCap size={20} aria-hidden="true" />
             <p>
               Консультации преподавателей
               <br />

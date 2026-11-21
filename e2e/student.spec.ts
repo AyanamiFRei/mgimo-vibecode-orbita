@@ -66,7 +66,18 @@ test("student isolation and full staff document lifecycle", async ({ browser }, 
   const alice = await one.newPage();
   const mark = await two.newPage();
   const dean = await staff.newPage();
-  await login(alice);
+  const applicant = `applicant_${testInfo.project.name}_${Date.now()}`;
+  const registration = await alice.request.post("/api/auth/register", {
+    headers: { Origin: "http://localhost:3100" },
+    data: {
+      login: applicant,
+      password: "OrbitDemo2026!",
+      program: "business-informatics",
+      persona: "alisa",
+    },
+  });
+  expect(registration.status()).toBe(201);
+  await login(alice, applicant);
   await login(mark, "student2");
   await login(dean, "dean");
   const a = await (await alice.request.get("/api/workspace")).json();

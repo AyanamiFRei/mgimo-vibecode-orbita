@@ -1,5 +1,5 @@
 "use client";
-import { Camera, UserRound, ShieldCheck, GraduationCap } from "lucide-react";
+import { Camera, ShieldCheck } from "lucide-react";
 import { useRef, useState } from "react";
 import { useWorkspace } from "./workspace-provider";
 import { UserAvatar } from "./user-avatar";
@@ -69,7 +69,7 @@ function PhotoControls() {
         />
         <button
           type="button"
-          className="button secondary small"
+          className="button primary small"
           aria-describedby="profile-photo-help"
           disabled={pending}
           onClick={() => input.current?.click()}
@@ -80,7 +80,7 @@ function PhotoControls() {
         {user.avatarUrl && (
           <button
             type="button"
-            className="button secondary small"
+            className="text-button"
             disabled={pending}
             onClick={() => void updatePhoto(null)}
           >
@@ -107,17 +107,12 @@ export function Profile() {
   } = useWorkspace();
   return (
     <>
-      <PageTitle
-        eyebrow="УЧЕБНЫЕ СВЕДЕНИЯ"
-        title="Профиль"
-        description="Данные студента, факультет, направление, курс и группа."
-      />
+      <PageTitle title="Профиль" />
       <div className="profile-grid">
         <section className="panel profile-card">
           <UserAvatar user={user} large />
           <h2>{user.name}</h2>
-          <span className="badge status-ready">
-            <GraduationCap size={15} aria-hidden="true" />
+          <span className="profile-role">
             {user.role === "student" ? "Студент" : "Сотрудник деканата"}
           </span>
           <p>{user.faculty}</p>
@@ -125,10 +120,7 @@ export function Profile() {
           <PhotoControls />
         </section>
         <section className="panel">
-          <h2>
-            <UserRound size={20} aria-hidden="true" />
-            Основные сведения
-          </h2>
+          <h2>Основные сведения</h2>
           <dl className="detail-list">
             {[
               { label: "ФИО", value: user.name },
@@ -151,8 +143,8 @@ export function Profile() {
       <div className="info-strip">
         <ShieldCheck size={19} aria-hidden="true" />
         <span>
-          Данные профиля доступны только после входа. В прототипе редактирование учебных сведений
-          отключено.
+          Профиль виден только после входа. В демоверсии учебные сведения можно только
+          просматривать.
         </span>
       </div>
     </>

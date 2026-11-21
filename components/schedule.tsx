@@ -63,7 +63,6 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
         </Link>
       )}
       <PageTitle
-        eyebrow="УЧЕБНЫЙ КАЛЕНДАРЬ"
         title={teacher ? "Расписание преподавателя" : "Расписание"}
         description={`${teacher ? teacher.name : data.user.group} · Учебный год 2026/27`}
       />
@@ -79,8 +78,8 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
               )
             }
           >
-            <option value="autumn-2026">Осенний · 2026/27</option>
-            <option value="spring-2027">Весенний · 2026/27</option>
+            <option value="autumn-2026">Осенний</option>
+            <option value="spring-2027">Весенний</option>
           </select>
         </label>
         <label htmlFor="schedule-date">
@@ -98,8 +97,8 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
           />
         </label>
         <span className="semester-caption">
-          {loaded?.semester.name || "Два семестра в одном календаре"}
-          <small>Праздники РФ + учебный план вымышленного вуза</small>
+          Учебный календарь
+          <small>Праздники РФ и учебный план вымышленного вуза</small>
         </span>
       </div>
       <div className="schedule-toolbar">
@@ -188,10 +187,7 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
       </div>
       <div className="info-strip">
         <Info size={17} aria-hidden="true" />
-        <span>
-          Выходные и переносы учтены. Даты и время — московские. Каникулы и сессия заданы учебным
-          планом концепта.
-        </span>
+        <span>Время московское. Выходные и переносы учтены.</span>
       </div>
       {!loaded && !error && (
         <div className="panel loading-state schedule-loading" role="status">
@@ -246,9 +242,9 @@ export function Schedule({ teacher }: { teacher?: Teacher }) {
                       }
                       text={
                         meta?.kind === "holiday"
-                          ? "Праздничный или перенесённый выходной. Отдыхай и строй свои планы."
+                          ? "По учебному календарю занятий нет."
                           : meta?.kind === "vacation"
-                            ? "Время восстановиться перед новым учебным этапом."
+                            ? "Даты указаны в учебном календаре."
                             : "На этот день занятия не запланированы."
                       }
                     />

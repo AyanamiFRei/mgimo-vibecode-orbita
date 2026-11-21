@@ -18,7 +18,7 @@ export default defineConfig({
     {
       name: "iphone-se-webkit",
       use: { ...devices["iPhone SE"], browserName: "webkit" },
-      grep: /headline/,
+      grep: /headline|compact header search/,
     },
   ],
   webServer: {

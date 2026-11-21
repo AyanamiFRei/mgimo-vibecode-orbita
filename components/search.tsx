@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Form from "next/form";
 import { useSearchParams } from "next/navigation";
 import { Search as SearchIcon, ArrowUpRight } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
@@ -51,14 +52,16 @@ export function Search() {
         title="Поиск по кабинету"
         description="Расписание, дисциплины, документы и объявления."
       />
-      <form action="/dashboard/search" className="search-page-form" role="search">
+      <Form action="/dashboard/search" className="search-page-form" role="search" prefetch={false}>
         <label className="sr-only" htmlFor="search-query">
           Что найти?
         </label>
         <SearchIcon size={20} aria-hidden="true" />
         <input
+          key={query}
           id="search-query"
           name="q"
+          type="search"
           defaultValue={query}
           maxLength={100}
           autoComplete="off"
@@ -67,7 +70,7 @@ export function Search() {
         <button className="button primary" type="submit">
           Найти
         </button>
-      </form>
+      </Form>
       <section className="panel">
         {results.length ? (
           <>

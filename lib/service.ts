@@ -109,11 +109,12 @@ export class CampusService {
   async getWorkspace(actorId: string): Promise<Workspace> {
     const user = await requireRequestActor(this.db, actorId);
     const weekStart = mondayInMoscow(this.clock());
+    const nextWeekStart = addDays(weekStart, 7);
     const results = await this.db.batch(
       [
         {
           sql: "SELECT * FROM classes WHERE user_id = ? AND date >= ? AND date < ? ORDER BY date, start_time, id",
-          args: [actorId, weekStart, addDays(weekStart, 7)],
+          args: [actorId, weekStart, addDays(nextWeekStart, 7)],
         },
         { sql: "SELECT * FROM grades WHERE user_id = ? ORDER BY rowid", args: [actorId] },
         {
@@ -131,7 +132,7 @@ export class CampusService {
       ],
       "read",
     );
-    const classes: ClassItem[] = results[0].rows
+    const lessons: ClassItem[] = results[0].rows
       .map(classFromRow)
       .filter((item) => ["study", "exam"].includes(calendarDay(item.date).kind));
     const grades: Grade[] = results[1].rows.map((row) => ({
@@ -165,7 +166,8 @@ export class CampusService {
     return {
       user,
       weekStart,
-      classes,
+      classes: lessons.filter((lesson) => lesson.date < nextWeekStart),
+      nextWeekLesson: lessons.find((lesson) => lesson.date >= nextWeekStart),
       grades,
       requests: await requestsFromRows(this.db, results[2].rows),
       notifications,

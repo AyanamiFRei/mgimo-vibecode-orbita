@@ -344,15 +344,6 @@ progress::-webkit-progress-value {
 .empty-state h3 {
   margin: 15px 0 0;
 }
-.empty-icon {
-  width: 46px;
-  height: 46px;
-  display: inline-grid;
-  place-items: center;
-  background: #eff4e9;
-  border-radius: 50%;
-  color: #648558;
-}
 .info-strip,
 .success-message {
   display: flex;
@@ -509,7 +500,7 @@ progress::-webkit-progress-value {
   position: relative;
   overflow: hidden;
 }
-.help-spark {
+.help-icon {
   display: inline-flex;
   color: #7f9564;
   margin-bottom: 8px;
@@ -741,116 +732,6 @@ progress::-webkit-progress-value {
 .hero-button:hover {
   background: #21452f;
   color: #fff;
-}
-.hero-art {
-  width: 44%;
-  min-width: 330px;
-  position: relative;
-  overflow: hidden;
-}
-.orbit {
-  position: absolute;
-  width: 310px;
-  height: 310px;
-  border: 1px solid #d0dabd;
-  border-radius: 50%;
-  top: -40px;
-  left: 25px;
-}
-.orbit-two {
-  width: 240px;
-  height: 240px;
-  top: -4px;
-  left: 61px;
-}
-.orbit-three {
-  width: 170px;
-  height: 170px;
-  top: 31px;
-  left: 96px;
-}
-.orbit-star {
-  font-size: 122px;
-  line-height: 1;
-  position: absolute;
-  top: 61px;
-  left: 120px;
-  color: #9caf7f;
-  transform: rotate(-9deg);
-  font-weight: 200;
-}
-.floating-ticket {
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: #fffef4e8;
-  backdrop-filter: blur(8px);
-  padding: 12px 14px;
-  border: 1px solid white;
-  border-radius: 11px;
-  box-shadow: 0 9px 22px #66764c0c;
-}
-.floating-ticket strong {
-  display: block;
-  font-size: 11px;
-  font-weight: 550;
-  color: #5d6f4c;
-}
-.floating-ticket small {
-  display: block;
-  font-size: 7px;
-  color: #9ca58d;
-  margin-top: 4px;
-}
-.ticket-top {
-  top: 30px;
-  left: 19px;
-  transform: rotate(-7deg);
-}
-.ticket-top > svg {
-  background: #e8f0db;
-  border-radius: 50%;
-  padding: 3px;
-  box-sizing: content-box;
-  color: #81955e;
-  margin-left: 6px;
-}
-.ticket-bottom {
-  bottom: 35px;
-  right: 24px;
-  transform: rotate(6deg);
-}
-.ticket-icon {
-  background: #edf1e2;
-  color: #8fa572;
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-}
-.ticket-icon.light {
-  background: #f2eedc;
-  color: #b5a975;
-}
-.hero-dot {
-  position: absolute;
-  border-radius: 50%;
-  background: #ced9b7;
-  width: 12px;
-  height: 12px;
-}
-.dot-one {
-  left: 32px;
-  bottom: 38px;
-  width: 8px;
-  height: 8px;
-}
-.dot-two {
-  right: 34px;
-  top: 26px;
 }
 .stats-grid {
   display: grid;
@@ -2167,21 +2048,6 @@ progress::-webkit-progress-value {
   .hero-copy p {
     font-size: 14px;
   }
-  .hero-art {
-    width: 45%;
-  }
-  .hero-art .orbit {
-    left: 70px;
-  }
-  .hero-art .orbit-two {
-    left: 105px;
-  }
-  .hero-art .orbit-three {
-    left: 140px;
-  }
-  .hero-art .orbit-star {
-    left: 165px;
-  }
   .dashboard-grid {
     grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr);
   }
@@ -2237,35 +2103,11 @@ progress::-webkit-progress-value {
   .global-search kbd {
     display: none;
   }
-  .hero-art {
-    min-width: 260px;
-  }
-  .floating-ticket {
-    padding: 9px;
-  }
-  .ticket-bottom {
-    right: 12px;
-  }
-  .ticket-top {
-    left: 2px;
-  }
   .hero-copy {
     padding: 29px 26px;
   }
   .hero-copy h2 {
     font-size: 25px;
-  }
-  .hero-art .orbit {
-    left: -10px;
-  }
-  .hero-art .orbit-two {
-    left: 25px;
-  }
-  .hero-art .orbit-three {
-    left: 60px;
-  }
-  .hero-art .orbit-star {
-    left: 83px;
   }
   .dashboard-grid {
     grid-template-columns: minmax(0, 1.3fr) minmax(250px, 1fr);
@@ -2335,30 +2177,6 @@ progress::-webkit-progress-value {
   .topbar {
     height: 72px;
     padding: 0 22px;
-  }
-  .hero-art {
-    min-width: 210px;
-  }
-  .floating-ticket small {
-    display: none;
-  }
-  .floating-ticket strong {
-    font-size: 9px;
-  }
-  .ticket-icon {
-    width: 27px;
-    height: 27px;
-  }
-  .ticket-icon svg {
-    width: 17px;
-  }
-  .ticket-top {
-    top: 35px;
-    left: 5px;
-  }
-  .ticket-bottom {
-    bottom: 35px;
-    right: 10px;
   }
   .hero-copy h2 {
     font-size: 24px;
@@ -2596,11 +2414,6 @@ progress::-webkit-progress-value {
     font-size: 6px;
     letter-spacing: 1px;
   }
-  .hero-art {
-    min-width: 200px;
-    width: 40%;
-    margin-right: -16px;
-  }
   .hero-copy p {
     font-size: 11px;
   }
@@ -2612,9 +2425,6 @@ progress::-webkit-progress-value {
   }
   .stat-label {
     font-size: 8px;
-  }
-  .stat-top > svg {
-    width: 15px;
   }
   .stat-number {
     font-size: 25px;
@@ -2921,41 +2731,6 @@ progress::-webkit-progress-value {
     line-height: 1.8;
     max-width: 220px;
   }
-  .hero-art {
-    position: absolute;
-    right: -71px;
-    top: 0;
-    bottom: 0;
-    width: 190px;
-    min-width: 190px;
-    opacity: 0.65;
-  }
-  .hero-art .orbit {
-    width: 260px;
-    height: 260px;
-    left: 0;
-    top: -20px;
-  }
-  .hero-art .orbit-two {
-    width: 200px;
-    height: 200px;
-    left: 30px;
-    top: 10px;
-  }
-  .hero-art .orbit-three {
-    width: 140px;
-    height: 140px;
-    left: 60px;
-    top: 40px;
-  }
-  .hero-art .orbit-star {
-    font-size: 100px;
-    left: 80px;
-    top: 66px;
-  }
-  .floating-ticket {
-    display: none;
-  }
   .hero-copy {
     z-index: 2;
   }
@@ -2976,9 +2751,6 @@ progress::-webkit-progress-value {
   }
   .stat-label {
     font-size: 10px;
-  }
-  .stat-top > svg {
-    width: 18px;
   }
   .stat-number {
     font-size: 29px;
@@ -3679,9 +3451,6 @@ progress::-webkit-progress-value {
     max-width: 210px;
     font-size: 11px;
   }
-  .hero-art {
-    opacity: 0.3;
-  }
   .hero-label {
     font-size: 8px;
   }
@@ -4128,9 +3897,6 @@ progress::-webkit-progress-value {
   .teacher-card {
     padding: 20px;
   }
-  .teacher-card-top .badge {
-    font-size: 8px;
-  }
   .conversation-grid {
     grid-template-columns: minmax(0, 1.5fr) minmax(210px, 1fr);
     gap: 15px;
@@ -4155,7 +3921,6 @@ progress::-webkit-progress-value {
     grid-template-columns: 1fr;
   }
   .teacher-conversation-card {
-    order: -1;
     display: grid;
     grid-template-columns: 53px 1fr;
     column-gap: 16px;
@@ -4204,9 +3969,6 @@ progress::-webkit-progress-value {
   }
   .teacher-card h2 {
     font-size: 19px;
-  }
-  .teacher-card-top .badge {
-    font-size: 9px;
   }
   .teacher-thread-row {
     gap: 10px;

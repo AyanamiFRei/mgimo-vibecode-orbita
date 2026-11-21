@@ -30,9 +30,7 @@ export function Teachers({
       </PageTitle>
       <div className="info-strip">
         <Info size={18} aria-hidden="true" />
-        <span>
-          Каталог вымышленных преподавателей. Переписка доступна в отдельном разделе «Чаты».
-        </span>
+        <span>Все преподаватели в каталоге вымышлены.</span>
       </div>
       <Form
         action="/dashboard/teachers"
@@ -63,26 +61,26 @@ export function Teachers({
             <article key={teacher.id} className="panel teacher-card">
               <div className="teacher-card-top">
                 <TeacherAvatar teacher={teacher} />
-                <span className="badge status-ready">Вымышленный профиль</span>
+                <div className="teacher-card-identity">
+                  <h2>
+                    <NavigationLink
+                      className="teacher-profile-link"
+                      prefetch={false}
+                      href={`/dashboard/teachers/${encodeURIComponent(teacher.id)}`}
+                    >
+                      {teacher.name} <ArrowUpRight size={16} aria-hidden="true" />
+                    </NavigationLink>
+                  </h2>
+                  <p className="teacher-title">
+                    {teacher.title} · {teacher.department}
+                  </p>
+                </div>
               </div>
-              <h2>
-                <NavigationLink
-                  className="teacher-profile-link"
-                  prefetch={false}
-                  href={`/dashboard/teachers/${encodeURIComponent(teacher.id)}`}
-                >
-                  {teacher.name} <ArrowUpRight size={16} aria-hidden="true" />
-                </NavigationLink>
-              </h2>
-              <p className="teacher-title">
-                {teacher.title} · {teacher.department}
-              </p>
               <div className="teacher-subjects">
                 {teacher.subjects.map((subject) => (
                   <span key={subject}>{subject}</span>
                 ))}
               </div>
-              <p className="teacher-bio">{teacher.bio}</p>
               <div className="teacher-detail">
                 <Clock3 size={15} aria-hidden="true" />
                 <span>Консультации: {teacher.officeHours}</span>

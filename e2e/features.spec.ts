@@ -13,6 +13,7 @@ test("login headline fits iPhone SE and enlarged text", async ({ page }) => {
     await page.setViewportSize({ width, height: 667 });
     await page.goto("/login");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator(".login-orbit svg")).toBeVisible();
     const bounds = await page.locator(".login-story").evaluate((section) => {
       const area = section.getBoundingClientRect();
       const title = section.querySelector("h1")!;
@@ -41,6 +42,63 @@ test("login headline fits iPhone SE and enlarged text", async ({ page }) => {
         .evaluate((element) => element.scrollWidth <= element.clientWidth),
     ).toBe(true);
   }
+});
+
+test("compact header search and request submit remain available on narrow screens", async ({
+  page,
+}, info) => {
+  await page.setViewportSize({ width: 930, height: 650 });
+  const username = `compact_${info.project.name.replaceAll("-", "_")}_${Date.now()}`.slice(0, 32);
+  const registration = await page.request.post("/api/auth/register", {
+    headers: { Origin: "http://localhost:3100" },
+    data: {
+      login: username,
+      password: "OrbitDemo2026!",
+      program: "business-informatics",
+      persona: "nika",
+    },
+  });
+  expect(registration.status()).toBe(201);
+  await login(page, username);
+  const compactSearch = page.getByRole("link", { name: "Поиск по кабинету", exact: true });
+  const desktopSearch = page.getByRole("textbox", { name: "Поиск по кабинету", exact: true });
+  await expect(compactSearch).toBeVisible();
+  await expect(desktopSearch).toBeHidden();
+  await page.setViewportSize({ width: 931, height: 650 });
+  await expect(compactSearch).toBeHidden();
+  await expect(desktopSearch).toBeVisible();
+  await page.setViewportSize({ width: 320, height: 568 });
+  await compactSearch.click();
+  await expect(page.getByRole("heading", { name: "Поиск по кабинету" })).toBeVisible();
+  await page.getByRole("searchbox", { name: "Что найти?" }).fill("Английский");
+  await page.getByRole("button", { name: "Найти", exact: true }).click();
+  await expect(page.getByRole("link", { name: /Английский язык/ }).first()).toBeVisible();
+
+  await page.goto("/dashboard/documents?new=1");
+  const dialog = page.getByRole("dialog", { name: "Новая заявка" });
+  const submit = dialog.getByRole("button", { name: "Отправить заявку" });
+  const scroll = dialog.locator(".document-request-scroll");
+  await expect(submit).toBeInViewport({ ratio: 1 });
+  await expect
+    .poll(() => scroll.evaluate((node) => node.scrollHeight > node.clientHeight))
+    .toBe(true);
+  await dialog.getByRole("textbox", { name: /Комментарий/ }).focus();
+  await expect(submit).toBeInViewport({ ratio: 1 });
+  const error = "Не удалось отправить заявку. ".repeat(12).trim();
+  await page.route("**/api/requests", (route) =>
+    route.fulfill({ status: 503, json: { error: { message: error } } }),
+  );
+  await dialog.getByLabel("Куда нужна справка").fill("Для оформления пропуска");
+  await submit.click();
+  await expect(dialog.getByRole("alert")).toContainText("Не удалось отправить заявку.");
+  await expect(submit).toBeInViewport({ ratio: 1 });
+  page.once("dialog", (confirm) => confirm.accept());
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+
+  await page.goto("/dashboard/teachers");
+  await expect(page.getByRole("heading", { name: "Преподаватели", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
 });
 
 test("fictional registration provisions own profile and curriculum", async ({ page }, info) => {

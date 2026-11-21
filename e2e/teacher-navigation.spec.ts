@@ -131,7 +131,7 @@ test("original light surfaces and Material motion respect reduced motion", async
   await page
     .getByRole("link", { name: "Справка о стипендии Оформить онлайн", exact: true })
     .click();
-  const dialog = page.getByRole("dialog", { name: "Создание заявки" });
+  const dialog = page.getByRole("dialog", { name: "Новая заявка" });
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveCSS("animation-name", /orbita-dialog-spatial/);
   await expect(page.locator("main#main")).toHaveCSS("animation-name", "none");

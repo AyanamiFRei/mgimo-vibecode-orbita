@@ -12,7 +12,7 @@ import {
   Search,
   LogOut,
   ShieldCheck,
-  Sparkles,
+  FileText,
   Menu,
   X,
   UsersRound,
@@ -182,7 +182,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             новых горизонтов
           </span>
         </div>
-        <div className="nav-caption">РАЗДЕЛЫ КАБИНЕТА</div>
+        <div className="nav-caption">Разделы кабинета</div>
         <SelectionTrack
           as="nav"
           className="main-nav"
@@ -226,11 +226,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </SelectionTrack>
         <div className="sidebar-bottom">
           <div className="help-card">
-            <span className="help-spark">
-              <Sparkles size={19} aria-hidden="true" />
+            <span className="help-icon">
+              <FileText size={18} aria-hidden="true" />
             </span>
             <h3>Заявка в деканат</h3>
-            <p>Заказ справки или подача заявления. Статус сохраняется в документах.</p>
+            <p>Закажи справку или подай заявление. Статус заявки — в разделе «Документы».</p>
             <NavigationLink
               href="/dashboard/documents?new=1"
               prefetch={false}
@@ -286,11 +286,20 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <input
                 name="q"
                 aria-label="Поиск по кабинету"
-                placeholder="Найти в кабинете…"
+                placeholder="Поиск по кабинету"
                 autoComplete="off"
               />
               <kbd>↵</kbd>
             </Form>
+            <NavigationLink
+              href="/dashboard/search"
+              className="compact-search icon-button"
+              prefetch={false}
+              aria-label="Поиск по кабинету"
+              aria-current={pathname === "/dashboard/search" ? "page" : undefined}
+            >
+              <Search size={20} aria-hidden="true" />
+            </NavigationLink>
             <NavigationLink
               href="/dashboard/notifications"
               className="notification-button icon-button"

@@ -1,4 +1,6 @@
+import { connection } from "next/server";
 import { Dashboard } from "@/components/dashboard";
-export default function Page() {
-  return <Dashboard />;
+export default async function Page() {
+  await connection();
+  return <Dashboard initialTime={new Date().getTime()} />;
 }

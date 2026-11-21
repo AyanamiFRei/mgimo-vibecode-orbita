@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { Check, GraduationCap, TrendingUp, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
 import { QueryLink } from "./query-link";
 import { SelectionTrack } from "./selection-track";
@@ -19,13 +19,11 @@ export function Grades() {
   return (
     <>
       <PageTitle
-        eyebrow="ТЕКУЩИЙ УЧЕБНЫЙ ПЕРИОД"
         title="Успеваемость"
         description="Текущие баллы, итоговые оценки, зачёты и даты экзаменов."
       />
       <div className="grade-stats">
         <div className="panel grade-stat">
-          <TrendingUp size={22} aria-hidden="true" />
           <span>Средний балл</span>
           <strong>
             {average
@@ -36,22 +34,18 @@ export function Grades() {
           <p>По закрытым дисциплинам с оценкой</p>
         </div>
         <div className="panel grade-stat">
-          <Check size={22} aria-hidden="true" />
           <span>Закрыто дисциплин</span>
           <strong>
             {completed.length}
             <small> / {data.grades.length}</small>
           </strong>
-          <p>Дисциплины с итоговой аттестацией</p>
         </div>
         <div className="panel grade-stat">
-          <GraduationCap size={22} aria-hidden="true" />
           <span>Зачётные единицы</span>
           <strong>
             {completed.reduce((s, g) => s + g.credits, 0)}
             <small> з. е.</small>
           </strong>
-          <p>За успешно пройденные дисциплины</p>
         </div>
       </div>
       <div className="filter-row">
@@ -116,7 +110,7 @@ export function Grades() {
             </article>
           ))
         ) : (
-          <EmptyState title="Здесь пока пусто" text="В этой категории пока нет дисциплин." />
+          <EmptyState title="В этом списке нет дисциплин" text="Выбери другой фильтр." />
         )}
       </section>
       <p className="supporting-note">

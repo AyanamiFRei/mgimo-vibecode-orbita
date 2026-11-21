@@ -2,11 +2,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Clock3, Info, MapPin, MessageSquare, Send, X } from "lucide-react";
+import { ArrowLeft, Clock3, MapPin, Send, X } from "lucide-react";
 import type { Teacher, TeacherConversation, TeacherMessage } from "@/lib/types";
 import { apiMutation, useWorkspace } from "./workspace-provider";
 import { DateText, PageTitle } from "./ui";
 import { AutoResizeTextarea } from "./auto-resize-textarea";
+
+const conversationDisclosure =
+  "Участники вымышлены. Тестовый сотрудник отвечает от своего имени. Переписка остаётся в кабинете. Не указывай личные данные.";
 
 export async function getData<T>(url: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(url, { cache: "no-store", signal });
@@ -88,13 +91,9 @@ export function TeacherCompose({ teacher }: { teacher: Teacher }) {
       <p>
         {teacher.name} · {teacher.department}
       </p>
-      <div className="form-notice">
-        <Info size={16} aria-hidden="true" />
-        <span>
-          Учебная симуляция. Обращение сохраняется в кабинете; отвечает тестовый сотрудник. Внешние
-          письма не отправляются.
-        </span>
-      </div>
+      <p className="form-notice" id="compose-disclosure">
+        {conversationDisclosure}
+      </p>
       <form className="request-form" ref={form} onSubmit={send}>
         <label htmlFor="teacher-subject">Тема обращения</label>
         <input
@@ -110,6 +109,7 @@ export function TeacherCompose({ teacher }: { teacher: Teacher }) {
         <AutoResizeTextarea
           id="teacher-body"
           name="body"
+          aria-describedby="compose-disclosure"
           required
           minLength={3}
           maxLength={2000}
@@ -214,16 +214,11 @@ export function TeacherConversationView({ id }: { id: string }) {
         </div>
       ) : (
         <>
-          <PageTitle
-            eyebrow="ЛИЧНОЕ ОБРАЩЕНИЕ"
-            title={conversation.thread.subject}
-            description={`Преподаватель: ${conversation.teacher.name}`}
-          />
+          <PageTitle title={conversation.thread.subject} description={conversation.teacher.name} />
           <div className="conversation-grid">
             <section className="panel conversation-panel">
               <div className="conversation-heading">
-                <MessageSquare size={19} aria-hidden="true" />
-                <span>Переписка внутри прототипа</span>
+                <span>Сообщения</span>
                 <button className="text-button" onClick={() => setReload((n) => n + 1)}>
                   Обновить диалог
                 </button>
@@ -264,6 +259,7 @@ export function TeacherConversationView({ id }: { id: string }) {
                 <AutoResizeTextarea
                   id="reply-body"
                   name="body"
+                  aria-describedby="reply-disclosure"
                   required
                   minLength={3}
                   maxLength={2000}
@@ -271,6 +267,9 @@ export function TeacherConversationView({ id }: { id: string }) {
                   autoComplete="off"
                   placeholder="Напиши сообщение…"
                 />
+                <p className="supporting-note conversation-disclosure" id="reply-disclosure">
+                  {conversationDisclosure}
+                </p>
                 {sendError && (
                   <p role="alert" className="form-error">
                     {sendError}
@@ -303,13 +302,6 @@ export function TeacherConversationView({ id }: { id: string }) {
               <div className="teacher-detail">
                 <MapPin size={16} aria-hidden="true" />
                 <span>{conversation.teacher.office}</span>
-              </div>
-              <div className="form-notice">
-                <Info size={16} aria-hidden="true" />
-                <span>
-                  Все участники — вымышленные. За преподавателя отвечает тестовый сотрудник от
-                  собственного имени. Не отправляй настоящие персональные данные.
-                </span>
               </div>
             </aside>
           </div>

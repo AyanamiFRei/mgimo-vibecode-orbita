@@ -1,5 +1,5 @@
 import { Brand } from "./brand";
-import { ShieldCheck } from "lucide-react";
+import { Asterisk, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 export function AuthFrame({
@@ -26,7 +26,9 @@ export function AuthFrame({
         <div className="login-orbit" aria-hidden="true">
           <div />
           <div />
-          <span>✳</span>
+          <span>
+            <Asterisk size="1em" strokeWidth={1.5} />
+          </span>
         </div>
       </section>
       <section className="login-panel">
@@ -34,7 +36,7 @@ export function AuthFrame({
           <ThemeToggle />
         </div>
         <div className="login-form-wrap">
-          <span className="badge concept-badge">КОНКУРСНЫЙ ПРОТОТИП</span>
+          <span className="badge concept-badge">Конкурсный прототип</span>
           <h2>{title}</h2>
           <p className="login-description">{description}</p>
           {children}

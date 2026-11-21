@@ -44,6 +44,8 @@ describe("student data and seed", () => {
     expect(first.user.name).not.toBe(second.user.name);
     expect(first.classes.length).toBeGreaterThan(5);
     expect(first.classes.some((item) => item.date === "2026-11-04")).toBe(false);
+    expect(first.nextWeekLesson?.date).toBe(addDays(first.weekStart, 7));
+    expect(first.nextWeekLesson?.id).not.toBe(second.nextWeekLesson?.id);
     expect(
       first.classes.every(
         (item) => item.date >= first.weekStart && item.date < addDays(first.weekStart, 7),

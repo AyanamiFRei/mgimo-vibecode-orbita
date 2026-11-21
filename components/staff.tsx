@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { StudentRequest, RequestStatus } from "@/lib/types";
 import { apiMutation } from "./workspace-provider";
 import { DateText, EmptyState, PageTitle, Status } from "./ui";
-import { Check, Clock3, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 type QueueItem = StudentRequest & { student: { id: string; name: string; group: string } };
 export function Staff() {
   const [items, setItems] = useState<QueueItem[]>([]);
@@ -57,13 +57,9 @@ export function Staff() {
   }
   return (
     <>
-      <PageTitle
-        eyebrow="РАБОЧЕЕ МЕСТО СОТРУДНИКА"
-        title="Очередь деканата"
-        description="Обработка заявок студентов, статусы и ответы по документам."
-      >
+      <PageTitle title="Очередь деканата">
         <button
-          className="button secondary"
+          className="text-button"
           onClick={() => {
             setLoading(true);
             load()
@@ -72,8 +68,8 @@ export function Staff() {
           }}
           disabled={loading}
         >
-          <RefreshCw size={17} aria-hidden="true" />
-          Обновить
+          <RefreshCw size={16} aria-hidden="true" />
+          Обновить очередь
         </button>
       </PageTitle>
       {error && (
@@ -86,17 +82,19 @@ export function Staff() {
           {notice}
         </p>
       )}
-      <div className="queue-summary">
-        <span>
-          <Clock3 size={17} aria-hidden="true" />
-          {items.filter((r) => r.status === "submitted" || r.status === "processing").length}{" "}
-          активных
-        </span>
-        <span>
-          <Check size={17} aria-hidden="true" />
-          {items.filter((r) => r.status === "ready").length} готовых
-        </span>
-      </div>
+      {!loading && (
+        <div className="queue-summary">
+          <span>
+            Активные{" "}
+            <strong>
+              {items.filter((r) => r.status === "submitted" || r.status === "processing").length}
+            </strong>
+          </span>
+          <span>
+            Готовые <strong>{items.filter((r) => r.status === "ready").length}</strong>
+          </span>
+        </div>
+      )}
       {loading ? (
         <p role="status">Загружаем очередь…</p>
       ) : items.length ? (
@@ -104,7 +102,7 @@ export function Staff() {
           {items.map((r) => (
             <article key={r.id} className="panel staff-request">
               <div className="section-head">
-                <span className="eyebrow">№ {r.number}</span>
+                <span className="staff-request-number">№ {r.number}</span>
                 <Status status={r.status} />
               </div>
               <h2>{r.title}</h2>
@@ -131,28 +129,34 @@ export function Staff() {
               </dl>
               {(r.status === "submitted" || r.status === "processing") && (
                 <form className="staff-form" onSubmit={(e) => update(e, r.id)}>
-                  <label htmlFor={`status-${r.id}`}>Новый статус</label>
-                  <select
-                    id={`status-${r.id}`}
-                    name="status"
-                    defaultValue={r.status === "submitted" ? "processing" : "ready"}
-                  >
-                    {r.status === "submitted" ? (
-                      <option value="processing">В работе</option>
-                    ) : (
-                      <option value="ready">Готова</option>
-                    )}
-                    <option value="rejected">Отклонена</option>
-                  </select>
-                  <label htmlFor={`comment-${r.id}`}>Ответ студенту</label>
-                  <textarea
-                    id={`comment-${r.id}`}
-                    name="comment"
-                    autoComplete="off"
-                    rows={2}
-                    maxLength={1500}
-                    placeholder="Укажи, что сделано или что нужно уточнить…"
-                  />
+                  <div className="staff-fields">
+                    <div className="staff-field">
+                      <label htmlFor={`status-${r.id}`}>Новый статус</label>
+                      <select
+                        id={`status-${r.id}`}
+                        name="status"
+                        defaultValue={r.status === "submitted" ? "processing" : "ready"}
+                      >
+                        {r.status === "submitted" ? (
+                          <option value="processing">В работе</option>
+                        ) : (
+                          <option value="ready">Готова</option>
+                        )}
+                        <option value="rejected">Отклонена</option>
+                      </select>
+                    </div>
+                    <div className="staff-field">
+                      <label htmlFor={`comment-${r.id}`}>Ответ студенту</label>
+                      <textarea
+                        id={`comment-${r.id}`}
+                        name="comment"
+                        autoComplete="off"
+                        rows={2}
+                        maxLength={1500}
+                        placeholder="При отказе укажи причину"
+                      />
+                    </div>
+                  </div>
                   <button className="button primary" disabled={Boolean(pending)}>
                     {pending === r.id ? "Сохраняем…" : "Обновить статус"}
                   </button>
